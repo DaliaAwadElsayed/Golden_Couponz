@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">الكوبون الذهبي</string>
+    <string name="preferred_language">Your preferred language?</string>
+    <string name="preferred_country">بلدك المفضلة؟</string>
+    <string name="arabic_label">اللغة العربية</string>
+    <string name="english_label">English</string>
+    <string name="fav_language">لغتك المفضلة؟</string>
+    <string name="fav_country">بلدك المفضلة؟</string>
+    <string name="en_continue_label">Continue</string>
+    <string name="ar_continue_label">متابعة</string>    <string name="somethingwentwrongmessage">حدث خطأ ما!</string>
+    <string name="no_internet_message">"لا يوجد اٍتصال بالأنترنت,  يرجى التحقق من الشبكة! "</string>
+    <string name="stores_label">المتاجر</string>
+    <string name="enjoy_strongest_discounts_offers">استمتع بأقوي مجموعة من الخصومات والعروض</string>
+    <string name="view_all">مشاهدة الكل</string>
+    <string name="find_store_you_want">ابحث عن المتجر الذي تريده</string>
+    <string name="skip_label">تخطي</string>
+    <string name="best_store_deals">أفضل عروض المتاجر</string>
+    <string name="get_exclusive_coupon_and_offer">احصل علي كوبونات وعروض حصرية للمتاجر المفضلة اليك</string>
+    <string name="next_label">التالي</string>
+    <string name="ar_no_internet_message">لا يوجد اٍتصال بالأنترنت,  يرجى التحقق من الشبكة!</string>
+    <string name="en_no_internet_message">No Internet Connection, Please check your Network!</string>
+    <string name="products_label">المنتجات</string>
+    <string name="alerts_label">التنبيهات</string>
+    <string name="follow_offer">تابع عروض متاجرك</string>
+    <string name="be_ready_for_alerts">كن علي استعداد لاستقبال التنبيهات والاشعارات الخاصة بالمتاجر المفضلة لديك</string>
+    <string name="disconts_products">خصومات علي المنتجات</string>
+    <string name="find_the_product_and_discount">ابحث عن المنتج الذي تريده واستكشف الخصومات المطبقة عليه</string>
+    <string name="lets_start">لنبدأ</string>
+    <string name="dont_miss">لا تفوت أي شيء</string>
+    <string name="allow_notifications">اسمح باستقبال الإشعارات منا للبقاء على اطلاع دائم بالكوبونات والعروض المميزة أو المتعلقة بالمتاجر المفضلة إليك</string>
+    <string name="allow_alerts">السماح للتنبيهات</string>
+    <string name="no_not_now">لا ليس الآن</string>
+</resources>

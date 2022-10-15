@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:background="@color/grey"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/slider_image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/large_margin"
+                android:scaleType="fitXY"
+                tools:src="@drawable/ic_first_skip" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/firstTextId"
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:gravity="center"
+                android:textColor="@color/basic_color"
+                android:textSize="@dimen/small_text_size"
+                android:textStyle="bold"
+                tools:text="@string/stores_label" />
+
+            <TextView
+                android:id="@+id/secondTextId"
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/large_text_size"
+                android:textStyle="bold"
+                tools:text="@string/best_store_deals" />
+
+            <TextView
+                android:id="@+id/thirdTextId"
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium_text_size"
+                tools:text="@string/get_exclusive_coupon_and_offer" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

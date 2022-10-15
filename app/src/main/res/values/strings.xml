@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Golden Couponz</string>
+    <string name="preferred_language">Your preferred language?</string>
+    <string name="preferred_country">Preferred country?</string>
+    <string name="arabic_label">اللغة العربية</string>
+    <string name="english_label">English</string>
+    <string name="fav_language">لغتك المفضلة؟</string>
+    <string name="fav_country">بلدك المفضلة؟</string>
+    <string name="en_continue_label">Continue</string>
+    <string name="ar_continue_label">متابعة</string>
+    <string name="somethingwentwrongmessage">Something Went Wrong!</string>
+    <string name="no_internet_message">No Internet Connection, Please check your Network!</string>
+    <string name="stores_label">Stores</string>
+    <string name="enjoy_strongest_discounts_offers">Enjoy the strongest range of discounts and offers</string>
+    <string name="view_all">View all</string>
+    <string name="find_store_you_want">Find the store you want</string>
+    <string name="skip_label">Skip</string>
+    <string name="best_store_deals">Best Store Deals</string>
+    <string name="get_exclusive_coupon_and_offer">Get exclusive coupons and offers for your favorite stores</string>
+    <string name="next_label">Next</string>
+    <string name="ar_no_internet_message">لا يوجد اٍتصال بالأنترنت,  يرجى التحقق من الشبكة!</string>
+    <string name="en_no_internet_message">No Internet Connection, Please check your Network!</string>
+    <string name="products_label">Products</string>
+    <string name="alerts_label">Alerts</string>
+    <string name="follow_offer">Follow the offers of your stores</string>
+    <string name="be_ready_for_alerts">Be ready to receive alerts and notifications for your favorite stores</string>
+    <string name="disconts_products">Discounts on products</string>
+    <string name="find_the_product_and_discount">Find the product you want and explore the applicable discounts</string>
+    <string name="lets_start">Let\'s start</string>
+    <string name="dont_miss">Don\'t miss anything</string>
+    <string name="allow_notifications">Allow notifications from us to stay up to date on coupons and special offers or related to your favorite stores.</string>
+    <string name="allow_alerts">Allow alerts</string>
+    <string name="no_not_now">No not now</string>
+</resources>
