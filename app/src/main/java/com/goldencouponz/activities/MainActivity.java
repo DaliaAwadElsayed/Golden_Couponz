@@ -1,13 +1,18 @@
 package com.goldencouponz.activities;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
@@ -17,8 +22,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.ActivityMainBinding;
 import com.goldencouponz.interfaces.ToolbarInterface;
-import com.goldencouponz.utility.GoldenSharedPreference;
-import com.goldencouponz.utility.Local;
 import com.goldencouponz.utility.LocaleHelper;
 
 import java.io.InputStream;
@@ -28,17 +31,31 @@ import java.net.URLConnection;
 public class MainActivity extends AppCompatActivity implements ToolbarInterface {
     ActivityMainBinding activityMainBinding;
     NavController navController;
-
+    Resources resources;
+    Context context;
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // Permission is granted. Continue the action or workflow in your
+                    // app.
+                } else {
+                    // Explain to the user that the feature is unavailable because the
+                    // features requires a permission that the user has denied. At the
+                    // same time, respect the user's decision. Don't link to system
+                    // settings in an effort to convince the user to change their
+                    // decision.
+                }
+            });
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Local.Companion.updateResources(this);
-        LocaleHelper.setLocale(this, GoldenSharedPreference.getSelectedLanguageValue(this));
+//        Local.Companion.updateResources(this);
+//        LocaleHelper.setLocale(this, GoldenSharedPreference.getSelectedLanguageValue(this));
         super.onCreate(savedInstanceState);
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         navController = Navigation.findNavController(this, R.id.home_nav_fragment);
         NavigationUI.setupWithNavController(activityMainBinding.bottomId, navController);
         activityMainBinding.toolBarId.setClickable(true);
-
 
     }
 
@@ -64,15 +81,6 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         activityMainBinding.bottomId.setVisibility(View.VISIBLE);
 
     }
-
-    //Internet ConnectionCheck
-//    public void checkInternet() {
-//        if (isInternetAvailable()) {
-//            new IsInternetActive().execute();
-//        } else {
-//            Toast.makeText(getApplicationContext(), R.string.no_internet_message, Toast.LENGTH_LONG).show();
-//        }
-//    }
 
     public boolean isInternetAvailable() {
         try {
@@ -129,4 +137,10 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
             super.onPreExecute();
         }
     }
+
+public void changeLanguage(){
+    context = LocaleHelper.setLocale(MainActivity.this, "ar");
+    resources = context.getResources();
+}
+
 }

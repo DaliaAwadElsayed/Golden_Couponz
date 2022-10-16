@@ -67,7 +67,6 @@
                     android:text="@string/english_label"
                     android:textAllCaps="false"
                     android:textStyle="bold" />
-
                 <TextView
                     android:id="@+id/arButtonId"
                     style="@style/ButtonStyle"
@@ -81,6 +80,7 @@
                     android:gravity="center"
                     android:text="@string/arabic_label"
                     android:textStyle="bold" />
+
 
 
 

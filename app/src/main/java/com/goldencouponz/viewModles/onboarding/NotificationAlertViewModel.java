@@ -5,7 +5,9 @@ import android.view.View;
 
 import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.Navigation;
 
+import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.NotificationAlertFragmentBinding;
 
 public class NotificationAlertViewModel extends ViewModel {
@@ -26,6 +28,19 @@ public class NotificationAlertViewModel extends ViewModel {
 
             }
         });
-
+        notificationAlertFragmentBinding.allowAlertId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO NOTIFICATION ALERT ALLOWING
+                Navigation.findNavController(view).navigate(R.id.homeFragment);
+            }
+        });
+        notificationAlertFragmentBinding.notNowId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO NOTIFICATION ALERT ALLOWING
+                Navigation.findNavController(view).navigate(R.id.loginFragment);
+            }
+        });
     }
 }

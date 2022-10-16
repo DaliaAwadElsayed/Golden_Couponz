@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.SplashFragmentBinding;
@@ -46,7 +47,12 @@ public class SplashFragment extends Fragment {
 
         mViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
         mViewModel.init(splashFragmentBinding, getContext(),getActivity());
-
+        splashFragmentBinding.continueId.setOnClickListener(view -> {
+//            Local.Companion.updateResources(context);
+//            LocaleHelper.setLocale(context, GoldenSharedPreference.getSelectedLanguageValue(context));
+            ((MainActivity) getActivity()).changeLanguage();
+            Navigation.findNavController(view).navigate(R.id.firstSkipFragment);
+        });
     }
 
 }

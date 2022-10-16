@@ -14,7 +14,7 @@ class Local {
             val res: Resources = context.resources
             val config = Configuration(res.configuration)
             config.setLocale(locale)
-//            context.createConfigurationContext(config)
+            context.createConfigurationContext(config)
             res.updateConfiguration(config, res.displayMetrics)
         }
     }

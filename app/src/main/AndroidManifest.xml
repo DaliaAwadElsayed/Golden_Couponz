@@ -12,6 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:configChanges="locale|orientation|screenSize|keyboard|keyboardHidden"
         android:theme="@style/Theme.GoldenCouponz">
         <activity
             android:name="com.goldencouponz.activities.MainActivity"

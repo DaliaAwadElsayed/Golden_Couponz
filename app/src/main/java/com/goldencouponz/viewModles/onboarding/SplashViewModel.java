@@ -10,7 +10,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModel;
-import androidx.navigation.Navigation;
 
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.SplashFragmentBinding;
@@ -19,7 +18,6 @@ import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.GoldenSharedPreference;
-import com.goldencouponz.utility.LocaleHelper;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,23 +25,29 @@ import retrofit2.Response;
 
 public class SplashViewModel extends ViewModel {
     SplashFragmentBinding splashFragmentBinding;
-    Context context;
+    Context context, mContext;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
     CountriesAdapter countriesAdapter;
     Activity activity;
 
+
     public void init(SplashFragmentBinding splashFragmentBinding, Context context, Activity activity) {
         this.context = context;
+        this.mContext=context;
         this.splashFragmentBinding = splashFragmentBinding;
         this.activity = activity;
         splashScreen();
-        splashFragmentBinding.continueId.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.firstSkipFragment));
+//        splashFragmentBinding.continueId.setOnClickListener(view -> {
+//            Local.Companion.updateResources(context);
+//            LocaleHelper.setLocale(context, GoldenSharedPreference.getSelectedLanguageValue(context));
+//            Navigation.findNavController(view).navigate(R.id.firstSkipFragment);
+//              });
         splashFragmentBinding.countriesLinearId.setVisibility(View.GONE);
         splashFragmentBinding.arButtonId.setOnClickListener(view -> {
             continueProp();
-            LocaleHelper.setLocale(context, "ar");
-            GoldenSharedPreference.changeLanguage(context, 1);
-            splashFragmentBinding.prefCountryId.setText(R.string.fav_country);
+//            LocaleHelper.setLocale(context, "ar");
+//            GoldenSharedPreference.changeLanguage(context, 1);
+               splashFragmentBinding.prefCountryId.setText(R.string.fav_country);
             splashFragmentBinding.continueId.setText(R.string.ar_continue_label);
             splashFragmentBinding.homeRecyclerView.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             splashFragmentBinding.countriesLinearId.setVisibility(View.GONE);
@@ -56,8 +60,10 @@ public class SplashViewModel extends ViewModel {
             @Override
             public void onClick(View view) {
                 continueProp();
-                LocaleHelper.setLocale(context, "en");
-                GoldenSharedPreference.changeLanguage(context, 0);
+//                LocaleHelper.setLocale(context, "en");
+//                GoldenSharedPreference.changeLanguage(context, 0);
+//                mContext = LocaleHelper.setLocale(mContext, "en");
+//                resources = mContext.getResources();
                 splashFragmentBinding.prefCountryId.setText(R.string.preferred_country);
                 splashFragmentBinding.continueId.setText(R.string.en_continue_label);
                 splashFragmentBinding.homeRecyclerView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
