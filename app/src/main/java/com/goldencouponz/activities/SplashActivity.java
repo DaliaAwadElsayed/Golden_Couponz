@@ -1,85 +1,123 @@
-package com.goldencouponz.viewModles.onboarding;
+package com.goldencouponz.activities;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
-import androidx.lifecycle.ViewModel;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.e.goldencouponz.R;
-import com.e.goldencouponz.databinding.SplashFragmentBinding;
+import com.e.goldencouponz.databinding.ActivitySplashBinding;
 import com.goldencouponz.adapters.countries.CountriesAdapter;
 import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.GoldenSharedPreference;
 
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SplashViewModel extends ViewModel {
-    SplashFragmentBinding splashFragmentBinding;
-    Context context, mContext;
+public class SplashActivity extends AppCompatActivity {
+    ActivitySplashBinding splashFragmentBinding;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
     CountriesAdapter countriesAdapter;
-    Activity activity;
+    String language;
+    /**
+     * language
+     **/
+    private static String LANGUAGE_CODE_ENGLISH = "en";
+    private static final String LANGUAGE_CODE_ARABIC = "ar";
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(getLanguageAwareContext(newBase));
+    }
 
-    public void init(SplashFragmentBinding splashFragmentBinding, Context context, Activity activity) {
-        this.context = context;
-        this.mContext=context;
-        this.splashFragmentBinding = splashFragmentBinding;
-        this.activity = activity;
+    private static Context getLanguageAwareContext(Context context) {
+        Configuration configuration = context.getResources().getConfiguration();
+        configuration.setLocale(new Locale(getLanguageCode()));
+        return context.createConfigurationContext(configuration);
+    }
+
+    // Rewrite this method according to your needs
+    private static String getLanguageCode() {
+        return LANGUAGE_CODE_ARABIC;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        splashFragmentBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
+        if (GoldenSharedPreference.getUserLanguage(this).equals("ar") || GoldenSharedPreference.getUserLanguage(this).equals("en")) {
+            language = GoldenSharedPreference.getUserLanguage(this);
+            Intent i = new Intent(SplashActivity.this, MainActivity.class);
+            i.putExtra("language", language);
+            startActivity(i);
+        }
+        if (!isInternetAvailable()) {
+            Toast.makeText(this, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+        }
         splashScreen();
-//        splashFragmentBinding.continueId.setOnClickListener(view -> {
-//            Local.Companion.updateResources(context);
-//            LocaleHelper.setLocale(context, GoldenSharedPreference.getSelectedLanguageValue(context));
-//            Navigation.findNavController(view).navigate(R.id.firstSkipFragment);
-//              });
+        splashFragmentBinding.continueId.setOnClickListener(view -> {
+            Intent i = new Intent(SplashActivity.this, SkipActivity.class);
+            i.putExtra("language", language);
+            startActivity(i);
+            finish();
+        });
         splashFragmentBinding.countriesLinearId.setVisibility(View.GONE);
         splashFragmentBinding.arButtonId.setOnClickListener(view -> {
             continueProp();
-//            LocaleHelper.setLocale(context, "ar");
-//            GoldenSharedPreference.changeLanguage(context, 1);
-               splashFragmentBinding.prefCountryId.setText(R.string.fav_country);
+            splashFragmentBinding.prefCountryId.setText(R.string.fav_country);
             splashFragmentBinding.continueId.setText(R.string.ar_continue_label);
             splashFragmentBinding.homeRecyclerView.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             splashFragmentBinding.countriesLinearId.setVisibility(View.GONE);
-            splashFragmentBinding.enButtonId.setBackground(context.getResources().getDrawable(R.drawable.bk_border_button));
-            splashFragmentBinding.arButtonId.setBackground(context.getResources().getDrawable(R.drawable.bk_button));
+            splashFragmentBinding.enButtonId.setBackground(getResources().getDrawable(R.drawable.bk_border_button));
+            splashFragmentBinding.arButtonId.setBackground(getResources().getDrawable(R.drawable.bk_button));
             getCountries("ar");
-
+            language = "ar";
+            //TODO UPDATE USER COUNTRY AND ID
+            GoldenSharedPreference.saveUserLangAndCountry(SplashActivity.this,"ar","",0);
         });
         splashFragmentBinding.enButtonId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 continueProp();
-//                LocaleHelper.setLocale(context, "en");
-//                GoldenSharedPreference.changeLanguage(context, 0);
-//                mContext = LocaleHelper.setLocale(mContext, "en");
-//                resources = mContext.getResources();
                 splashFragmentBinding.prefCountryId.setText(R.string.preferred_country);
                 splashFragmentBinding.continueId.setText(R.string.en_continue_label);
                 splashFragmentBinding.homeRecyclerView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                 splashFragmentBinding.countriesLinearId.setVisibility(View.GONE);
-                splashFragmentBinding.arButtonId.setBackground(context.getResources().getDrawable(R.drawable.bk_border_button));
-                splashFragmentBinding.enButtonId.setBackground(context.getResources().getDrawable(R.drawable.bk_button));
+                splashFragmentBinding.arButtonId.setBackground(getResources().getDrawable(R.drawable.bk_border_button));
+                splashFragmentBinding.enButtonId.setBackground(getResources().getDrawable(R.drawable.bk_button));
                 getCountries("en");
+                language = "en";
+                GoldenSharedPreference.saveUserLangAndCountry(SplashActivity.this,"en","",0);
             }
         });
+
     }
 
     private void continueProp() {
         splashFragmentBinding.continueId.setAlpha(0.5f);
         splashFragmentBinding.continueId.setEnabled(false);
-        splashFragmentBinding.continueId.setBackground(context.getResources().getDrawable(R.drawable.bk_border_button));
-        splashFragmentBinding.continueId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.grey)));
+        splashFragmentBinding.continueId.setBackground(getResources().getDrawable(R.drawable.bk_border_button));
+        splashFragmentBinding.continueId.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey)));
 
     }
 
@@ -92,7 +130,7 @@ public class SplashViewModel extends ViewModel {
             } catch (Exception e) {
             }
             handler.post(() -> {
-                if (!GoldenSharedPreference.isLoggedIn(context)) {
+                if (!GoldenSharedPreference.isLoggedIn(this)) {
                     animation();
                 }
 
@@ -103,13 +141,13 @@ public class SplashViewModel extends ViewModel {
 
     private void animation() {
         splashFragmentBinding.langLinearId.setVisibility(View.VISIBLE);
-        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
+        Animation animation = AnimationUtils.loadAnimation(this.getApplicationContext(), R.anim.slide_up);
         splashFragmentBinding.langLinearId.startAnimation(animation);
         splashFragmentBinding.logoId.startAnimation(animation);
     }
 
     private void getCountries(String lang) {
-        countriesAdapter = new CountriesAdapter(context);
+        countriesAdapter = new CountriesAdapter(this);
         splashFragmentBinding.progress.setVisibility(View.VISIBLE);
         apiInterface.getCountries(lang).enqueue(new Callback<ApiResponse>() {
             @Override
@@ -131,12 +169,12 @@ public class SplashViewModel extends ViewModel {
                                     if (position != -1) {
                                         splashFragmentBinding.continueId.setAlpha(1f);
                                         splashFragmentBinding.continueId.setEnabled(true);
-                                        splashFragmentBinding.continueId.setBackground(context.getResources().getDrawable(R.drawable.bk_button));
+                                        splashFragmentBinding.continueId.setBackground(getResources().getDrawable(R.drawable.bk_button));
                                         splashFragmentBinding.continueId.setBackgroundTintList(null);
                                     } else {
                                         splashFragmentBinding.continueId.setAlpha(0.5f);
                                         splashFragmentBinding.continueId.setEnabled(false);
-                                        splashFragmentBinding.continueId.setBackground(context.getResources().getDrawable(R.drawable.bk_border_button));
+                                        splashFragmentBinding.continueId.setBackground(getResources().getDrawable(R.drawable.bk_border_button));
                                     }
                                 }
                             });
@@ -148,14 +186,14 @@ public class SplashViewModel extends ViewModel {
                         }
                     } else {
                         splashFragmentBinding.countriesLinearId.setVisibility(View.GONE);
-                        Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SplashActivity.this, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
                         splashFragmentBinding.progress.setVisibility(View.GONE);
                         splashFragmentBinding.noInternetConId.setVisibility(View.GONE);
                     }
                 } else {
                     splashFragmentBinding.countriesLinearId.setVisibility(View.GONE);
                     splashFragmentBinding.noInternetConId.setVisibility(View.GONE);
-                    Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SplashActivity.this, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
                     splashFragmentBinding.progress.setVisibility(View.GONE);
                 }
             }
@@ -177,5 +215,19 @@ public class SplashViewModel extends ViewModel {
             }
         });
     }
+
+    public boolean isInternetAvailable() {
+        try {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        } catch (Exception e) {
+
+            Log.e("isInternetAvailable:", e.toString());
+            return false;
+        }
+    }
+
 
 }

@@ -2,13 +2,14 @@
 <resources>
     <string name="app_name">الكوبون الذهبي</string>
     <string name="preferred_language">Your preferred language?</string>
-    <string name="preferred_country">بلدك المفضلة؟</string>
+    <string name="preferred_country">Preferred country?</string>
     <string name="arabic_label">اللغة العربية</string>
     <string name="english_label">English</string>
     <string name="fav_language">لغتك المفضلة؟</string>
     <string name="fav_country">بلدك المفضلة؟</string>
     <string name="en_continue_label">Continue</string>
-    <string name="ar_continue_label">متابعة</string>    <string name="somethingwentwrongmessage">حدث خطأ ما!</string>
+    <string name="ar_continue_label">متابعة</string>
+    <string name="somethingwentwrongmessage">حدث خطأ ما!</string>
     <string name="no_internet_message">"لا يوجد اٍتصال بالأنترنت,  يرجى التحقق من الشبكة! "</string>
     <string name="stores_label">المتاجر</string>
     <string name="enjoy_strongest_discounts_offers">استمتع بأقوي مجموعة من الخصومات والعروض</string>
@@ -59,4 +60,15 @@
     <string name="confirm_password">تأكيد كلمة المرور</string>
     <string name="create_label">إنشاء حساب</string>
     <string name="or_label">أو</string>
+    <string name="thereisanerrorwiththedata">يوجد خطأ بالبيانات</string>
+    <string name="lessthan8letters">كلمة المرور لا يمكن ان تكون اقل من  6 حروف</string>
+    <string name="entervalidemail">ادخل بريد الكتروني صحيح</string>
+    <string name="theemailhasalreadybeentaken">البريد الاٍلكتروني مستخدم بالفعل</string>
+    <string name="entervalidphone">ادخل رقم جوال صحيح</string>
+    <string name="enterphone">ادخل رقم الجوال</string>
+    <string name="enterurname">ادخل اسمك</string>
+    <string name="enterpassword">ادخل كلمة المرور</string>
+    <string name="passwordsdoesntmatch">كلمة المرور غير متطابقة</string>
+    <string name="emailsdoesntmatch">البريد الاٍلكتروني غير متطابق</string>
+
 </resources>

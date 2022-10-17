@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.FirstSkipFragmentBinding;
-import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.onboarding.FirstSkipViewModel;
 
 public class FirstSkipFragment extends Fragment {
@@ -34,9 +33,7 @@ public class FirstSkipFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(FirstSkipViewModel.class);
-        ((MainActivity) getActivity()).hideToolbar();
-        ((MainActivity) getActivity()).hideBottomMenu();
-        mViewModel.init(firstSkipFragmentBinding, getContext());
+         mViewModel.init(firstSkipFragmentBinding, getContext());
     }
 
 }

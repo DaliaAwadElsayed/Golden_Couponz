@@ -31,6 +31,8 @@ public class FirstSkipViewModel extends ViewModel implements ViewPager.OnPageCha
     public void init(FirstSkipFragmentBinding firstSkipFragmentBinding, Context context) {
         this.context = context;
         this.firstSkipFragmentBinding = firstSkipFragmentBinding;
+        firstSkipFragmentBinding.nextId.setText(R.string.next_label);
+        firstSkipFragmentBinding.skipId.setText(R.string.skip_label);
         firstSkipFragmentBinding.skipId.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.notificationAlertFragment));
         final Handler handler = new Handler();
         final Runnable Update = new Runnable() {

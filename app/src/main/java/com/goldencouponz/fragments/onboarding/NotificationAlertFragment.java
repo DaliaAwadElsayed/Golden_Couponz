@@ -1,5 +1,7 @@
 package com.goldencouponz.fragments.onboarding;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +36,22 @@ public class NotificationAlertFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(NotificationAlertViewModel.class);
-        ((MainActivity) getActivity()).hideToolbar();
-        ((MainActivity) getActivity()).hideBottomMenu();
-        mViewModel.init(notificationAlertFragmentBinding, getContext());    }
+        mViewModel.init(notificationAlertFragmentBinding, getContext());
+        notificationAlertFragmentBinding.notNowId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                moveToNewActivity();
+            }
+        });
 
+    }
+
+    private void moveToNewActivity() {
+        Bundle extras = getActivity().getIntent().getExtras();
+        Intent i = new Intent(getActivity(), MainActivity.class);
+        i.putExtra("language", extras.getString("language"));
+        startActivity(i);
+        ((Activity) getActivity()).overridePendingTransition(0, 0);
+//        getActivity().finish();
+    }
 }

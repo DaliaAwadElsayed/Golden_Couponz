@@ -16,7 +16,7 @@ import com.goldencouponz.utility.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.HomePageViewHolder> {
+public class CountriesCodeAdapter extends RecyclerView.Adapter<CountriesCodeAdapter.HomePageViewHolder> {
     private LayoutInflater inflater;
     private List<Country> countries = new ArrayList<>();
     Context context;
@@ -24,13 +24,14 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Home
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(View viewItem, int position);
+        void onItemClick(View viewItem, String tel);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
-    public CountriesAdapter(Context context) {
+
+    public CountriesCodeAdapter(Context context) {
         this.context = context;
     }
 
@@ -77,7 +78,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Home
         }
 
         private void bindRestaurant(Country countries) {
-            countryItemBinding.countryNameId.setText(Utility.fixNullString(String.valueOf(countries.getTitle())));
+            countryItemBinding.countryNameId.setText(Utility.fixNullString(String.valueOf(countries.getTitle())) + " " + "(" + "+" + countries.getTel() + ")");
             Utils.fetchSvg(context, countries.getFlag(), countryItemBinding.countryImgId);
             if (checkedPosition == -1) {
                 countryItemBinding.checkId.setVisibility(View.GONE);
@@ -93,7 +94,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Home
                 if (checkedPosition != getAdapterPosition()) {
                     notifyItemChanged(checkedPosition);
                     checkedPosition = getAdapterPosition();
-                    listener.onItemClick(countryItemBinding.getRoot(), checkedPosition);
+                    listener.onItemClick(countryItemBinding.getRoot(), countries.getTel());
 
                 }
             });

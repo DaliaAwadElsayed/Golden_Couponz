@@ -10,9 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.RegisterationFragmentBinding;
 import com.goldencouponz.activities.MainActivity;
+import com.goldencouponz.viewModles.authentication.RegisterationViewModel;
 
 public class RegisterationFragment extends Fragment {
 
@@ -25,7 +25,8 @@ RegisterationFragmentBinding registerationFragmentBinding;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.registeration_fragment, container, false);
+        registerationFragmentBinding=RegisterationFragmentBinding.inflate(inflater,container,false);
+        return registerationFragmentBinding.getRoot();
     }
 
     @Override

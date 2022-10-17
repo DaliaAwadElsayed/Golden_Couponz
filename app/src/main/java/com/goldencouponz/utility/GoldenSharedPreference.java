@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.goldencouponz.models.wrapper.ApiResponse;
+
 public class GoldenSharedPreference {
     private static final String IS_LOGGED_IN = "IsLoggedIn";
     private static final String KEY_NAME = "name";
@@ -13,9 +15,14 @@ public class GoldenSharedPreference {
     private static final String TOKEN = "token_pref";
     private static final String UID = "user_id_pref";
     private static final String LANG_KEY = "chosen_lang_key";
-    private static final String ADDRESS = "address";
+    private static final String COUNTRY_NAME = "chosen_country";
+    private static final String COUNTRY_ID = "chosen_country_id";
+    private static final String STATUS = "status";
+    private static final String PROFILE = "profile";
     private static final String PHONE = "phone";
-    private static final String NOLOGGING = "NOLOGIN";
+    private static final String NOLOGGING = "no_login";
+    private static final String SHOW = "show";
+
     private static Application application;
     SharedPreferences sharedPref = application.getApplicationContext().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
     public SharedPreferences.Editor editor = sharedPref.edit();
@@ -24,7 +31,7 @@ public class GoldenSharedPreference {
 
     }
     /**
-     * @created by Dalia
+     * @created by Dalia Awad
      * */
     /**
      * save the user data into shared preference manager (APPLICATION TO APP PREFERENCE MANAGER)
@@ -32,29 +39,66 @@ public class GoldenSharedPreference {
      * @param context  the context to access the shared preference
      * @param userData the user data from the login response
      */
-//    public static void saveUser(Context context, User userData, int id) {
-//        PreferenceManager.getDefaultSharedPreferences(context)
-//                .edit()
-//                .putInt(UID, id)
-//                .putString(USERROLE, "CLIENT")
-//                .putInt(NOLOGGING, 1)
-//                .putString(KEY_NAME, userData.getName())
-//                .putString(KEY_EMAIL, userData.getEmail())
-//                .putString(PHONE, userData.getPhone())
-//                .putString(ADDRESS, userData.getAddress())
-//                .putBoolean(IS_LOGGED_IN, true)
-//                .apply();
-//    }
+    public static void saveUser(Context context, ApiResponse userData, int id) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putInt(UID, id)
+                .putString(KEY_NAME, userData.getName())
+                .putString(KEY_EMAIL, userData.getEmail())
+                .putString(PHONE, userData.getPhone())
+                .putString(PROFILE, userData.getProfilePhotoUrl())
+                .putInt(STATUS, userData.getStatus())
+                .putString(TOKEN, userData.getToken())
+                .putBoolean(IS_LOGGED_IN, true)
+                .putInt(NOLOGGING, 1)
+                .apply();
+    }
+
+    public static void saveUserLangAndCountry(Context context, String lang, String country, int countryId) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(LANG_KEY, lang)
+                .putString(COUNTRY_NAME, country)
+                .putInt(COUNTRY_ID, countryId)
+                .apply();
+    }
+
+    public static void saveUserCloseLogIn(Context context, String show) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(SHOW, show)
+                .apply();
+    }
+    /**
+     * @return the user show Login Screen
+     */
+    public static String getUserShowLogin(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(SHOW, "");
+    }
+    /**
+     * @return the user country name choice
+     */
+    public static String getUserCountryName(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(COUNTRY_NAME, "");
+    }
 
     /**
-     * @save the user token
+     * @return the user country id choice
      */
-//    public static void saveToken(Context context, ApiResponse userData) {
-//        PreferenceManager.getDefaultSharedPreferences(context)
-//                .edit()
-//                .putString(TOKEN, userData.getAccessToken())
-//                .apply();
-//    }
+    public static int getUserCountryId(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt(COUNTRY_ID, 0);
+    }
+
+    /**
+     * @return the user language choice
+     */
+    public static String getUserLanguage(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(LANG_KEY, "");
+    }
 
     /**
      * @return the user token
@@ -70,15 +114,6 @@ public class GoldenSharedPreference {
     public static int getLOGIN(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getInt(NOLOGGING, 1);
-    }
-
-
-    /**
-     * @return the user Address
-     */
-    public static String getAddress(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(ADDRESS, "");
     }
 
     /**
@@ -128,42 +163,9 @@ public class GoldenSharedPreference {
         PreferenceManager.getDefaultSharedPreferences(context).edit().clear().apply();
     }
 
-
-    /**
-     * get Activity
-     */
-    public static void setActivity(Application activity) {
-        application = activity;
-    }
-
-    public static Application getActivity() {
-        return application;
-    }
-
-    private static SharedPreferences getDefaultSharedPreference(Context context) {
-        if (PreferenceManager.getDefaultSharedPreferences(context) != null)
-            return PreferenceManager.getDefaultSharedPreferences(context);
-        else
-            return null;
-    }
-
-    public static int getSelectedLanguage(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(LANG_KEY, "ar").equals("en") ? 0 : 1;
-    }
-
     public static String getSelectedLanguageValue(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(LANG_KEY, "ar");
     }
 
-    /**
-     * @param language 0 for english and 1 for arabic
-     */
-    public static void changeLanguage(Context context, int language) {
-        // PreferenceManager.getDefaultSharedPreferences(context).edit().putString(LANG_KEY, language == 0 ? "en" : "ar").apply();
-        if (language == 0) {
-            PreferenceManager.getDefaultSharedPreferences(context).edit().putString(LANG_KEY, "en").apply();
-        } else {
-            PreferenceManager.getDefaultSharedPreferences(context).edit().putString(LANG_KEY, "ar").apply();
-        }
-    }
+
 }

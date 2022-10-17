@@ -1,13 +1,9 @@
 package com.goldencouponz.viewModles.onboarding;
 
 import android.content.Context;
-import android.view.View;
 
-import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModel;
-import androidx.navigation.Navigation;
 
-import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.NotificationAlertFragmentBinding;
 
 public class NotificationAlertViewModel extends ViewModel {
@@ -17,30 +13,6 @@ public class NotificationAlertViewModel extends ViewModel {
     public void init(NotificationAlertFragmentBinding notificationAlertFragmentBinding, Context context) {
         this.context = context;
         this.notificationAlertFragmentBinding = notificationAlertFragmentBinding;
-        notificationAlertFragmentBinding.allowAlertId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
-
-                } else {
-
-                }
-
-            }
-        });
-        notificationAlertFragmentBinding.allowAlertId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO NOTIFICATION ALERT ALLOWING
-                Navigation.findNavController(view).navigate(R.id.homeFragment);
-            }
-        });
-        notificationAlertFragmentBinding.notNowId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO NOTIFICATION ALERT ALLOWING
-                Navigation.findNavController(view).navigate(R.id.loginFragment);
-            }
-        });
     }
+
 }

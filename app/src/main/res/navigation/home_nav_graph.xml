@@ -3,40 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_nav_graph"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.goldencouponz.fragments.onboarding.SplashFragment"
-        android:label="SplashFragment"
-        tools:layout="@layout/splash_fragment">
-        <action
-            android:id="@+id/firstSkipFragment"
-            app:destination="@id/firstSkipFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/firstSkipFragment"
-        android:name="com.goldencouponz.fragments.onboarding.FirstSkipFragment"
-        android:label="FirstSkipFragment"
-        tools:layout="@layout/first_skip_fragment">
-        <action
-            android:id="@+id/notificationAlertFragment"
-            app:destination="@id/notificationAlertFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/notificationAlertFragment"
-        android:name="com.goldencouponz.fragments.onboarding.NotificationAlertFragment"
-        android:label="NotificationAlertFragment"
-        tools:layout="@layout/notification_alert_fragment" >
-        <action
-            android:id="@+id/loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
-    <fragment
-        tools:layout="@layout/login_fragment"
         android:id="@+id/loginFragment"
         android:name="com.goldencouponz.fragments.authentication.LoginFragment"
-        android:label="LoginFragment" >
+        android:label="LoginFragment"
+        tools:layout="@layout/login_fragment">
         <action
             android:id="@+id/registerationFragment"
             app:destination="@id/registerationFragment" />
@@ -45,10 +18,9 @@
             app:destination="@id/forgetPasswordFragment" />
         <action
             android:id="@+id/homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+           />
+
     </fragment>
     <fragment
         android:id="@+id/forgetPasswordFragment"
@@ -64,5 +36,14 @@
         android:id="@+id/registerationFragment"
         android:name="com.goldencouponz.fragments.authentication.RegisterationFragment"
         android:label="registeration_fragment"
-        tools:layout="@layout/registeration_fragment" />
+        tools:layout="@layout/registeration_fragment">
+        <action
+            android:id="@+id/favouriteStoresFragment"
+            app:destination="@id/favouriteStoresFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteStoresFragment"
+        android:name="com.goldencouponz.fragments.favourite.FavouriteStoresFragment"
+        android:label="favourite_stores_fragment"
+        tools:layout="@layout/favourite_stores_fragment" />
 </navigation>
