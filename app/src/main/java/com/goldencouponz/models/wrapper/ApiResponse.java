@@ -1,7 +1,7 @@
 package com.goldencouponz.models.wrapper;
 
 
-import com.goldencouponz.models.country.Country;
+import com.goldencouponz.models.appsetting.Country;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -35,6 +35,7 @@ public class ApiResponse {
     @SerializedName("token")
     @Expose
     private String token;
+
 
     public ApiResponse() {
     }

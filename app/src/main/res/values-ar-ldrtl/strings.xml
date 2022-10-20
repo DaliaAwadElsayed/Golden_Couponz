@@ -70,5 +70,18 @@
     <string name="enterpassword">ادخل كلمة المرور</string>
     <string name="passwordsdoesntmatch">كلمة المرور غير متطابقة</string>
     <string name="emailsdoesntmatch">البريد الاٍلكتروني غير متطابق</string>
+    <string name="account_label">حسابي</string>
+    <string name="sign_in_and_save_offers">سجل الدخول واحفظ المتاجر المفضلة، وتابع اهم العروض وكن علي اتصال دائما</string>
+    <string name="sign_in_sign_up">تسجيل الدخول / إنشاء حساب</string>
+    <string name="support_us">ادعمنا</string>
+    <string name="rate_us_app_store">قيمنا في متجر التطبيقات</string>
+    <string name="app_settings">إعدادات التطبيق</string>
+    <string name="terms_conditions">الشروط والأحكام</string>
+    <string name="language_label">اللغة</string>
+    <string name="about_label">عن الكوبون الذهبي</string>
+    <string name="edit_profile">تعديل البيانات</string>
+    <string name="who_we_are">من نحن؟</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="sign_out">تسجيل الخروج</string>
 
 </resources>

@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.LoginFragmentBinding;
-import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.authentication.LoginViewModel;
 
 public class LoginFragment extends Fragment {
@@ -34,8 +33,6 @@ public class LoginFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        ((MainActivity) getActivity()).showToolbar();
-        ((MainActivity) getActivity()).hideBottomMenu();
         mViewModel.init(loginFragmentBinding, getContext());
     }
 

@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.e.goldencouponz.databinding.CountryItemBinding;
-import com.goldencouponz.models.country.Country;
+import com.goldencouponz.models.appsetting.Country;
 import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.Utils;
 
@@ -24,7 +24,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Home
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(View viewItem, int position);
+        void onItemClick(View viewItem,int position, String name);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -93,7 +93,8 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Home
                 if (checkedPosition != getAdapterPosition()) {
                     notifyItemChanged(checkedPosition);
                     checkedPosition = getAdapterPosition();
-                    listener.onItemClick(countryItemBinding.getRoot(), checkedPosition);
+                    String countryName=countries.getTitle();
+                    listener.onItemClick(countryItemBinding.getRoot(), checkedPosition,countryName);
 
                 }
             });

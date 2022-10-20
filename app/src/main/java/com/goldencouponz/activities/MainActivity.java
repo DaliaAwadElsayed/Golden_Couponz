@@ -7,19 +7,25 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.com.dtag.livia.utility.Local;
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.ActivityMainBinding;
 import com.goldencouponz.interfaces.ToolbarInterface;
 import com.goldencouponz.utility.LocaleHelper;
+import com.google.android.gms.tasks.Task;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.luseen.spacenavigation.SpaceItem;
+import com.luseen.spacenavigation.SpaceOnClickListener;
 
 public class MainActivity extends AppCompatActivity implements ToolbarInterface {
     ActivityMainBinding activityMainBinding;
@@ -36,28 +42,79 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
             LocaleHelper.setLocale(this, value);
             if (value.equals("ar")) {
                 getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            }
-            else {
+            } else {
                 getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             }
         }
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         navController = Navigation.findNavController(this, R.id.home_nav_fragment);
-        NavigationUI.setupWithNavController(activityMainBinding.bottomId, navController);
-        activityMainBinding.toolBarId.setClickable(true);
+        activityMainBinding.bottomId.initWithSaveInstanceState(savedInstanceState);
+        activityMainBinding.bottomId.setSaveEnabled(true);
+        activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_store));
+        activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_products));
+        activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_fav));
+        activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_user));
+        bottomClickListener();
+    }
 
+    public void askRatings() {
+        ReviewManager manager = ReviewManagerFactory.create(this);
+        Task<ReviewInfo> request = manager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // We can get the ReviewInfo object
+                ReviewInfo reviewInfo = task.getResult();
+                Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
+                flow.addOnCompleteListener(task2 -> {
+                    // The flow has finished. The API does not indicate whether the user
+                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+                    // matter the result, we continue our app flow.
+                });
+            } else {
+                // There was some problem, continue regardless of the result.
+            }
+        });
+    }
+
+    private void bottomClickListener() {
+        activityMainBinding.bottomId.setSpaceOnClickListener(new SpaceOnClickListener() {
+            @Override
+            public void onCentreButtonClick() {
+                Toast.makeText(MainActivity.this, "whatsApp", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemClick(int itemIndex, String itemName) {
+                if (itemIndex == 3) {
+                    navController.navigate(R.id.profileFragment);
+                } else if (itemIndex == 2) {
+                    navController.navigate(R.id.favouriteStoresFragment);
+                } else if (itemIndex == 1) {
+                    //products
+                } else if (itemIndex == 0) {
+                    navController.navigate(R.id.homeFragment);
+                }
+            }
+
+            @Override
+            public void onItemReselected(int itemIndex, String itemName) {
+                if (itemIndex == 3) {
+                    navController.navigate(R.id.profileFragment);
+                } else if (itemIndex == 2) {
+                    navController.navigate(R.id.favouriteStoresFragment);
+                } else if (itemIndex == 1) {
+                    //products
+                } else if (itemIndex == 0) {
+                    navController.navigate(R.id.homeFragment);
+                }
+            }
+        });
     }
 
     @Override
-    public void showToolbar() {
-        activityMainBinding.toolBarId.setSystemUiVisibility(View.VISIBLE);
-        activityMainBinding.toolBarId.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideToolbar() {
-        activityMainBinding.toolBarId.setSystemUiVisibility(View.GONE);
-        activityMainBinding.toolBarId.setVisibility(View.GONE);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        activityMainBinding.bottomId.onSaveInstanceState(outState);
     }
 
     @Override

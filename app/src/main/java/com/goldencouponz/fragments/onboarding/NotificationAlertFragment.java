@@ -52,6 +52,5 @@ public class NotificationAlertFragment extends Fragment {
         i.putExtra("language", extras.getString("language"));
         startActivity(i);
         ((Activity) getActivity()).overridePendingTransition(0, 0);
-//        getActivity().finish();
     }
 }

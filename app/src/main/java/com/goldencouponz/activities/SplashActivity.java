@@ -3,7 +3,6 @@ package com.goldencouponz.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -27,8 +26,6 @@ import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.GoldenSharedPreference;
 
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,27 +35,6 @@ public class SplashActivity extends AppCompatActivity {
     private Api apiInterface = RetrofitClient.getInstance().getApi();
     CountriesAdapter countriesAdapter;
     String language;
-    /**
-     * language
-     **/
-    private static String LANGUAGE_CODE_ENGLISH = "en";
-    private static final String LANGUAGE_CODE_ARABIC = "ar";
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(getLanguageAwareContext(newBase));
-    }
-
-    private static Context getLanguageAwareContext(Context context) {
-        Configuration configuration = context.getResources().getConfiguration();
-        configuration.setLocale(new Locale(getLanguageCode()));
-        return context.createConfigurationContext(configuration);
-    }
-
-    // Rewrite this method according to your needs
-    private static String getLanguageCode() {
-        return LANGUAGE_CODE_ARABIC;
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -93,7 +69,8 @@ public class SplashActivity extends AppCompatActivity {
             getCountries("ar");
             language = "ar";
             //TODO UPDATE USER COUNTRY AND ID
-            GoldenSharedPreference.saveUserLangAndCountry(SplashActivity.this,"ar","",0);
+            GoldenSharedPreference.saveUserLang(SplashActivity.this,"ar");
+
         });
         splashFragmentBinding.enButtonId.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +84,7 @@ public class SplashActivity extends AppCompatActivity {
                 splashFragmentBinding.enButtonId.setBackground(getResources().getDrawable(R.drawable.bk_button));
                 getCountries("en");
                 language = "en";
-                GoldenSharedPreference.saveUserLangAndCountry(SplashActivity.this,"en","",0);
+                GoldenSharedPreference.saveUserLang(SplashActivity.this,"en");
             }
         });
 
@@ -165,8 +142,9 @@ public class SplashActivity extends AppCompatActivity {
                             splashFragmentBinding.homeRecyclerView.setAdapter(countriesAdapter);
                             countriesAdapter.setOnItemClickListener(new CountriesAdapter.OnItemClickListener() {
                                 @Override
-                                public void onItemClick(View viewItem, int position) {
+                                public void onItemClick(View viewItem, int position,String name) {
                                     if (position != -1) {
+                                        GoldenSharedPreference.saveUserCountry(SplashActivity.this,position,name);
                                         splashFragmentBinding.continueId.setAlpha(1f);
                                         splashFragmentBinding.continueId.setEnabled(true);
                                         splashFragmentBinding.continueId.setBackground(getResources().getDrawable(R.drawable.bk_button));

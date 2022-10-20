@@ -5,4 +5,7 @@
     <color name="white">#FFF</color>
     <color name="grey">#E5E5E5</color>
     <color name="antique_white">#FFFEFA</color>
+    <color name="alpha">#DAD6D6</color>
+
+
 </resources>

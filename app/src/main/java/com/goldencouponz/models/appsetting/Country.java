@@ -1,4 +1,4 @@
-package com.goldencouponz.models.country;
+package com.goldencouponz.models.appsetting;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

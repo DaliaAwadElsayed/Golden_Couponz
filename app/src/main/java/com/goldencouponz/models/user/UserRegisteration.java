@@ -19,8 +19,52 @@ public class UserRegisteration {
     @SerializedName("phone")
     @Expose
     private String phone;
+    @SerializedName("status")
+    @Expose
+    private Boolean status;
+    @SerializedName("user")
+    @Expose
+    private UserRegisteration user;
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("profile_photo_url")
+    @Expose
+    private String profilePhotoUrl;
 
     public UserRegisteration() {
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public UserRegisteration getUser() {
+        return user;
+    }
+
+    public void setUser(UserRegisteration user) {
+        this.user = user;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getProfilePhotoUrl() {
+        return profilePhotoUrl;
+    }
+
+    public void setProfilePhotoUrl(String profilePhotoUrl) {
+        this.profilePhotoUrl = profilePhotoUrl;
     }
 
     public String getName() {

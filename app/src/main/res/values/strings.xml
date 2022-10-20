@@ -69,5 +69,18 @@
     <string name="enterpassword">Enter password</string>
     <string name="passwordsdoesntmatch">Passwords doesn\'t match</string>
     <string name="emailsdoesntmatch">Emails doesn\'t match</string>
+    <string name="account_label">My Account</string>
+    <string name="sign_in_and_save_offers">Sign in and save your favorite stores, follow the most important offers and always be in touch</string>
+    <string name="sign_in_sign_up">Sign in / Sign up</string>
+    <string name="support_us">Support us</string>
+    <string name="rate_us_app_store">Rate us in the App Store</string>
+    <string name="app_settings">Application settings</string>
+    <string name="terms_conditions">Terms and Conditions</string>
+    <string name="language_label">Language</string>
+    <string name="about_label">About Golden Couponz</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="who_we_are">Who we are?</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="sign_out">Sign out</string>
 
 </resources>

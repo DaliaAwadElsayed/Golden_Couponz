@@ -54,15 +54,19 @@ public class GoldenSharedPreference {
                 .apply();
     }
 
-    public static void saveUserLangAndCountry(Context context, String lang, String country, int countryId) {
+    public static void saveUserLang(Context context, String lang) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(LANG_KEY, lang)
+                .apply();
+    }
+    public static void saveUserCountry(Context context, int countryId,  String country) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
                 .putString(COUNTRY_NAME, country)
                 .putInt(COUNTRY_ID, countryId)
                 .apply();
     }
-
     public static void saveUserCloseLogIn(Context context, String show) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()

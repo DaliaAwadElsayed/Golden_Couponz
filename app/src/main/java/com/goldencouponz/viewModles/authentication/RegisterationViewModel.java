@@ -103,7 +103,6 @@ public class RegisterationViewModel extends ViewModel {
                     if (response.body().getSuccess() && response.body() != null) {
                         registerationFragmentBinding.progress.setVisibility(View.GONE);
                         if (!response.body().getCountries().isEmpty()) {
-                            registerationFragmentBinding.relativeRegistId.setVisibility(View.VISIBLE);
                             registerationFragmentBinding.countriesLinearId.setVisibility(View.VISIBLE);
                             Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
                             registerationFragmentBinding.countriesLinearId.startAnimation(animation);
@@ -111,6 +110,7 @@ public class RegisterationViewModel extends ViewModel {
                             registerationFragmentBinding.prefCountryId.setVisibility(View.VISIBLE);
                             countriesAdapter.setCountries(response.body().getCountries());
                             registerationFragmentBinding.homeRecyclerView.setAdapter(countriesAdapter);
+                            registerationFragmentBinding.relativeRegistId.setVisibility(View.VISIBLE);
                             countriesAdapter.setOnItemClickListener(new CountriesCodeAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View viewItem, String code) {
@@ -247,7 +247,7 @@ public class RegisterationViewModel extends ViewModel {
 
     private boolean confirmPasswordStrongValid() {
         String name = registerationFragmentBinding.confirmPasswordId.getText().toString();
-      if (name.isEmpty() ) {
+        if (name.isEmpty()) {
             registerationFragmentBinding.confirmPasswordId.setError(context.getResources().getString(R.string.passwordsdoesntmatch));
             registerationFragmentBinding.confirmPasswordId.requestFocus();
             return false;

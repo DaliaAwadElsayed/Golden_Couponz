@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.e.goldencouponz.databinding.CountryItemBinding;
-import com.goldencouponz.models.country.Country;
+import com.goldencouponz.models.appsetting.Country;
 import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.Utils;
 

@@ -41,7 +41,6 @@
         android:fillViewport="true">
 
         <RelativeLayout
-            android:layout_marginTop="@dimen/_8sdp"
             android:id="@+id/linearRegisterId"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -360,14 +359,15 @@
 
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/relativeRegistId"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:alpha="0.6"
-                android:background="#BFBDBD"
+                android:background="@color/alpha"
                 android:clickable="false"
+                android:alpha="0.5"
                 android:orientation="horizontal"
-                android:visibility="gone" />
+               />
 
             <LinearLayout
                 android:id="@+id/countriesLinearId"
@@ -422,5 +422,4 @@
 
     </ScrollView>
     </LinearLayout>
-
 </layout>

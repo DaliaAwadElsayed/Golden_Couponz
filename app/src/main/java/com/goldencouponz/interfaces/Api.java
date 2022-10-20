@@ -1,5 +1,6 @@
 package com.goldencouponz.interfaces;
 
+import com.goldencouponz.models.appsetting.AboutApp;
 import com.goldencouponz.models.user.UserRegisteration;
 import com.goldencouponz.models.wrapper.ApiResponse;
 
@@ -21,8 +22,20 @@ public interface Api {
     @POST("api/login")
     Call<ApiResponse> userLogin(@Field("email") String email, @Field("password") String password);
 
+    //api/logout
+    @GET("api/logout")
+    Call<ApiResponse> userLogOut(@Header("Authorization") String authHeader);
+
     //api/register
     @POST("api/register")
     Call<ApiResponse> userRegister(@Body UserRegisteration registeration);
+
+    //{{baseUrl}}/api/profile
+    @GET("api/profile")
+    Call<UserRegisteration> getProfile(@Header("Authorization") String authHeader);
+
+    //api/general-views
+    @GET("api/general-views")
+    Call<AboutApp> generalViews(@Header("Accept-Language") String AcceptLanguage);
 
 }

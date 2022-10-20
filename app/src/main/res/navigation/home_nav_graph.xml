@@ -18,8 +18,7 @@
             app:destination="@id/forgetPasswordFragment" />
         <action
             android:id="@+id/homeFragment"
-            app:destination="@id/homeFragment"
-           />
+            app:destination="@id/homeFragment" />
 
     </fragment>
     <fragment
@@ -31,7 +30,14 @@
         android:id="@+id/homeFragment"
         android:name="com.goldencouponz.fragments.home.HomeFragment"
         android:label="home_fragment"
-        tools:layout="@layout/home_fragment" />
+        tools:layout="@layout/home_fragment">
+        <action
+            android:id="@+id/profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/aboutFragment"
+            app:destination="@id/aboutFragment" />
+    </fragment>
     <fragment
         android:id="@+id/registerationFragment"
         android:name="com.goldencouponz.fragments.authentication.RegisterationFragment"
@@ -46,4 +52,27 @@
         android:name="com.goldencouponz.fragments.favourite.FavouriteStoresFragment"
         android:label="favourite_stores_fragment"
         tools:layout="@layout/favourite_stores_fragment" />
+    <fragment
+        android:id="@+id/notificationAlertFragment2"
+        android:name="com.goldencouponz.fragments.onboarding.NotificationAlertFragment"
+        android:label="NotificationAlertFragment"
+        tools:layout="@layout/notification_alert_fragment" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.goldencouponz.fragments.aboutgolden.AboutFragment"
+        android:label="about_fragment"
+        tools:layout="@layout/about_fragment" >
+        <action
+            android:id="@+id/action_aboutFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.goldencouponz.fragments.authentication.ProfileFragment"
+        android:label="profile_fragment"
+        tools:layout="@layout/profile_fragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+    </fragment>
 </navigation>
