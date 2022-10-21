@@ -297,7 +297,7 @@ public class RegisterationViewModel extends ViewModel {
         if (!name.isEmpty()) {
             return true;
         } else {
-            Toast.makeText(context, R.string.preferred_country, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.chooseCode, Toast.LENGTH_SHORT).show();
             registerationFragmentBinding.codeId.requestFocus();
             return false;
         }

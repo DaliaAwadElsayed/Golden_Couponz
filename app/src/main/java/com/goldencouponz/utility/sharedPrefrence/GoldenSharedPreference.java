@@ -43,7 +43,6 @@ public class GoldenSharedPreference {
                 .putString(KEY_EMAIL, userData.getEmail())
                 .putString(PHONE, userData.getPhone())
                 .putString(PROFILE, userData.getProfilePhotoUrl())
-                .putInt(STATUS, userData.getStatus())
                 .putString(TOKEN, userData.getToken())
                 .putBoolean(IS_LOGGED_IN, true)
                 .putInt(NOLOGGING, 1)

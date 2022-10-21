@@ -23,9 +23,9 @@ public class ForgetPasswordViewModel extends ViewModel {
         forgetPasswordFragmentBinding.toolBarId.setClickable(true);
         forgetPasswordFragmentBinding.backId.setOnClickListener(view -> {
             if (login.equals("yes")) {
-                Navigation.findNavController(view).navigate(R.id.loginFragment);
-            } else {
                 Navigation.findNavController(view).navigate(R.id.profileFragment);
+            } else {
+                Navigation.findNavController(view).navigate(R.id.loginFragment);
 
             }
         });

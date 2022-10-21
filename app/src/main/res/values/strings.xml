@@ -65,6 +65,7 @@
     <string name="theemailhasalreadybeentaken">The email has already been taken</string>
     <string name="entervalidphone">Enter valid PhoneNumber</string>
     <string name="enterphone">Enter PhoneNumber</string>
+    <string name="chooseCode">Choose your Country Code</string>
     <string name="enterurname">Enter your name</string>
     <string name="enterpassword">Enter password</string>
     <string name="passwordsdoesntmatch">Passwords doesn\'t match</string>
@@ -92,4 +93,5 @@
     <string name="successfulyupdate">Successfully Updated</string>
     <string name="changepassworddone">change password done</string>
     <string name="oldpasswordisincorret">Old password is incorrect</string>
+    <string name="oldPasswordAsNew">New Password cannot be same as your current password</string>
 </resources>

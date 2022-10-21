@@ -8,6 +8,7 @@
     <string name="fav_language">لغتك المفضلة؟</string>
     <string name="fav_country">بلدك المفضلة؟</string>
     <string name="en_continue_label">Continue</string>
+    <string name="chooseCode">اختار كود بلدك</string>
     <string name="ar_continue_label">متابعة</string>
     <string name="somethingwentwrongmessage">حدث خطأ ما!</string>
     <string name="no_internet_message">"لا يوجد اٍتصال بالأنترنت,  يرجى التحقق من الشبكة! "</string>
@@ -93,4 +94,6 @@
     <string name="successfulyupdate">تم التحديث بنجاح</string>
     <string name="changepassworddone">تم تغيير كلمة المرور بنجاح</string>
     <string name="oldpasswordisincorret">كلمة السر القديمه خاطئه</string>
+    <string name="oldPasswordAsNew">لا يمكن أن تكون كلمة المرور الجديدة هي نفسها كلمة مرورك الحالية</string>
+
 </resources>

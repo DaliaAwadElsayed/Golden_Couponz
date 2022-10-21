@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.Navigation;
 
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.EditProfileFragmentBinding;
@@ -31,6 +32,12 @@ public class EditProfileViewModel extends ViewModel {
         this.editProfileFragmentBinding = editProfileFragmentBinding;
         userRegisteration = new UserRegisteration();
         userProfile();
+        editProfileFragmentBinding.backId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.profileFragment);
+            }
+        });
         editProfileFragmentBinding.saveId.setOnClickListener(view -> {
             if (inputValid()) {
                 userEditProfile();
@@ -152,7 +159,7 @@ public class EditProfileViewModel extends ViewModel {
         if (!name.isEmpty()) {
             return true;
         } else {
-            Toast.makeText(context, R.string.preferred_country, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.chooseCode, Toast.LENGTH_SHORT).show();
             editProfileFragmentBinding.codeId.requestFocus();
             return false;
         }

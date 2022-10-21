@@ -551,7 +551,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_centerHorizontal="true"
-                        android:text="@string/app_settings"
+                        android:text="@string/application_lang"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
@@ -685,7 +685,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_centerHorizontal="true"
-                        android:text="@string/application_lang"
+                        android:text="@string/app_settings"
                         android:textStyle="bold" />
 
                 </RelativeLayout>

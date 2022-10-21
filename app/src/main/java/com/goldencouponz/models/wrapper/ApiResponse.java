@@ -32,11 +32,19 @@ public class ApiResponse {
     @SerializedName("token")
     @Expose
     private String token;
-
+    @SerializedName("message")
+    @Expose
+    private String message;
     public ApiResponse() {
     }
 
+    public String getMessage() {
+        return message;
+    }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public Integer getId() {
         return id;

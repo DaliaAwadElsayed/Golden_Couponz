@@ -2,6 +2,7 @@ package com.goldencouponz.viewModles.authentication;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -67,8 +68,14 @@ public class ChangePasswordViewModel extends ViewModel {
                         login(GoldenSharedPreference.getKeyEmail(context), changePasswordFragmentBinding.newPasswordId.getText().toString());
                         changePasswordFragmentBinding.progress.setVisibility(View.GONE);
                     } else if (response.code() == 400) {
+                        Log.i("MESSAGE",response.body().getMessage()+"/"+response.message());
                         changePasswordFragmentBinding.progress.setVisibility(View.GONE);
-                        Toast.makeText(context, R.string.oldpasswordisincorret, Toast.LENGTH_SHORT).show();
+                        if (response.body().getMessage().equals("New Password cannot be same as your current password")){
+                            Toast.makeText(context, R.string.oldPasswordAsNew, Toast.LENGTH_SHORT).show();
+                        }
+                        else if (response.body().getMessage().equals("Your current password does not matches with the password")){
+                            Toast.makeText(context, R.string.oldpasswordisincorret, Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         changePasswordFragmentBinding.progress.setVisibility(View.GONE);
                         Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
