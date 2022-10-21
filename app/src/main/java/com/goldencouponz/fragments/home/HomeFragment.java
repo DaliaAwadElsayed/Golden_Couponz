@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.HomeFragmentBinding;
+import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.home.HomeViewModel;
 
 public class HomeFragment extends Fragment {
@@ -33,6 +34,7 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        ((MainActivity) getActivity()).showBottomMenu();
         mViewModel.init(homeFragmentBinding, getContext());
     }
 

@@ -20,6 +20,8 @@ import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.ActivityMainBinding;
 import com.goldencouponz.interfaces.ToolbarInterface;
 import com.goldencouponz.utility.LocaleHelper;
+import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
+import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
@@ -38,11 +40,14 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String value = extras.getString("language");
+            String country=GoldenNoLoginSharedPreference.getUserCountryName(MainActivity.this);
+            Log.i("COUNTRY",country+"");
+            GoldenNoLoginSharedPreference.saveUserCountry(MainActivity.this,0,country);
             Local.Companion.updateResources(this);
             LocaleHelper.setLocale(this, value);
-            if (value.equals("ar")) {
+            if (value.equals("ar")|| GoldenNoLoginSharedPreference.getUserLanguage(this).equals("ar")) {
                 getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            } else {
+            } else  if (value.equals("en")|| GoldenNoLoginSharedPreference.getUserLanguage(this).equals("en")) {
                 getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             }
         }
@@ -55,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_fav));
         activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_user));
         bottomClickListener();
+        GoldenSharedPreference.setActivity(getApplication());
+        GoldenNoLoginSharedPreference.setActivity(getApplication());
     }
 
     public void askRatings() {
@@ -119,12 +126,12 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
 
     @Override
     public void hideBottomMenu() {
-        activityMainBinding.bottomId.setVisibility(View.GONE);
+        activityMainBinding.relativBottomId.setVisibility(View.GONE);
     }
 
     @Override
     public void showBottomMenu() {
-        activityMainBinding.bottomId.setVisibility(View.VISIBLE);
+        activityMainBinding.relativBottomId.setVisibility(View.VISIBLE);
 
     }
 

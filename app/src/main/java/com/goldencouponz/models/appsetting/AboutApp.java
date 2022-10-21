@@ -3,6 +3,8 @@ package com.goldencouponz.models.appsetting;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class AboutApp{
     @SerializedName("title_ar")
     @Expose
@@ -19,6 +21,17 @@ public class AboutApp{
     @SerializedName("details_en")
     @Expose
     private String detailsEn;
+    @SerializedName("topics")
+    @Expose
+    private List<AboutApp> topics = null;
+
+    public List<AboutApp> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(List<AboutApp> topics) {
+        this.topics = topics;
+    }
 
     public String getTitleAr() {
         return titleAr;

@@ -2,11 +2,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.com.dtag.livia.MainActivity">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/main_container"
@@ -23,37 +27,42 @@
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 app:navGraph="@navigation/home_nav_graph" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:paddingTop="@dimen/_15sdp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_rec" />
-
-                <com.luseen.spacenavigation.SpaceNavigationView
-                    android:id="@+id/bottomId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_25sdp"
-                    app:active_centre_button_background_color="@null"
-                    app:active_item_color="@color/basic_color"
-                    app:centre_button_color="#4AAE20"
-                    android:layoutDirection="ltr"
-                    app:active_centre_button_icon_color="@color/white"
-                    app:centre_button_icon="@drawable/ic__68629061595759824"
-                    app:inactive_centre_button_icon_color="#fff"
-                    app:inactive_item_color="#7A7A7A"
-                    app:space_background_color="#fff"
-                    app:space_item_icon_size="@dimen/_22sdp"
-                    app:space_item_text_size="@dimen/space_item_text_default_size" />
-
-            </RelativeLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
     </FrameLayout>
+    <RelativeLayout
+        android:id="@+id/relativBottomId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+       >
+
+        <LinearLayout
+            android:alpha="0.6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_rec" />
+
+        <com.luseen.spacenavigation.SpaceNavigationView
+            android:id="@+id/bottomId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_25sdp"
+            app:active_centre_button_background_color="@null"
+            app:active_item_color="@color/basic_color"
+            app:centre_button_color="#4AAE20"
+            android:layoutDirection="ltr"
+            app:active_centre_button_icon_color="#fff"
+            app:centre_button_icon="@drawable/ic__68629061595759824"
+            app:inactive_centre_button_icon_color="#fff"
+            app:inactive_item_color="#7A7A7A"
+            app:space_background_color="#fff"
+            app:space_item_icon_size="@dimen/_22sdp"
+            app:space_item_text_size="@dimen/space_item_text_default_size" />
+
+    </RelativeLayout>
+</LinearLayout>
+
 </layout>

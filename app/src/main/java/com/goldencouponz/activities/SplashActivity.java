@@ -24,7 +24,8 @@ import com.goldencouponz.adapters.countries.CountriesAdapter;
 import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
-import com.goldencouponz.utility.GoldenSharedPreference;
+import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
+import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,17 +35,18 @@ public class SplashActivity extends AppCompatActivity {
     ActivitySplashBinding splashFragmentBinding;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
     CountriesAdapter countriesAdapter;
-    String language;
+    String language,country;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         splashFragmentBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
-        if (GoldenSharedPreference.getUserLanguage(this).equals("ar") || GoldenSharedPreference.getUserLanguage(this).equals("en")) {
-            language = GoldenSharedPreference.getUserLanguage(this);
+        if (GoldenNoLoginSharedPreference.getUserLanguage(this).equals("ar") || GoldenNoLoginSharedPreference.getUserLanguage(this).equals("en")) {
+            language = GoldenNoLoginSharedPreference.getUserLanguage(this);
             Intent i = new Intent(SplashActivity.this, MainActivity.class);
             i.putExtra("language", language);
+            i.putExtra("country", country);
             startActivity(i);
         }
         if (!isInternetAvailable()) {
@@ -54,6 +56,7 @@ public class SplashActivity extends AppCompatActivity {
         splashFragmentBinding.continueId.setOnClickListener(view -> {
             Intent i = new Intent(SplashActivity.this, SkipActivity.class);
             i.putExtra("language", language);
+
             startActivity(i);
             finish();
         });
@@ -69,7 +72,7 @@ public class SplashActivity extends AppCompatActivity {
             getCountries("ar");
             language = "ar";
             //TODO UPDATE USER COUNTRY AND ID
-            GoldenSharedPreference.saveUserLang(SplashActivity.this,"ar");
+            GoldenNoLoginSharedPreference.saveUserLang(SplashActivity.this,"ar");
 
         });
         splashFragmentBinding.enButtonId.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +87,7 @@ public class SplashActivity extends AppCompatActivity {
                 splashFragmentBinding.enButtonId.setBackground(getResources().getDrawable(R.drawable.bk_button));
                 getCountries("en");
                 language = "en";
-                GoldenSharedPreference.saveUserLang(SplashActivity.this,"en");
+                GoldenNoLoginSharedPreference.saveUserLang(SplashActivity.this,"en");
             }
         });
 
@@ -144,7 +147,7 @@ public class SplashActivity extends AppCompatActivity {
                                 @Override
                                 public void onItemClick(View viewItem, int position,String name) {
                                     if (position != -1) {
-                                        GoldenSharedPreference.saveUserCountry(SplashActivity.this,position,name);
+                                        GoldenNoLoginSharedPreference.saveUserCountry(SplashActivity.this,position,name);
                                         splashFragmentBinding.continueId.setAlpha(1f);
                                         splashFragmentBinding.continueId.setEnabled(true);
                                         splashFragmentBinding.continueId.setBackground(getResources().getDrawable(R.drawable.bk_button));

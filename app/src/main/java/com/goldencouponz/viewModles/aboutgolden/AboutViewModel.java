@@ -1,6 +1,7 @@
 package com.goldencouponz.viewModles.aboutgolden;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -13,7 +14,7 @@ import com.e.goldencouponz.databinding.AboutFragmentBinding;
 import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.appsetting.AboutApp;
 import com.goldencouponz.models.wrapper.RetrofitClient;
-import com.goldencouponz.utility.GoldenSharedPreference;
+import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,7 +31,7 @@ public class AboutViewModel extends ViewModel {
         this.context = context;
         this.type = type;
         aboutFragmentBinding.backId.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.profileFragment));
-        if (GoldenSharedPreference.getUserLanguage(context).equals("ar")) {
+        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             getGeneralViews("ar", type);
             title();
         } else {
@@ -55,31 +56,30 @@ public class AboutViewModel extends ViewModel {
             public void onResponse(Call<AboutApp> call, Response<AboutApp> response) {
                 if (response.code() == 200) {
                     Log.i("DETAILSLANGUAGE", lang);
-                    Log.i("DETAILS", response.body().getDetailsAr());
                     aboutFragmentBinding.detailsId.setVisibility(View.VISIBLE);
                     aboutFragmentBinding.noInternetConId.setVisibility(View.GONE);
                     aboutFragmentBinding.progress.setVisibility(View.GONE);
                     if (lang.equals("en")) {
                         if (type.equals("about")) {
                             aboutFragmentBinding.logoId.setVisibility(View.VISIBLE);
-                            aboutFragmentBinding.detailsId.setText(response.body().getDetailsEn());
+                            aboutFragmentBinding.detailsId.setText(Html.fromHtml(response.body().getTopics().get(2).getDetailsEn()));
                         } else if (type.equals("privacy")) {
                             aboutFragmentBinding.logoId.setVisibility(View.GONE);
-                            aboutFragmentBinding.detailsId.setText(response.body().getDetailsEn());
+                            aboutFragmentBinding.detailsId.setText(Html.fromHtml(response.body().getTopics().get(1).getDetailsEn()));
                         } else if (type.equals("terms")) {
                             aboutFragmentBinding.logoId.setVisibility(View.GONE);
-                            aboutFragmentBinding.detailsId.setText(response.body().getDetailsEn());
+                            aboutFragmentBinding.detailsId.setText(Html.fromHtml(response.body().getTopics().get(0).getDetailsEn()));
                         }
                     } else {
                         if (type.equals("about")) {
                             aboutFragmentBinding.logoId.setVisibility(View.VISIBLE);
-                            aboutFragmentBinding.detailsId.setText(response.body().getDetailsAr());
+                            aboutFragmentBinding.detailsId.setText(Html.fromHtml(response.body().getTopics().get(2).getDetailsAr()));
                         } else if (type.equals("privacy")) {
                             aboutFragmentBinding.logoId.setVisibility(View.GONE);
-                            aboutFragmentBinding.detailsId.setText(response.body().getDetailsAr());
+                            aboutFragmentBinding.detailsId.setText(Html.fromHtml(response.body().getTopics().get(1).getDetailsAr()));
                         } else if (type.equals("terms")) {
                             aboutFragmentBinding.logoId.setVisibility(View.GONE);
-                            aboutFragmentBinding.detailsId.setText(response.body().getDetailsAr());
+                            aboutFragmentBinding.detailsId.setText(Html.fromHtml(response.body().getTopics().get(0).getDetailsAr()));
                         }
                     }
                 } else {

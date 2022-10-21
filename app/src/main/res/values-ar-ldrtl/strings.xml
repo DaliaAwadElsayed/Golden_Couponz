@@ -83,5 +83,14 @@
     <string name="who_we_are">من نحن؟</string>
     <string name="privacy_policy">سياسة الخصوصية</string>
     <string name="sign_out">تسجيل الخروج</string>
-
+    <string name="application_lang">لغة التطبيق</string>
+    <string name="edit_account_info">تعديل بيانات الحساب</string>
+    <string name="change_password">تغيير كلمة المرور</string>
+    <string name="current_password">كلمة المرور الحالية</string>
+    <string name="new_password">كلمة المرور الجديدة</string>
+    <string name="save_label">حفظ</string>
+    <string name="forget_password_change_question">نسيت كلمة المرور الحالية؟</string>
+    <string name="successfulyupdate">تم التحديث بنجاح</string>
+    <string name="changepassworddone">تم تغيير كلمة المرور بنجاح</string>
+    <string name="oldpasswordisincorret">كلمة السر القديمه خاطئه</string>
 </resources>

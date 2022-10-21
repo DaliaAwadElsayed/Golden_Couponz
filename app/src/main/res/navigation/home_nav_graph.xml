@@ -61,7 +61,7 @@
         android:id="@+id/aboutFragment"
         android:name="com.goldencouponz.fragments.aboutgolden.AboutFragment"
         android:label="about_fragment"
-        tools:layout="@layout/about_fragment" >
+        tools:layout="@layout/about_fragment">
         <action
             android:id="@+id/action_aboutFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -70,9 +70,36 @@
         android:id="@+id/profileFragment"
         android:name="com.goldencouponz.fragments.authentication.ProfileFragment"
         android:label="profile_fragment"
-        tools:layout="@layout/profile_fragment" >
+        tools:layout="@layout/profile_fragment">
         <action
-            android:id="@+id/action_profileFragment_to_aboutFragment"
+            android:id="@+id/aboutFragment"
             app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.goldencouponz.fragments.authentication.ChangePasswordFragment"
+        android:label="ChangePasswordFragment"
+        tools:layout="@layout/change_password_fragment">
+        <action
+            android:id="@+id/profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/forgetPasswordFragment"
+            app:destination="@id/forgetPasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.goldencouponz.fragments.authentication.EditProfileFragment"
+        android:label="edit_profile_fragment"
+        tools:layout="@layout/edit_profile_fragment">
+        <action
+            android:id="@+id/profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

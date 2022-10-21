@@ -50,6 +50,7 @@ public class NotificationAlertFragment extends Fragment {
         Bundle extras = getActivity().getIntent().getExtras();
         Intent i = new Intent(getActivity(), MainActivity.class);
         i.putExtra("language", extras.getString("language"));
+        i.putExtra("country", extras.getString("country"));
         startActivity(i);
         ((Activity) getActivity()).overridePendingTransition(0, 0);
     }

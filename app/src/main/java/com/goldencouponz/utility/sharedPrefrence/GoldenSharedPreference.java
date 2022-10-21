@@ -1,4 +1,4 @@
-package com.goldencouponz.utility;
+package com.goldencouponz.utility.sharedPrefrence;
 
 import android.app.Application;
 import android.content.Context;
@@ -14,15 +14,11 @@ public class GoldenSharedPreference {
     private static final String KEY_EMAIL = "email";
     private static final String TOKEN = "token_pref";
     private static final String UID = "user_id_pref";
-    private static final String LANG_KEY = "chosen_lang_key";
-    private static final String COUNTRY_NAME = "chosen_country";
-    private static final String COUNTRY_ID = "chosen_country_id";
     private static final String STATUS = "status";
     private static final String PROFILE = "profile";
     private static final String PHONE = "phone";
     private static final String NOLOGGING = "no_login";
     private static final String SHOW = "show";
-
     private static Application application;
     SharedPreferences sharedPref = application.getApplicationContext().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
     public SharedPreferences.Editor editor = sharedPref.edit();
@@ -54,24 +50,18 @@ public class GoldenSharedPreference {
                 .apply();
     }
 
-    public static void saveUserLang(Context context, String lang) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putString(LANG_KEY, lang)
-                .apply();
-    }
-    public static void saveUserCountry(Context context, int countryId,  String country) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putString(COUNTRY_NAME, country)
-                .putInt(COUNTRY_ID, countryId)
-                .apply();
-    }
     public static void saveUserCloseLogIn(Context context, String show) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(SHOW, show)
                 .apply();
+    }
+
+    /**
+     * get Activity
+     */
+    public static void setActivity(Application activity) {
+        application = activity;
     }
     /**
      * @return the user show Login Screen
@@ -79,29 +69,6 @@ public class GoldenSharedPreference {
     public static String getUserShowLogin(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(SHOW, "");
-    }
-    /**
-     * @return the user country name choice
-     */
-    public static String getUserCountryName(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(COUNTRY_NAME, "");
-    }
-
-    /**
-     * @return the user country id choice
-     */
-    public static int getUserCountryId(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getInt(COUNTRY_ID, 0);
-    }
-
-    /**
-     * @return the user language choice
-     */
-    public static String getUserLanguage(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(LANG_KEY, "");
     }
 
     /**
@@ -164,11 +131,9 @@ public class GoldenSharedPreference {
      * use this to clear the shared preference (when the user log out the account)
      */
     public static void clearSharedPreference(Context context) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().clear().apply();
-    }
-
-    public static String getSelectedLanguageValue(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(LANG_KEY, "ar");
+       PreferenceManager.getDefaultSharedPreferences(context).edit().clear().apply();
+//        SharedPreferences settings = context.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
+//        settings.edit().remove(KEY_EMAIL).apply();
     }
 
 

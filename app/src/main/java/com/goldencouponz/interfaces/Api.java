@@ -1,6 +1,7 @@
 package com.goldencouponz.interfaces;
 
 import com.goldencouponz.models.appsetting.AboutApp;
+import com.goldencouponz.models.user.ChangePassword;
 import com.goldencouponz.models.user.UserRegisteration;
 import com.goldencouponz.models.wrapper.ApiResponse;
 
@@ -33,6 +34,14 @@ public interface Api {
     //{{baseUrl}}/api/profile
     @GET("api/profile")
     Call<UserRegisteration> getProfile(@Header("Authorization") String authHeader);
+
+    //api/updateprofile
+    @POST("api/updateprofile")
+    Call<ApiResponse> userEditProfile(@Header("Authorization") String authHeader, @Body UserRegisteration userRegisteration);
+
+    //api/change-password
+    @POST("api/change-password")
+    Call<ApiResponse> changePassword(@Header("Authorization") String authHeader, @Body ChangePassword changePassword);
 
     //api/general-views
     @GET("api/general-views")

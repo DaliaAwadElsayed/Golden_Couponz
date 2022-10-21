@@ -26,6 +26,7 @@ public class SkipActivity extends AppCompatActivity {
         Log.i("LANGUAGESKIP",extras.getString("language"));
         if (extras != null) {
             String value = extras.getString("language");
+
             Local.Companion.updateResources(this);
             LocaleHelper.setLocale(this, value);
             if (value.equals("ar")) {

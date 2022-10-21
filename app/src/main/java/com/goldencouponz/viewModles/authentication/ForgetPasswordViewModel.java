@@ -14,12 +14,21 @@ public class ForgetPasswordViewModel extends ViewModel {
     ForgetPasswordFragmentBinding forgetPasswordFragmentBinding;
     Context context;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
+    String login;
 
-    public void init(ForgetPasswordFragmentBinding forgetPasswordFragmentBinding, Context context) {
+    public void init(ForgetPasswordFragmentBinding forgetPasswordFragmentBinding, Context context, String login) {
         this.context = context;
         this.forgetPasswordFragmentBinding = forgetPasswordFragmentBinding;
+        this.login = login;
         forgetPasswordFragmentBinding.toolBarId.setClickable(true);
-        forgetPasswordFragmentBinding.backId.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.loginFragment));
+        forgetPasswordFragmentBinding.backId.setOnClickListener(view -> {
+            if (login.equals("yes")) {
+                Navigation.findNavController(view).navigate(R.id.loginFragment);
+            } else {
+                Navigation.findNavController(view).navigate(R.id.profileFragment);
+
+            }
+        });
 
     }
 

@@ -26,9 +26,6 @@ public class ApiResponse {
     @SerializedName("phone")
     @Expose
     private String phone;
-    @SerializedName("status")
-    @Expose
-    private Integer status;
     @SerializedName("profile_photo_url")
     @Expose
     private String profilePhotoUrl;
@@ -36,9 +33,10 @@ public class ApiResponse {
     @Expose
     private String token;
 
-
     public ApiResponse() {
     }
+
+
 
     public Integer getId() {
         return id;
@@ -70,14 +68,6 @@ public class ApiResponse {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public String getProfilePhotoUrl() {

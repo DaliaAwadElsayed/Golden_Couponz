@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.ForgetPasswordFragmentBinding;
+import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.authentication.ForgetPasswordViewModel;
 
 public class ForgetPasswordFragment extends Fragment {
@@ -33,6 +34,9 @@ public class ForgetPasswordFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ForgetPasswordViewModel.class);
-        mViewModel.init(forgetPasswordFragmentBinding, getContext());    }
+        mViewModel.init(forgetPasswordFragmentBinding, getContext(),getArguments().getString("login"));
+        ((MainActivity) getActivity()).hideBottomMenu();
+
+    }
 
 }

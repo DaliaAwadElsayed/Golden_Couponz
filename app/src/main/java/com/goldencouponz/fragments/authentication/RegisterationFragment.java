@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.RegisterationFragmentBinding;
+import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.authentication.RegisterationViewModel;
 
 public class RegisterationFragment extends Fragment {
@@ -32,6 +33,8 @@ RegisterationFragmentBinding registerationFragmentBinding;
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(RegisterationViewModel.class);
-        mViewModel.init(registerationFragmentBinding, getContext());    }
+        mViewModel.init(registerationFragmentBinding, getContext());
+        ((MainActivity) getActivity()).hideBottomMenu();
+    }
 
 }

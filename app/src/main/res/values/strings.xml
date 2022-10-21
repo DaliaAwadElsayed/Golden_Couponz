@@ -82,5 +82,14 @@
     <string name="who_we_are">Who we are?</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="sign_out">Sign out</string>
-
+    <string name="application_lang">Application language</string>
+    <string name="edit_account_info">Edit account information</string>
+    <string name="change_password">Change password</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New password</string>
+    <string name="save_label">Save</string>
+    <string name="forget_password_change_question">Forgot your current password?</string>
+    <string name="successfulyupdate">Successfully Updated</string>
+    <string name="changepassworddone">change password done</string>
+    <string name="oldpasswordisincorret">Old password is incorrect</string>
 </resources>

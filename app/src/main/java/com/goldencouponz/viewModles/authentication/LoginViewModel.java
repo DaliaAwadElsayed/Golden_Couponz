@@ -1,6 +1,7 @@
 package com.goldencouponz.viewModles.authentication;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,7 +13,7 @@ import com.e.goldencouponz.databinding.LoginFragmentBinding;
 import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
-import com.goldencouponz.utility.GoldenSharedPreference;
+import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,7 +29,11 @@ public class LoginViewModel extends ViewModel {
         this.loginFragmentBinding = loginFragmentBinding;
         loginFragmentBinding.toolBarId.setClickable(true);
         loginFragmentBinding.signUpId.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.registerationFragment));
-        loginFragmentBinding.forgetPassId.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.forgetPasswordFragment));
+        loginFragmentBinding.forgetPassId.setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("login", "no");
+            Navigation.findNavController(view).navigate(R.id.forgetPasswordFragment, bundle);
+        });
         loginFragmentBinding.signInId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,7 +43,7 @@ public class LoginViewModel extends ViewModel {
             }
         });
         loginFragmentBinding.closeId.setOnClickListener(view -> {
-            GoldenSharedPreference.saveUserCloseLogIn(context,"close");
+            GoldenSharedPreference.saveUserCloseLogIn(context, "close");
             Navigation.findNavController(view).navigate(R.id.homeFragment);
         });
 
@@ -55,8 +60,7 @@ public class LoginViewModel extends ViewModel {
                     Navigation.findNavController(loginFragmentBinding.getRoot()).navigate(R.id.homeFragment);
                 } else {
                     loginFragmentBinding.progress.setVisibility(View.GONE);
-                    Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(context, R.string.thereisanerrorwiththedata, Toast.LENGTH_LONG).show();
                 }
             }
 

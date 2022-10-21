@@ -19,7 +19,7 @@ import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.user.UserRegisteration;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
-import com.goldencouponz.utility.GoldenSharedPreference;
+import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 
 import retrofit2.Call;
 import retrofit2.Callback;

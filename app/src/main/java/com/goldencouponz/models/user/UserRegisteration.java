@@ -10,6 +10,9 @@ public class UserRegisteration {
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("email_confirmation")
+    @Expose
+    private String email_confirmation;
     @SerializedName("password_confirmation")
     @Expose
     private String password_confirmation;
@@ -33,6 +36,14 @@ public class UserRegisteration {
     private String profilePhotoUrl;
 
     public UserRegisteration() {
+    }
+
+    public String getEmail_confirmation() {
+        return email_confirmation;
+    }
+
+    public void setEmail_confirmation(String email_confirmation) {
+        this.email_confirmation = email_confirmation;
     }
 
     public Boolean getStatus() {
