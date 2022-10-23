@@ -80,7 +80,7 @@ public class LoginViewModel extends ViewModel {
 
     private boolean passwordIsValid() {
         String firstPass = loginFragmentBinding.passwordId.getText().toString();
-        if (firstPass.length() < 6) {
+        if (firstPass.length() < 8) {
             loginFragmentBinding.passwordId.setError(context.getResources().getString(R.string.lessthan8letters));
             return false;
         } else {

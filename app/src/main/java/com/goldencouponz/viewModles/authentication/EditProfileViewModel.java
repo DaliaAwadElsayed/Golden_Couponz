@@ -89,7 +89,7 @@ public class EditProfileViewModel extends ViewModel {
     private void userEditProfile() {
         editProfileFragmentBinding.progress.setVisibility(View.VISIBLE);
         userRegisteration.setName(Utility.fixNullString(editProfileFragmentBinding.nameId.getText().toString()));
-        userRegisteration.setPhone(Utility.fixNullString(editProfileFragmentBinding.codeId.getText() + editProfileFragmentBinding.phoneId.getText().toString()));
+        userRegisteration.setPhone(Utility.fixNullString(editProfileFragmentBinding.phoneId.getText().toString()));
         userRegisteration.setEmail(Utility.fixNullString(editProfileFragmentBinding.emailId.getText().toString()));
         userRegisteration.setEmail_confirmation(Utility.fixNullString(editProfileFragmentBinding.confirmEmailId.getText().toString()));
 
@@ -117,7 +117,7 @@ public class EditProfileViewModel extends ViewModel {
     }
 
     private boolean inputValid() {
-        return nameValid() && phoneValid() && codeValid() && emailValid() && emailsIsValid();
+        return nameValid() && phoneValid() && emailValid() && emailsIsValid();
     }
 
     private boolean nameValid() {
@@ -154,16 +154,7 @@ public class EditProfileViewModel extends ViewModel {
         }
     }
 
-    private boolean codeValid() {
-        String name = editProfileFragmentBinding.codeId.getText().toString();
-        if (!name.isEmpty()) {
-            return true;
-        } else {
-            Toast.makeText(context, R.string.chooseCode, Toast.LENGTH_SHORT).show();
-            editProfileFragmentBinding.codeId.requestFocus();
-            return false;
-        }
-    }
+
 
     private boolean emailValid() {
         String email = editProfileFragmentBinding.emailId.getText().toString();

@@ -18,6 +18,10 @@ import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,13 +72,30 @@ public class ChangePasswordViewModel extends ViewModel {
                         login(GoldenSharedPreference.getKeyEmail(context), changePasswordFragmentBinding.newPasswordId.getText().toString());
                         changePasswordFragmentBinding.progress.setVisibility(View.GONE);
                     } else if (response.code() == 400) {
-                        Log.i("MESSAGE",response.body().getMessage()+"/"+response.message());
-                        changePasswordFragmentBinding.progress.setVisibility(View.GONE);
-                        if (response.body().getMessage().equals("New Password cannot be same as your current password")){
-                            Toast.makeText(context, R.string.oldPasswordAsNew, Toast.LENGTH_SHORT).show();
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response.errorBody().string());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        else if (response.body().getMessage().equals("Your current password does not matches with the password")){
+                        String userMessage = null;
+                        try {
+                            userMessage = jsonObject.getString("message");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.i("MESSAGE", ""+userMessage);
+                        changePasswordFragmentBinding.progress.setVisibility(View.GONE);
+                        if (userMessage.equals("New Password cannot be same as your current password")) {
+                            Toast.makeText(context, R.string.oldPasswordAsNew, Toast.LENGTH_SHORT).show();
+                        } else if (userMessage.equals("Your current password does not matches with the password")) {
                             Toast.makeText(context, R.string.oldpasswordisincorret, Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         changePasswordFragmentBinding.progress.setVisibility(View.GONE);
@@ -132,7 +153,7 @@ public class ChangePasswordViewModel extends ViewModel {
             changePasswordFragmentBinding.newPasswordId.setError(context.getResources().getString(R.string.enterpassword));
             changePasswordFragmentBinding.newPasswordId.requestFocus();
             return false;
-        } else if (!name.isEmpty() && name.length() < 6) {
+        } else if (!name.isEmpty() && name.length() < 8) {
             changePasswordFragmentBinding.newPasswordId.setError(context.getResources().getString(R.string.lessthan8letters));
             changePasswordFragmentBinding.newPasswordId.requestFocus();
             return false;

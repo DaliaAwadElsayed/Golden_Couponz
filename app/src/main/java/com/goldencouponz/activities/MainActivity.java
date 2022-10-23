@@ -22,10 +22,6 @@ import com.goldencouponz.interfaces.ToolbarInterface;
 import com.goldencouponz.utility.LocaleHelper;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
-import com.google.android.gms.tasks.Task;
-import com.google.android.play.core.review.ReviewInfo;
-import com.google.android.play.core.review.ReviewManager;
-import com.google.android.play.core.review.ReviewManagerFactory;
 import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceOnClickListener;
 
@@ -64,24 +60,6 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         GoldenNoLoginSharedPreference.setActivity(getApplication());
     }
 
-    public void askRatings() {
-        ReviewManager manager = ReviewManagerFactory.create(this);
-        Task<ReviewInfo> request = manager.requestReviewFlow();
-        request.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // We can get the ReviewInfo object
-                ReviewInfo reviewInfo = task.getResult();
-                Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
-                flow.addOnCompleteListener(task2 -> {
-                    // The flow has finished. The API does not indicate whether the user
-                    // reviewed or not, or even whether the review dialog was shown. Thus, no
-                    // matter the result, we continue our app flow.
-                });
-            } else {
-                // There was some problem, continue regardless of the result.
-            }
-        });
-    }
 
     private void bottomClickListener() {
         activityMainBinding.bottomId.setSpaceOnClickListener(new SpaceOnClickListener() {

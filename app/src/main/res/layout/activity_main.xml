@@ -2,67 +2,68 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <FrameLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/main_container"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <fragment
-                android:id="@+id/home_nav_fragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/main_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/antique_white"
-                app:defaultNavHost="true"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                app:navGraph="@navigation/home_nav_graph" />
+                android:layout_height="match_parent">
+
+                <fragment
+                    android:id="@+id/home_nav_fragment"
+                    android:name="androidx.navigation.fragment.NavHostFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/antique_white"
+                    app:defaultNavHost="true"
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                    app:navGraph="@navigation/home_nav_graph" />
 
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
-    </FrameLayout>
-    <RelativeLayout
-        android:id="@+id/relativBottomId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-       >
+        </FrameLayout>
 
-        <LinearLayout
-            android:alpha="0.6"
+        <RelativeLayout
+            android:id="@+id/relativBottomId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_rec" />
+            android:layout_gravity="bottom">
 
-        <com.luseen.spacenavigation.SpaceNavigationView
-            android:id="@+id/bottomId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_25sdp"
-            app:active_centre_button_background_color="@null"
-            app:active_item_color="@color/basic_color"
-            app:centre_button_color="#4AAE20"
-            android:layoutDirection="ltr"
-            app:active_centre_button_icon_color="#fff"
-            app:centre_button_icon="@drawable/ic__68629061595759824"
-            app:inactive_centre_button_icon_color="#fff"
-            app:inactive_item_color="#7A7A7A"
-            app:space_background_color="#fff"
-            app:space_item_icon_size="@dimen/_22sdp"
-            app:space_item_text_size="@dimen/space_item_text_default_size" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:background="@drawable/ic_rec" />
 
-    </RelativeLayout>
-</LinearLayout>
+            <com.luseen.spacenavigation.SpaceNavigationView
+                android:id="@+id/bottomId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:layoutDirection="ltr"
+                app:active_centre_button_background_color="@null"
+                app:active_centre_button_icon_color="#fff"
+                app:active_item_color="@color/basic_color"
+                app:centre_button_color="#4AAE20"
+                app:centre_button_icon="@drawable/ic__68629061595759824"
+                app:inactive_centre_button_icon_color="#fff"
+                app:inactive_item_color="#7A7A7A"
+                app:space_background_color="#fff"
+                app:space_item_icon_size="@dimen/_22sdp"
+                app:space_item_text_size="@dimen/space_item_text_default_size" />
+
+        </RelativeLayout>
+    </LinearLayout>
 
 </layout>

@@ -62,7 +62,7 @@
     <string name="create_label">إنشاء حساب</string>
     <string name="or_label">أو</string>
     <string name="thereisanerrorwiththedata">يوجد خطأ بالبيانات</string>
-    <string name="lessthan8letters">كلمة المرور لا يمكن ان تكون اقل من  6 حروف</string>
+    <string name="lessthan8letters">كلمة المرور لا يمكن ان تكون اقل من  8 حروف</string>
     <string name="entervalidemail">ادخل بريد الكتروني صحيح</string>
     <string name="theemailhasalreadybeentaken">البريد الاٍلكتروني مستخدم بالفعل</string>
     <string name="entervalidphone">ادخل رقم جوال صحيح</string>

@@ -235,7 +235,7 @@ public class RegisterationViewModel extends ViewModel {
             registerationFragmentBinding.passwordId.setError(context.getResources().getString(R.string.enterpassword));
             registerationFragmentBinding.passwordId.requestFocus();
             return false;
-        } else if (!name.isEmpty() && name.length() < 6) {
+        } else if (!name.isEmpty() && name.length() < 8) {
             registerationFragmentBinding.passwordId.setError(context.getResources().getString(R.string.lessthan8letters));
             registerationFragmentBinding.passwordId.requestFocus();
             return false;

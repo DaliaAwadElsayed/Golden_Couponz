@@ -89,16 +89,11 @@
                             android:textStyle="bold" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/small_margin">
 
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
                             android:textColorHint="#2C2C2E"
                             app:boxBackgroundColor="@null"
                             app:boxBackgroundMode="outline"
@@ -129,56 +124,7 @@
                                 android:textStyle="bold" />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <LinearLayout
-                            android:layout_width="@dimen/_8sdp"
-                            android:layout_height="match_parent" />
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/codeLayoutId"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableStart="@drawable/ic_baseline_keyboard_arrow_down_24"
-                                android:textColorHint="#2C2C2E"
-                                app:boxBackgroundColor="@null"
-                                app:boxBackgroundMode="outline"
-                                app:boxCornerRadiusBottomEnd="@dimen/_4sdp"
-                                app:boxCornerRadiusBottomStart="@dimen/_4sdp"
-                                app:boxCornerRadiusTopEnd="@dimen/_4sdp"
-                                app:boxCornerRadiusTopStart="@dimen/_4sdp"
-                                app:boxStrokeColor="@color/grey"
-                                app:boxStrokeErrorColor="@color/grey"
-                                app:boxStrokeWidth="0.2dp"
-                                app:boxStrokeWidthFocused="@dimen/_1sdp"
-                                app:hintTextColor="#2C2C2E"
-                                app:placeholderText="+966">
-
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/codeId"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/small_margin"
-                                    android:drawableStart="@drawable/ic_baseline_keyboard_arrow_down_24"
-                                    android:drawablePadding="@dimen/_4sdp"
-                                    android:editable="false"
-                                    android:hint="@string/country_label"
-                                    android:textColor="@color/black"
-                                    android:textColorHint="#2C2C2E"
-                                    android:textColorLink="#2C2C2E"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-
-                            </com.google.android.material.textfield.TextInputLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

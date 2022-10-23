@@ -51,6 +51,7 @@ public class AboutViewModel extends ViewModel {
     }
 
     private void getGeneralViews(String lang, String type) {
+        aboutFragmentBinding.progress.setVisibility(View.VISIBLE);
         apiInterface.generalViews(lang).enqueue(new Callback<AboutApp>() {
             @Override
             public void onResponse(Call<AboutApp> call, Response<AboutApp> response) {

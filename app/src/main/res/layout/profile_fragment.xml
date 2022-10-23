@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.goldencouponz.fragments.authentication.ProfileFragment">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/mainRelativeId"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/antique_white">
-
+<ScrollView
+    android:id="@+id/scrollId"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
             <RelativeLayout
                 android:id="@+id/relativeId"
                 android:layout_width="match_parent"
@@ -440,7 +440,7 @@
                     android:visibility="gone" />
 
             </RelativeLayout>
-
+</ScrollView>
             <LinearLayout
                 android:id="@+id/countriesLinearId"
                 android:layout_width="match_parent"
@@ -509,7 +509,9 @@
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     tools:listitem="@layout/country_item" />
             </LinearLayout>
+
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/languageLinearId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -518,10 +520,10 @@
                 android:background="@drawable/bk_layout"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone">
+               >
 
                 <ImageView
-                    android:id="@+id/slideDownProfileId"
+                    android:id="@+id/slideDownLangId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -534,7 +536,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/cancelProfileId"
+                        android:id="@+id/cancelLangId"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:layout_alignParentStart="true"
@@ -615,7 +617,7 @@
                         android:id="@+id/englishRelativeId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_30sdp">
+                        >
 
                         <TextView
                             style="@style/TextViewStyle"
@@ -643,6 +645,8 @@
                 </LinearLayout>
             </LinearLayout>
 
+
+
             <LinearLayout
                 android:id="@+id/profileLinearId"
                 android:layout_width="match_parent"
@@ -655,7 +659,7 @@
                 android:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/slideDownLangId"
+                    android:id="@+id/slideDownProfileId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -664,11 +668,12 @@
                     android:src="@drawable/ic_line" />
 
                 <RelativeLayout
+                    android:id="@+id/profileRelativeId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/cancelLangId"
+                        android:id="@+id/cancelProfileId"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:layout_alignParentStart="true"
@@ -757,10 +762,5 @@
 
                 </LinearLayout>
             </LinearLayout>
-
         </RelativeLayout>
-
-    </ScrollView>
-
-
 </layout>

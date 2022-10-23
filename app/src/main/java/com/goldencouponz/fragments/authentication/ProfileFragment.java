@@ -36,12 +36,7 @@ public class ProfileFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         ((MainActivity) getActivity()).showBottomMenu();
         mViewModel.init(profileFragmentBinding, getContext());
-        profileFragmentBinding.supportUsId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainActivity) getActivity()).askRatings();
-            }
-        });
+
     }
 
 }

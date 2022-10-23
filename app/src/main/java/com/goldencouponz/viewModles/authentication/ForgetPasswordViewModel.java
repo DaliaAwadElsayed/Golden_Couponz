@@ -26,7 +26,6 @@ public class ForgetPasswordViewModel extends ViewModel {
                 Navigation.findNavController(view).navigate(R.id.profileFragment);
             } else {
                 Navigation.findNavController(view).navigate(R.id.loginFragment);
-
             }
         });
 
