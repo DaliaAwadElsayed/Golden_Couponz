@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_products));
         activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_fav));
         activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_user));
+        activityMainBinding.bottomId.setInActiveCentreButtonIconColor(getResources().getColor(R.color.white));
+        activityMainBinding.bottomId.setActiveCentreButtonIconColor(getResources().getColor(R.color.white));
+
         bottomClickListener();
         GoldenSharedPreference.setActivity(getApplication());
         GoldenNoLoginSharedPreference.setActivity(getApplication());

@@ -9,7 +9,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    public static final String BASE_URL = "https://phpstack-753729-2858509.cloudwaysapps.com/";
+    public static final String BASE_URL = " http://app.couponake.com/";
     private static RetrofitClient mInstance;
     private Retrofit retrofit;
 

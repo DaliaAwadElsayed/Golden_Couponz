@@ -6,6 +6,7 @@
         <item name="fontFamily">@font/app_font</item>
         <item name="colorPrimaryVariant">@color/basic_color</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="android:progressDrawable">@drawable/ic_loading</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/black</item>
         <item name="colorSecondaryVariant">@color/black</item>

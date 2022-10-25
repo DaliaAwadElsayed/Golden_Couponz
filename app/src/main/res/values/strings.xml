@@ -94,4 +94,5 @@
     <string name="changepassworddone">change password done</string>
     <string name="oldpasswordisincorret">Old password is incorrect</string>
     <string name="oldPasswordAsNew">New Password cannot be same as your current password</string>
+    <string name="all_label">All</string>
 </resources>
