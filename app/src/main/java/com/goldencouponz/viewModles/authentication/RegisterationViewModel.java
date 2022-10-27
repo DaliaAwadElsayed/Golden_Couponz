@@ -19,6 +19,7 @@ import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.user.UserRegisteration;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
+import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 
 import retrofit2.Call;
@@ -85,7 +86,11 @@ public class RegisterationViewModel extends ViewModel {
         registerationFragmentBinding.codeId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getCountries("en");
+                if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en") ){
+                getCountries("en");}
+                else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar") ){
+                    getCountries("ar");
+                }
 
             }
         });
