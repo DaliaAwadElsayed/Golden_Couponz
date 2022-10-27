@@ -86,9 +86,10 @@ public class RegisterationViewModel extends ViewModel {
         registerationFragmentBinding.codeId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en") ){
-                getCountries("en");}
-                else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar") ){
+                Log.i("LANGUAGEE",GoldenNoLoginSharedPreference.getUserLanguage(context)+"");
+                if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+                    getCountries("en");
+                } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
                     getCountries("ar");
                 }
 

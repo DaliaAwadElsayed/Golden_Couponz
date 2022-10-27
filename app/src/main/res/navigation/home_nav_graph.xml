@@ -25,7 +25,14 @@
         android:id="@+id/forgetPasswordFragment"
         android:name="com.goldencouponz.fragments.authentication.ForgetPasswordFragment"
         android:label="forget_password_fragment"
-        tools:layout="@layout/forget_password_fragment" />
+        tools:layout="@layout/forget_password_fragment" >
+        <action
+            android:id="@+id/loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.goldencouponz.fragments.home.HomeFragment"
