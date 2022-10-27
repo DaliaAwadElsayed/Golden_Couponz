@@ -221,7 +221,8 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
             homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
             homeFragmentBinding.allId.setBackgroundTintList(null);
 
-        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+        }
+        else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             categories("ar");
             storesList("ar", 0);
             homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
@@ -230,7 +231,6 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         homeFragmentBinding.allId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                all = 1;
                 homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
                 homeFragmentBinding.allId.setBackgroundTintList(null);
                 if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
@@ -271,7 +271,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                                         }
                                     }
 
-                                    if (homeFragmentBinding.gridId.getVisibility() == View.VISIBLE) {
+                                  else  if (homeFragmentBinding.gridId.getVisibility() == View.VISIBLE) {
                                         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
                                             storesList("en", categoryId);
                                         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
