@@ -4,6 +4,7 @@ package com.goldencouponz.models.wrapper;
 import com.goldencouponz.models.appsetting.Country;
 import com.goldencouponz.models.home.Category;
 import com.goldencouponz.models.home.Slider;
+import com.goldencouponz.models.home.Store;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -43,7 +44,18 @@ public class ApiResponse {
     @SerializedName("sliders")
     @Expose
     private List<Slider> sliders = null;
+    @SerializedName("stores")
+    @Expose
+    private List<Store> stores = null;
     public ApiResponse() {
+    }
+
+    public List<Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(List<Store> stores) {
+        this.stores = stores;
     }
 
     public List<Slider> getSliders() {

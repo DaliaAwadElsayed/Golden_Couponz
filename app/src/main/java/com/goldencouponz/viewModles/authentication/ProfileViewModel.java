@@ -45,7 +45,6 @@ public class ProfileViewModel extends ViewModel {
         this.context = context;
         this.profileFragmentBinding = profileFragmentBinding;
         this.activity = (FragmentActivity) context;
-
         Log.i("langChangeId", GoldenNoLoginSharedPreference.getUserLanguage(context) + "??");
         Log.i("countryChangeId", GoldenNoLoginSharedPreference.getUserCountryName(context) + "??");
         profileFragmentBinding.countryChangeId.setText(GoldenNoLoginSharedPreference.getUserCountryName(context));

@@ -56,7 +56,6 @@ public class SplashActivity extends AppCompatActivity {
         splashFragmentBinding.continueId.setOnClickListener(view -> {
             Intent i = new Intent(SplashActivity.this, SkipActivity.class);
             i.putExtra("language", language);
-
             startActivity(i);
             finish();
         });

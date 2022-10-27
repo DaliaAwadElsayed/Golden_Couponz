@@ -43,14 +43,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="0.6"
                 android:background="@drawable/ic_rec" />
 
             <com.luseen.spacenavigation.SpaceNavigationView
                 android:id="@+id/bottomId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_25sdp"
                 android:layoutDirection="ltr"
                 app:active_centre_button_background_color="@null"
                 app:active_centre_button_icon_color="#fff"

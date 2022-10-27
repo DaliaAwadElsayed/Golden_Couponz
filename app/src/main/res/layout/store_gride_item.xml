@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/rewardLinearId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="@dimen/_55sdp"
+            android:layout_height="@dimen/_55sdp"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/storeImgId"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginEnd="@dimen/_4sdp"
+                app:civ_border_width="0.5dp"
+                app:civ_border_color="@color/grey"
+                android:src="@drawable/ic_loading" />
+
+            <TextView
+
+                android:id="@+id/couponCountId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_weight="500"
+                android:background="@drawable/ic_pink_circle"
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+
+                android:textColor="#8A8360"
+                android:textSize="@dimen/small_text_size"
+                android:textStyle="bold"
+                tools:text="3" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/storeNameId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_weight="500"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textSize="@dimen/small_text_size"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            tools:text="EGYPT" />
+    </LinearLayout>
+
+
+</layout>

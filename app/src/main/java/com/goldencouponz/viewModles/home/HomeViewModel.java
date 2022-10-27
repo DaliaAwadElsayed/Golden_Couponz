@@ -3,6 +3,7 @@ package com.goldencouponz.viewModles.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -18,12 +19,15 @@ import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.HomeFragmentBinding;
 import com.goldencouponz.adapters.home.CategoriesAdapter;
 import com.goldencouponz.adapters.home.SlidersAdapter;
+import com.goldencouponz.adapters.home.StoresGridAdapter;
+import com.goldencouponz.adapters.home.StoresListAdapter;
 import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.rd.animation.type.AnimationType;
 
 import java.util.Timer;
@@ -38,6 +42,9 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
     Context context;
     CategoriesAdapter categoriesAdapter;
     SlidersAdapter addsBannerAdapter;
+    StoresGridAdapter storesGrideAdapter;
+    StoresListAdapter storesListAdapter;
+    int all = 0;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
     int interfaceSize;
     Timer timer;
@@ -45,7 +52,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
     final long DELAY_MS = 500;//delay in milliseconds before task is to be executed
     final long PERIOD_MS = 3000; // time in milliseconds between successive task executions.
     Activity activity;
-
+    String deviceToken;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -98,15 +105,6 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
 
     };
 
-    public enum State {
-        EXPANDED,
-        COLLAPSED,
-        IDLE
-    }
-
-    private State mCurrentState = State.IDLE;
-
-
     public interface sliderSize {
         void size(int size);
     }
@@ -114,17 +112,14 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
     public void init(HomeFragmentBinding homeFragmentBinding, Context context) {
         this.context = context;
         this.homeFragmentBinding = homeFragmentBinding;
+//        getUserDeviceToken();
+//        Log.d("deviceTokenOut", deviceToken);
+        changeLayout();
         if (!GoldenSharedPreference.isLoggedIn(context) && !GoldenSharedPreference.getUserShowLogin(context).equals("close")) {
             Navigation.findNavController(homeFragmentBinding.getRoot()).navigate(R.id.loginFragment);
         }
-        categoriesAdapter = new CategoriesAdapter(context);
         addsBannerAdapter = new SlidersAdapter(sliderSize, context);
-        homeFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
-        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
-            categories("en");
-        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
-            categories("ar");
-        }
+        storesGridChoice();
         final Handler handler = new Handler();
         final Runnable Update = new Runnable() {
             public void run() {
@@ -166,17 +161,128 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         });
     }
 
+    private void changeLayout() {
+        homeFragmentBinding.listId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                storesListChoice();
+            }
+        });
+        homeFragmentBinding.gridId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                storesGridChoice();
+            }
+        });
+    }
+
+    private void storesGridChoice() {
+        homeFragmentBinding.gridId.setVisibility(View.GONE);
+        homeFragmentBinding.listId.setVisibility(View.VISIBLE);
+        homeFragmentBinding.listId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_list));
+        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+            categories("en");
+            stores("en", 0);
+            homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
+            homeFragmentBinding.allId.setBackgroundTintList(null);
+
+        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+            categories("ar");
+            stores("ar", 0);
+            homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
+            homeFragmentBinding.allId.setBackgroundTintList(null);
+        }
+        homeFragmentBinding.allId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                all = 1;
+                homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
+                homeFragmentBinding.allId.setBackgroundTintList(null);
+                if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+                    stores("en", 0);
+                    categories("en");
+                } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+                    stores("ar", 0);
+                    categories("ar");
+                }
+
+            }
+        });
+
+    }
+
+    private void storesListChoice() {
+        homeFragmentBinding.listId.setVisibility(View.GONE);
+        homeFragmentBinding.gridId.setVisibility(View.VISIBLE);
+        homeFragmentBinding.listId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_grid));
+        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+            categories("en");
+            storesList("en", 0);
+            homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
+            homeFragmentBinding.allId.setBackgroundTintList(null);
+
+        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+            categories("ar");
+            storesList("ar", 0);
+            homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
+            homeFragmentBinding.allId.setBackgroundTintList(null);
+        }
+        homeFragmentBinding.allId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                all = 1;
+                homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
+                homeFragmentBinding.allId.setBackgroundTintList(null);
+                if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+                    storesList("en", 0);
+                    categories("en");
+                } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+                    storesList("ar", 0);
+                    categories("ar");
+                }
+
+            }
+        });
+
+    }
+
     private void categories(String lang) {
         homeFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getCategories(lang, "", 0).enqueue(new Callback<ApiResponse>() {
+        apiInterface.getCategories(lang, "deviceToken", 0).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.code() == 200 && response.body() != null) {
                         if (!response.body().getCategories().isEmpty()) {
-                            homeFragmentBinding.progress.setVisibility(View.GONE);
+                            internet();
+                            categoriesAdapter = new CategoriesAdapter(context);
+                            homeFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
                             categoriesAdapter.setCategories(response.body().getCategories());
+                            categoriesAdapter.setOnItemClickListener(new CategoriesAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View viewItem, int position, int categoryId) {
+                                    homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_notification_layout));
+                                    homeFragmentBinding.allId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
+                                    if (homeFragmentBinding.listId.getVisibility() == View.VISIBLE) {
+                                        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+                                            stores("en", categoryId);
+                                        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+                                            stores("ar", categoryId);
+                                        }
+                                    }
+
+                                    if (homeFragmentBinding.gridId.getVisibility() == View.VISIBLE) {
+                                        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+                                            storesList("en", categoryId);
+                                        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+                                            storesList("ar", categoryId);
+                                        }
+                                    }
+                                }
+                            });
+
                         } else {
+                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
                             homeFragmentBinding.progress.setVisibility(View.GONE);
                         }
                     }
@@ -186,10 +292,98 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.i("onFailure", t.toString());
-                homeFragmentBinding.progress.setVisibility(View.GONE);
-                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+                noInternet();
             }
         });
+    }
+
+    private void storesList(String lang, int categoryId) {
+        homeFragmentBinding.homeListRecyclerView.setVisibility(View.VISIBLE);
+        homeFragmentBinding.homeGrideRecyclerView.setVisibility(View.GONE);
+        homeFragmentBinding.progress.setVisibility(View.VISIBLE);
+        apiInterface.getStore(lang, "deviceToken", categoryId).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.code() == 200 && response.body() != null) {
+                        if (!response.body().getStores().isEmpty()) {
+                            internet();
+                            storesListAdapter = new StoresListAdapter(context);
+                            storesListAdapter.setStores(response.body().getStores());
+                            homeFragmentBinding.homeListRecyclerView.setAdapter(storesListAdapter);
+
+                        } else {
+                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                            homeFragmentBinding.progress.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.i("onFailure", t.toString());
+                noInternet();
+            }
+        });
+    }
+
+    private void stores(String lang, int categoryId) {
+        homeFragmentBinding.homeListRecyclerView.setVisibility(View.GONE);
+        homeFragmentBinding.homeGrideRecyclerView.setVisibility(View.VISIBLE);
+        homeFragmentBinding.progress.setVisibility(View.VISIBLE);
+        apiInterface.getStore(lang, "deviceToken", categoryId).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.code() == 200 && response.body() != null) {
+                        if (!response.body().getStores().isEmpty()) {
+                            internet();
+                            storesGrideAdapter = new StoresGridAdapter(context);
+                            storesGrideAdapter.setStores(response.body().getStores());
+                            homeFragmentBinding.homeGrideRecyclerView.setAdapter(storesGrideAdapter);
+
+                        } else {
+                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                            homeFragmentBinding.progress.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.i("onFailure", t.toString());
+                noInternet();
+            }
+        });
+    }
+
+    private void noInternet() {
+        homeFragmentBinding.noInternetConId.setVisibility(View.VISIBLE);
+        homeFragmentBinding.progress.setVisibility(View.GONE);
+        Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+        homeFragmentBinding.nestedScrollId.setVisibility(View.INVISIBLE);
+    }
+
+    private void internet() {
+        homeFragmentBinding.noInternetConId.setVisibility(View.GONE);
+        homeFragmentBinding.progress.setVisibility(View.GONE);
+        homeFragmentBinding.nestedScrollId.setVisibility(View.VISIBLE);
+
+    }
+
+    private void getUserDeviceToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    // Get new FCM registration token
+                    deviceToken = task.getResult();
+                    Log.d("deviceTokenIn", deviceToken);
+                });
     }
 
 }

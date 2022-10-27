@@ -1,7 +1,9 @@
 package com.goldencouponz.adapters.home;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,16 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ho
     private LayoutInflater inflater;
     private List<Category> categories = new ArrayList<>();
     Context context;
+    private int checkedPosition = -1;
+    private CategoriesAdapter.OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(View viewItem, int position, int categoryId);
+    }
+
+    public void setOnItemClickListener(CategoriesAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public CategoriesAdapter(Context context) {
         this.context = context;
@@ -72,6 +84,33 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ho
                 Picasso.get().load(category.getIcon()).placeholder(R.drawable.ic_loading).error(R.drawable.ic_loading).into(categoriesItemBinding.imgId);
             }
             categoriesItemBinding.textId.setText(Utility.fixNullString(category.getTitle()));
+            if (checkedPosition == -1) {
+                categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_notification_layout));
+                categoriesItemBinding.linearId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
+            } else {
+                if (checkedPosition == getAdapterPosition()) {
+                    categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
+                    categoriesItemBinding.linearId.setBackgroundTintList(null);
+                } else {
+                    categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_notification_layout));
+                    categoriesItemBinding.linearId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
+                }
+            }
+            itemView.setOnClickListener(view -> {
+                categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
+                categoriesItemBinding.linearId.setBackgroundTintList(null);
+                if (checkedPosition != getAdapterPosition()) {
+                    notifyItemChanged(checkedPosition);
+                    checkedPosition = getAdapterPosition();
+                    int categoryId = category.getId();
+                    listener.onItemClick(categoriesItemBinding.getRoot(), checkedPosition, categoryId);
+
+                }
+            });
+
         }
+
+
     }
+
 }

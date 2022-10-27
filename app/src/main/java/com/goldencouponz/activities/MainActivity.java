@@ -1,6 +1,7 @@
 package com.goldencouponz.activities;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -29,6 +30,44 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     ActivityMainBinding activityMainBinding;
     NavController navController;
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            activityMainBinding.bottomId.setInActiveCentreButtonIconColor(getResources().getColor(R.color.white));
+            activityMainBinding.bottomId.setActiveCentreButtonIconColor(getResources().getColor(R.color.white));
+            if (GoldenNoLoginSharedPreference.getUserLanguage(MainActivity.this).equals("en")) {
+                LocaleHelper.setLocale(this, "en");
+                GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "en");
+                activityMainBinding.bottomId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                Local.Companion.updateResources(MainActivity.this);
+
+            } else {
+                LocaleHelper.setLocale(this, "ar");
+                GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "ar");
+                activityMainBinding.bottomId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                Local.Companion.updateResources(MainActivity.this);
+
+            }
+            //Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            activityMainBinding.bottomId.setInActiveCentreButtonIconColor(getResources().getColor(R.color.white));
+            activityMainBinding.bottomId.setActiveCentreButtonIconColor(getResources().getColor(R.color.white));
+            if (GoldenNoLoginSharedPreference.getUserLanguage(MainActivity.this).equals("en")) {
+                LocaleHelper.setLocale(this, "en");
+                GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "en");
+                activityMainBinding.bottomId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                Local.Companion.updateResources(MainActivity.this);
+            } else {
+                LocaleHelper.setLocale(this, "ar");
+                GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "ar");
+                activityMainBinding.bottomId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                Local.Companion.updateResources(MainActivity.this);
+            }
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +75,14 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String value = extras.getString("language");
-            String country=GoldenNoLoginSharedPreference.getUserCountryName(MainActivity.this);
-            Log.i("COUNTRY",country+"");
-            GoldenNoLoginSharedPreference.saveUserCountry(MainActivity.this,0,country);
+            String country = GoldenNoLoginSharedPreference.getUserCountryName(MainActivity.this);
+            Log.i("COUNTRY", country + "");
+            GoldenNoLoginSharedPreference.saveUserCountry(MainActivity.this, 0, country);
             Local.Companion.updateResources(this);
             LocaleHelper.setLocale(this, value);
-            if (value.equals("ar")|| GoldenNoLoginSharedPreference.getUserLanguage(this).equals("ar")) {
+            if (value.equals("ar") || GoldenNoLoginSharedPreference.getUserLanguage(this).equals("ar")) {
                 getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            } else  if (value.equals("en")|| GoldenNoLoginSharedPreference.getUserLanguage(this).equals("en")) {
+            } else if (value.equals("en") || GoldenNoLoginSharedPreference.getUserLanguage(this).equals("en")) {
                 getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             }
         }
@@ -57,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_user));
         activityMainBinding.bottomId.setInActiveCentreButtonIconColor(getResources().getColor(R.color.white));
         activityMainBinding.bottomId.setActiveCentreButtonIconColor(getResources().getColor(R.color.white));
-
         bottomClickListener();
         GoldenSharedPreference.setActivity(getApplication());
         GoldenNoLoginSharedPreference.setActivity(getApplication());

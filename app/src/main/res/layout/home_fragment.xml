@@ -123,10 +123,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:scaleType="fitCenter"
                             android:layout_width="@dimen/_110sdp"
                             android:layout_height="@dimen/_55sdp"
                             android:layout_alignParentStart="true"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/change_logo" />
 
                         <ImageView
@@ -156,6 +156,7 @@
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/nestedScrollId"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -193,7 +194,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_4sdp"
                             android:layout_marginEnd="@dimen/_4sdp"
-                            android:layout_weight="4"
+                            android:layout_weight="5"
                             android:background="@drawable/bk_notification_layout"
                             android:backgroundTint="#F5F5F5"
                             android:drawableStart="@drawable/ic_search"
@@ -205,14 +206,32 @@
                             android:textFontWeight="400"
                             android:textSize="12sp" />
 
-                        <ImageView
+                        <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_4sdp"
-                            android:layout_marginEnd="@dimen/_4sdp"
-                            android:layout_weight="1"
-                            android:src="@drawable/ic_list" />
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/listId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:src="@drawable/ic_list" />
+
+                            <ImageView
+                                android:visibility="gone"
+                                android:id="@+id/gridId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_grid" />
+
+                        </RelativeLayout>
 
                     </LinearLayout>
 
@@ -224,6 +243,7 @@
                         android:padding="@dimen/_4sdp">
 
                         <LinearLayout
+                            android:id="@+id/allId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_8sdp"
@@ -243,10 +263,10 @@
                                 android:layout_marginStart="@dimen/_4sdp"
                                 android:layout_marginEnd="@dimen/_4sdp"
                                 android:layout_weight="500"
+                                android:text="@string/all_label"
                                 android:textColor="@color/black"
                                 android:textSize="12sp"
-                                android:textStyle="bold"
-                                android:text="@string/all_label" />
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -267,10 +287,72 @@
                         android:layout_marginTop="@dimen/_6sdp"
                         android:background="@color/grey" />
 
+                    <LinearLayout
+                        android:id="@+id/storesLinearId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginBottom="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/home_list_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:scrollbars="vertical"
+                            android:visibility="gone"
+                            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                            tools:listitem="@layout/store_list_item" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/home_gride_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:orientation="vertical"
+                            android:scrollbars="vertical"
+                            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                            app:spanCount="4"
+                            tools:listitem="@layout/store_gride_item" />
+                    </LinearLayout>
+
 
                 </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/noInternetConId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_bk_result"
+                android:src="@drawable/ic_internet" />
+
+            <TextView
+                android:id="@+id/textInternetId"
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:text="@string/no_internet_message"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
 
         <ProgressBar

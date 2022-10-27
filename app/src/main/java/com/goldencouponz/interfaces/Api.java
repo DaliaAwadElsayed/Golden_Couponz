@@ -55,4 +55,9 @@ public interface Api {
     //api/sliders
     @GET("api/sliders")
     Call<ApiResponse> addSlider();
+
+    ///api/stores
+    @GET("api/stores")
+    Call<ApiResponse> getStore(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Query("category_id") int category_id);
+
 }
