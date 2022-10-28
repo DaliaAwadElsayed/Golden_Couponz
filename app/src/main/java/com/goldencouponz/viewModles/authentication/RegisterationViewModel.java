@@ -201,7 +201,8 @@ public class RegisterationViewModel extends ViewModel {
                 if (response.code() == 200) {
                     registerationFragmentBinding.progress.setVisibility(View.GONE);
                     GoldenSharedPreference.saveUser(context, response.body(), response.body().getId());
-                    Navigation.findNavController(registerationFragmentBinding.getRoot()).navigate(R.id.favouriteStoresFragment);
+                    //TODO change to fav stores
+                    Navigation.findNavController(registerationFragmentBinding.getRoot()).navigate(R.id.homeFragment);
                 } else {
                     registerationFragmentBinding.progress.setVisibility(View.GONE);
                     Toast.makeText(context, R.string.thereisanerrorwiththedata, Toast.LENGTH_LONG).show();

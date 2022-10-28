@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_store"
+        android:iconTint="#7A7A7A"
+        android:title="@string/stores_label"
+        android:tooltipText="@string/stores_label" />
+    <item
+        android:id="@+id/favouriteStoresFragment"
+        android:icon="@drawable/ic_fav"
+        android:iconTint="#7A7A7A"
+        android:title="@string/favorite_label"
+        android:tooltipText="@string/favorite_label" />
+
+    <item
+        android:id="@+id/product"
+        android:icon="@drawable/ic_products"
+        android:iconTint="#7A7A7A"
+        android:title="@string/products_label"
+        android:tooltipText="@string/products_label" />
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_user"
+        android:iconTint="#7A7A7A"
+        android:title="@string/account_label"
+        android:tooltipText="@string/account_label" />
+
+</menu>

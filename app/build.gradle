@@ -67,7 +67,7 @@ dependencies {
     //pageIndicator
     implementation 'com.romandanylyk:pageindicatorview:1.0.3'
     //BottomMenu
-    implementation 'com.github.armcha:SpaceNavigationView:1.6.0'
+    implementation 'io.github.vejei.bottomnavigationbar:bottomnavigationbar:1.0.0-alpha'
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
     //firebase token

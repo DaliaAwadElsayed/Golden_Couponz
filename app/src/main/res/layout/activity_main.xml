@@ -6,6 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/antique_white"
         android:orientation="vertical">
 
         <FrameLayout
@@ -31,37 +32,23 @@
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
         </FrameLayout>
 
-        <RelativeLayout
-            android:id="@+id/relativBottomId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
 
-            <LinearLayout
+
+            <io.github.vejei.bottomnavigationbar.BottomNavigationBar
                 android:layout_width="match_parent"
+                android:layout_gravity="bottom"
+                android:id="@+id/relativBottomId"
+                android:saveEnabled="true"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_rec" />
-
-            <com.luseen.spacenavigation.SpaceNavigationView
-                android:id="@+id/bottomId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layoutDirection="ltr"
-                app:active_centre_button_background_color="@null"
-                app:active_centre_button_icon_color="#fff"
-                app:active_item_color="@color/basic_color"
-                app:centre_button_color="#4AAE20"
-                app:centre_button_icon="@drawable/ic__68629061595759824"
-                app:inactive_centre_button_icon_color="#fff"
-                app:inactive_item_color="#7A7A7A"
-                app:space_background_color="#fff"
-                app:space_item_icon_size="@dimen/_22sdp"
-                app:space_item_text_size="@dimen/space_item_text_default_size" />
-
-        </RelativeLayout>
+                app:action_layout="@layout/action_layout_hump"
+                app:action_view_attach_mode="hump"
+                app:action_view_hump_padding="16dp"
+                app:item_label_text_appearance_active="@style/TextViewActive"
+                app:item_label_text_appearance_inactive="@style/TextViewInActive"
+                app:item_unbounded_ripple="false"
+                app:navigation_menu="@menu/bottom_menu" />
     </LinearLayout>
 
 </layout>

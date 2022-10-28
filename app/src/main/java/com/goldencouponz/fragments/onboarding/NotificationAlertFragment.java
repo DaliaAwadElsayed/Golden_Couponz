@@ -3,6 +3,7 @@ package com.goldencouponz.fragments.onboarding;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.NotificationAlertFragmentBinding;
 import com.goldencouponz.activities.MainActivity;
+import com.goldencouponz.activities.SkipActivity;
 import com.goldencouponz.viewModles.onboarding.NotificationAlertViewModel;
 
 public class NotificationAlertFragment extends Fragment {
@@ -37,6 +39,13 @@ public class NotificationAlertFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(NotificationAlertViewModel.class);
         mViewModel.init(notificationAlertFragmentBinding, getContext());
+        notificationAlertFragmentBinding.allowAlertId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("CLICCCCK", "yes");
+                ((SkipActivity) getActivity()).notification();
+            }
+        });
         notificationAlertFragmentBinding.notNowId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

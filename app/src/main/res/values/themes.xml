@@ -22,7 +22,18 @@
         <item name="android:textSize">@dimen/medium_text_size</item>
         <item name="fontWeight">500</item>
     </style>
-
+    <style name="TextViewActive">
+        <item name="fontFamily">@font/app_font</item>
+        <item name="android:textColor">@color/basic_color</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="fontWeight">500</item>
+    </style>
+    <style name="TextViewInActive">
+        <item name="fontFamily">@font/app_font</item>
+        <item name="android:textColor">#7A7A7A</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="fontWeight">500</item>
+    </style>
     <style name="ButtonStyle">
         <item name="fontFamily">@font/app_font</item>
         <item name="android:textColor">@color/black</item>

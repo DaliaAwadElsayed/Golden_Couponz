@@ -11,12 +11,24 @@
         android:label="LoginFragment"
         tools:layout="@layout/login_fragment">
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/registerationFragment"
             app:destination="@id/registerationFragment" />
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/forgetPasswordFragment"
             app:destination="@id/forgetPasswordFragment" />
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/homeFragment"
             app:destination="@id/homeFragment" />
 
@@ -25,11 +37,19 @@
         android:id="@+id/forgetPasswordFragment"
         android:name="com.goldencouponz.fragments.authentication.ForgetPasswordFragment"
         android:label="forget_password_fragment"
-        tools:layout="@layout/forget_password_fragment" >
+        tools:layout="@layout/forget_password_fragment">
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/loginFragment"
             app:destination="@id/loginFragment" />
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/changePasswordFragment"
             app:destination="@id/changePasswordFragment" />
     </fragment>
@@ -40,8 +60,17 @@
         tools:layout="@layout/home_fragment">
         <action
             android:id="@+id/profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/homeFragment" />
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/aboutFragment"
             app:destination="@id/aboutFragment" />
     </fragment>
@@ -51,6 +80,10 @@
         android:label="registeration_fragment"
         tools:layout="@layout/registeration_fragment">
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/favouriteStoresFragment"
             app:destination="@id/favouriteStoresFragment" />
     </fragment>
@@ -60,16 +93,15 @@
         android:label="favourite_stores_fragment"
         tools:layout="@layout/favourite_stores_fragment" />
     <fragment
-        android:id="@+id/notificationAlertFragment2"
-        android:name="com.goldencouponz.fragments.onboarding.NotificationAlertFragment"
-        android:label="NotificationAlertFragment"
-        tools:layout="@layout/notification_alert_fragment" />
-    <fragment
         android:id="@+id/aboutFragment"
         android:name="com.goldencouponz.fragments.aboutgolden.AboutFragment"
         android:label="about_fragment"
         tools:layout="@layout/about_fragment">
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/action_aboutFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
@@ -80,13 +112,25 @@
         tools:layout="@layout/profile_fragment">
         <action
             android:id="@+id/aboutFragment"
-            app:destination="@id/aboutFragment" />
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/changePasswordFragment"
-            app:destination="@id/changePasswordFragment" />
+            app:destination="@id/changePasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/editProfileFragment"
-            app:destination="@id/editProfileFragment" />
+            app:destination="@id/editProfileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
@@ -95,10 +139,18 @@
         tools:layout="@layout/change_password_fragment">
         <action
             android:id="@+id/profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/forgetPasswordFragment"
-            app:destination="@id/forgetPasswordFragment" />
+            app:destination="@id/forgetPasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -106,6 +158,10 @@
         android:label="edit_profile_fragment"
         tools:layout="@layout/edit_profile_fragment">
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>

@@ -7,12 +7,13 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -23,46 +24,48 @@ import com.goldencouponz.interfaces.ToolbarInterface;
 import com.goldencouponz.utility.LocaleHelper;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
-import com.luseen.spacenavigation.SpaceItem;
-import com.luseen.spacenavigation.SpaceOnClickListener;
+
+import io.github.vejei.bottomnavigationbar.BottomNavigationBar;
 
 public class MainActivity extends AppCompatActivity implements ToolbarInterface {
     ActivityMainBinding activityMainBinding;
     NavController navController;
 
     @Override
+    public boolean onSupportNavigateUp() {
+        navController = Navigation.findNavController(this, R.id.home_nav_fragment);
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            activityMainBinding.bottomId.setInActiveCentreButtonIconColor(getResources().getColor(R.color.white));
-            activityMainBinding.bottomId.setActiveCentreButtonIconColor(getResources().getColor(R.color.white));
             if (GoldenNoLoginSharedPreference.getUserLanguage(MainActivity.this).equals("en")) {
                 LocaleHelper.setLocale(this, "en");
                 GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "en");
-                activityMainBinding.bottomId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                activityMainBinding.relativBottomId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                 Local.Companion.updateResources(MainActivity.this);
 
             } else {
                 LocaleHelper.setLocale(this, "ar");
                 GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "ar");
-                activityMainBinding.bottomId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                activityMainBinding.relativBottomId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
                 Local.Companion.updateResources(MainActivity.this);
 
             }
             //Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            activityMainBinding.bottomId.setInActiveCentreButtonIconColor(getResources().getColor(R.color.white));
-            activityMainBinding.bottomId.setActiveCentreButtonIconColor(getResources().getColor(R.color.white));
             if (GoldenNoLoginSharedPreference.getUserLanguage(MainActivity.this).equals("en")) {
                 LocaleHelper.setLocale(this, "en");
                 GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "en");
-                activityMainBinding.bottomId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                activityMainBinding.relativBottomId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                 Local.Companion.updateResources(MainActivity.this);
             } else {
                 LocaleHelper.setLocale(this, "ar");
                 GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "ar");
-                activityMainBinding.bottomId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                activityMainBinding.relativBottomId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
                 Local.Companion.updateResources(MainActivity.this);
             }
         }
@@ -88,14 +91,6 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         }
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         navController = Navigation.findNavController(this, R.id.home_nav_fragment);
-        activityMainBinding.bottomId.initWithSaveInstanceState(savedInstanceState);
-        activityMainBinding.bottomId.setSaveEnabled(true);
-        activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_store));
-        activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_products));
-        activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_fav));
-        activityMainBinding.bottomId.addSpaceItem(new SpaceItem("", R.drawable.ic_user));
-        activityMainBinding.bottomId.setInActiveCentreButtonIconColor(getResources().getColor(R.color.white));
-        activityMainBinding.bottomId.setActiveCentreButtonIconColor(getResources().getColor(R.color.white));
         bottomClickListener();
         GoldenSharedPreference.setActivity(getApplication());
         GoldenNoLoginSharedPreference.setActivity(getApplication());
@@ -103,44 +98,24 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
 
 
     private void bottomClickListener() {
-        activityMainBinding.bottomId.setSpaceOnClickListener(new SpaceOnClickListener() {
-            @Override
-            public void onCentreButtonClick() {
-                Toast.makeText(MainActivity.this, "whatsApp", Toast.LENGTH_SHORT).show();
-            }
+        activityMainBinding.relativBottomId.setOnNavigationItemSelectedListener(
+                new BottomNavigationBar.OnNavigationItemSelectedListener() {
+                    @Override
+                    public void onNavigationItemSelected(MenuItem item) {
+                        Fragment selectedFragment = null;
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.homeFragment) {
+                            navController.navigate(R.id.homeFragment);
+                        } else if (itemId == R.id.favouriteStoresFragment) {
+                            navController.navigate(R.id.homeFragment);
+                        } else if (itemId == R.id.product) {
+                            navController.navigate(R.id.homeFragment);
+                        } else if (itemId == R.id.profileFragment) {
+                            navController.navigate(R.id.profileFragment);
+                        }
 
-            @Override
-            public void onItemClick(int itemIndex, String itemName) {
-                if (itemIndex == 3) {
-                    navController.navigate(R.id.profileFragment);
-                } else if (itemIndex == 2) {
-                    navController.navigate(R.id.favouriteStoresFragment);
-                } else if (itemIndex == 1) {
-                    //products
-                } else if (itemIndex == 0) {
-                    navController.navigate(R.id.homeFragment);
-                }
-            }
-
-            @Override
-            public void onItemReselected(int itemIndex, String itemName) {
-                if (itemIndex == 3) {
-                    navController.navigate(R.id.profileFragment);
-                } else if (itemIndex == 2) {
-                    navController.navigate(R.id.favouriteStoresFragment);
-                } else if (itemIndex == 1) {
-                    //products
-                } else if (itemIndex == 0) {
-                    navController.navigate(R.id.homeFragment);
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        activityMainBinding.bottomId.onSaveInstanceState(outState);
+                    }
+                });
     }
 
     @Override

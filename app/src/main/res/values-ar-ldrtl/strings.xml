@@ -97,5 +97,6 @@
     <string name="oldPasswordAsNew">لا يمكن أن تكون كلمة المرور الجديدة هي نفسها كلمة مرورك الحالية</string>
     <string name="all_label">الكل</string>
     <string name="coupons_for_count_label">عدد الكوبونات:</string>
+    <string name="favorite_label">المفضلة</string>
 
 </resources>
