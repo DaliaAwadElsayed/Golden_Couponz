@@ -3,7 +3,6 @@ package com.goldencouponz.viewModles.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -221,8 +220,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
             homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
             homeFragmentBinding.allId.setBackgroundTintList(null);
 
-        }
-        else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             categories("ar");
             storesList("ar", 0);
             homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
@@ -261,17 +259,15 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                             categoriesAdapter.setOnItemClickListener(new CategoriesAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View viewItem, int position, int categoryId) {
-                                    homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_notification_layout));
-                                    homeFragmentBinding.allId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
+                                    homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
+//                                    homeFragmentBinding.allId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
                                     if (homeFragmentBinding.listId.getVisibility() == View.VISIBLE) {
                                         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
                                             stores("en", categoryId);
                                         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
                                             stores("ar", categoryId);
                                         }
-                                    }
-
-                                  else  if (homeFragmentBinding.gridId.getVisibility() == View.VISIBLE) {
+                                    } else if (homeFragmentBinding.gridId.getVisibility() == View.VISIBLE) {
                                         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
                                             storesList("en", categoryId);
                                         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {

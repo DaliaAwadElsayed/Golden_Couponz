@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.BannerLayoutBinding;
 import com.goldencouponz.models.home.Slider;
 import com.goldencouponz.viewModles.home.HomeViewModel;
@@ -54,7 +53,7 @@ public class SlidersAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         BannerLayoutBinding layoutBinding = BannerLayoutBinding.inflate(LayoutInflater.from(container.getContext()), container, false);
         if (sliders.get(position).getFile() != null) {
-                 Picasso.get().load(sliders.get(position).getFile()).placeholder(R.drawable.ic_loading).error(R.drawable.ic_loading).into(layoutBinding.viewPagerItemImage1);
+                 Picasso.get().load(sliders.get(position).getFile()).into(layoutBinding.viewPagerItemImage1);
 
         }
 

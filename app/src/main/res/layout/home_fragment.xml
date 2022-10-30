@@ -85,9 +85,8 @@
                                 android:layout_marginTop="@dimen/_12sdp"
                                 android:animateLayoutChanges="true"
                                 android:background="@drawable/slider_card_bg"
-                                android:scrollIndicators="top">
+                                android:scrollIndicators="top" />
 
-                            </androidx.viewpager.widget.ViewPager>
 
                             <com.rd.PageIndicatorView
                                 android:id="@+id/pageIndicatorView"
@@ -238,51 +237,60 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
+                    <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/_4sdp">
+                        android:layout_height="match_parent"
+                        android:fillViewport="true"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_12sdp">
 
                         <LinearLayout
-                            android:id="@+id/allId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_8sdp"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:background="@drawable/bk_notification_layout"
-                            android:backgroundTint="#F5F5F5"
-                            android:gravity="center"
-                            android:paddingStart="@dimen/_12sdp"
-                            android:paddingTop="@dimen/_4sdp"
-                            android:paddingEnd="@dimen/_12sdp"
-                            android:paddingBottom="@dimen/_4sdp">
+                            android:layout_marginTop="@dimen/_4sdp"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/_4sdp">
 
-                            <TextView
-                                android:id="@+id/textId"
+                            <LinearLayout
+                                android:id="@+id/allId"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_4sdp"
-                                android:layout_marginEnd="@dimen/_4sdp"
-                                android:layout_weight="500"
-                                android:text="@string/all_label"
-                                android:textColor="@color/black"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
+                                android:background="@drawable/bk_category_uncheck"
+                                android:gravity="center"
+                                android:paddingStart="@dimen/_2sdp"
+                                android:paddingTop="@dimen/_4sdp"
+                                android:paddingEnd="@dimen/_4sdp"
+                                android:paddingBottom="@dimen/_2sdp">
+
+                                <TextView
+                                    android:id="@+id/textId"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:layout_marginEnd="@dimen/_8sdp"
+                                    android:layout_marginBottom="@dimen/_2sdp"
+                                    android:layout_weight="500"
+                                    android:gravity="center"
+                                    android:text="@string/all_label"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/category_recycler_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="horizontal"
+                                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                                tools:listitem="@layout/categories_item" />
+
                         </LinearLayout>
+                    </androidx.core.widget.NestedScrollView>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/category_recycler_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:nestedScrollingEnabled="false"
-                            android:orientation="horizontal"
-                            android:scrollbars="horizontal"
-                            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                            tools:listitem="@layout/categories_item" />
-
-                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -364,7 +372,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:progressDrawable="@drawable/ic_loading"
+
             android:visibility="gone" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -8,29 +8,27 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_4sdp"
         android:layout_marginEnd="@dimen/_4sdp"
-        android:background="@drawable/bk_notification_layout"
-        android:backgroundTint="#F5F5F5"
+        android:background="@drawable/bk_category_uncheck"
         android:gravity="center"
-        android:paddingStart="@dimen/_12sdp"
-        android:paddingTop="@dimen/_2sdp"
-        android:paddingEnd="@dimen/_12sdp"
+        android:paddingStart="@dimen/_2sdp"
+        android:paddingTop="@dimen/_4sdp"
+        android:paddingEnd="@dimen/_4sdp"
         android:paddingBottom="@dimen/_2sdp">
 
         <ImageView
             android:id="@+id/imgId"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
-            android:background="#f5f5f5"
-            android:src="@drawable/ic_loading" />
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/_2sdp"
+            />
 
         <TextView
             android:id="@+id/textId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/_2sdp"
             android:layout_weight="500"
             android:textColor="@color/black"
             android:textSize="12sp"

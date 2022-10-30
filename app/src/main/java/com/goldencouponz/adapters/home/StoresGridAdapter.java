@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.StoreGrideItemBinding;
 import com.goldencouponz.models.home.Store;
 import com.goldencouponz.utility.Utility;
@@ -71,7 +70,7 @@ public class StoresGridAdapter extends RecyclerView.Adapter<StoresGridAdapter.Ho
         private void bindRestaurant(Store store) {
             storeGrideItemBinding.storeNameId.setText(Utility.fixNullString(String.valueOf(store.getTitle())));
             storeGrideItemBinding.couponCountId.setText(Utility.fixNullString(String.valueOf(store.getStoreCouponsCount())));
-            Picasso.get().load(store.getFile()).placeholder(R.drawable.ic_loading).placeholder(R.drawable.ic_loading).into(storeGrideItemBinding.storeImgId);
+            Picasso.get().load(store.getFile()).into(storeGrideItemBinding.storeImgId);
         }
 
     }

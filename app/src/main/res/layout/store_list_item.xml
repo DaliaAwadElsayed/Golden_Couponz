@@ -32,7 +32,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_4sdp"
                     android:layout_marginEnd="@dimen/_4sdp"
-                    android:src="@drawable/ic_loading" />
+                   />
 
                 <LinearLayout
                     android:layout_marginEnd="@dimen/_4sdp"

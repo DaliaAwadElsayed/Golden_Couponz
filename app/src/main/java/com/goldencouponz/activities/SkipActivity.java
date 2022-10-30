@@ -68,8 +68,6 @@ public class SkipActivity extends AppCompatActivity {
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_skip);
         ActivityResultLauncher var10001 = this.registerForActivityResult((ActivityResultContract)(new ActivityResultContracts.RequestPermission()),
                 (ActivityResultCallback)(new ActivityResultCallback() {
-                    // $FF: synthetic method
-                    // $FF: bridge method
                     public void onActivityResult(Object var1) {
                         this.onActivityResult((Boolean)var1);
                     }

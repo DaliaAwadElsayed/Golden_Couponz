@@ -3,7 +3,6 @@ package com.goldencouponz.utility;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.e.goldencouponz.R;
 import com.pixplicity.sharp.Sharp;
 
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class Utils {
         httpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                target.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_loading));
+//                target.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_loading));
             }
 
             @Override

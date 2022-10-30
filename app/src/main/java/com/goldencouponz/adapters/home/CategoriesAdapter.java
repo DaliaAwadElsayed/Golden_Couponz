@@ -1,7 +1,6 @@
 package com.goldencouponz.adapters.home;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,19 +80,19 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ho
 
         private void bindRestaurant(Category category) {
             if (category.getIcon() != null) {
-                Picasso.get().load(category.getIcon()).placeholder(R.drawable.ic_loading).error(R.drawable.ic_loading).into(categoriesItemBinding.imgId);
+                Picasso.get().load(category.getIcon()).into(categoriesItemBinding.imgId);
             }
             categoriesItemBinding.textId.setText(Utility.fixNullString(category.getTitle()));
             if (checkedPosition == -1) {
-                categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_notification_layout));
-                categoriesItemBinding.linearId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
+                categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
+//                categoriesItemBinding.linearId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
             } else {
                 if (checkedPosition == getAdapterPosition()) {
                     categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
                     categoriesItemBinding.linearId.setBackgroundTintList(null);
                 } else {
-                    categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_notification_layout));
-                    categoriesItemBinding.linearId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
+                    categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
+//                    categoriesItemBinding.linearId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
                 }
             }
             itemView.setOnClickListener(view -> {
