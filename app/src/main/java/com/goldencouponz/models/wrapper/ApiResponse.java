@@ -47,7 +47,18 @@ public class ApiResponse {
     @SerializedName("stores")
     @Expose
     private List<Store> stores = null;
+    @SerializedName("store")
+    @Expose
+    private Store store = null;
     public ApiResponse() {
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public List<Store> getStores() {

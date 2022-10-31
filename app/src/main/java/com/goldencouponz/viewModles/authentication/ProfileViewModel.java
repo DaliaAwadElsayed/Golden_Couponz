@@ -40,6 +40,7 @@ public class ProfileViewModel extends ViewModel {
     private Api apiInterface = RetrofitClient.getInstance().getApi();
     CountriesAdapter countriesAdapter;
     private FragmentActivity activity;
+    int countrySavedId;
 
     public void init(ProfileFragmentBinding profileFragmentBinding, Context context) {
         this.context = context;
@@ -90,7 +91,8 @@ public class ProfileViewModel extends ViewModel {
                             enableClick(false);
                             countriesAdapter.setOnItemClickListener(new CountriesAdapter.OnItemClickListener() {
                                 @Override
-                                public void onItemClick(View viewItem, int position, String code) {
+                                public void onItemClick(View viewItem, int position, int id, String code) {
+                                    countrySavedId=id;
                                     profileFragmentBinding.relativeId.setBackgroundColor(0);
                                     profileFragmentBinding.relativeId.setAlpha(1f);
                                     enableClick(true);
@@ -99,7 +101,7 @@ public class ProfileViewModel extends ViewModel {
                                     Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
                                     profileFragmentBinding.countriesLinearId.startAnimation(animation);
                                     profileFragmentBinding.countryChangeId.setText(code);
-                                    GoldenNoLoginSharedPreference.saveUserCountry(context, position, code);
+                                    GoldenNoLoginSharedPreference.saveUserCountry(context, position, id, code);
 
                                 }
                             });
@@ -157,7 +159,7 @@ public class ProfileViewModel extends ViewModel {
         } else if (profileFragmentBinding.langChangeId.getText().equals("English")) {
             GoldenNoLoginSharedPreference.saveUserLang(context, "en");
         }
-        GoldenNoLoginSharedPreference.saveUserCountry(context, 0, profileFragmentBinding.countryChangeId.getText().toString());
+        GoldenNoLoginSharedPreference.saveUserCountry(context, 0, countrySavedId, profileFragmentBinding.countryChangeId.getText().toString());
         ////////
         profileFragmentBinding.progress.setVisibility(View.VISIBLE);
         apiInterface.userLogOut("Bearer" + GoldenSharedPreference.getToken(context)).enqueue(new Callback<ApiResponse>() {
@@ -170,7 +172,7 @@ public class ProfileViewModel extends ViewModel {
                     } else if (profileFragmentBinding.langChangeId.getText().equals("English")) {
                         GoldenNoLoginSharedPreference.saveUserLang(context, "en");
                     }
-                    GoldenNoLoginSharedPreference.saveUserCountry(context, 0, profileFragmentBinding.countryChangeId.getText().toString());
+                    GoldenNoLoginSharedPreference.saveUserCountry(context, 0,countrySavedId, profileFragmentBinding.countryChangeId.getText().toString());
                     Navigation.findNavController(profileFragmentBinding.getRoot()).navigate(R.id.homeFragment);
                     profileFragmentBinding.progress.setVisibility(View.GONE);
                 }
@@ -322,6 +324,7 @@ public class ProfileViewModel extends ViewModel {
         profileFragmentBinding.profileLinearId.setVisibility(View.GONE);
 
     }
+
     private void supportUs() {
         //https://play.google.com/store/apps/details?id=com.codesroots.goldencoupon
         Uri uri = Uri.parse("market://details?id=" + "com.codesroots.goldencoupon");
@@ -332,6 +335,7 @@ public class ProfileViewModel extends ViewModel {
             Toast.makeText(context, " unable to find market app", Toast.LENGTH_LONG).show();
         }
     }
+
     private void enableClick(Boolean aBoolean) {
         profileFragmentBinding.codeId.setClickable(aBoolean);
         profileFragmentBinding.editId.setClickable(aBoolean);

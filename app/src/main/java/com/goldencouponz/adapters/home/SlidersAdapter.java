@@ -1,7 +1,6 @@
 package com.goldencouponz.adapters.home;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,15 +59,6 @@ public class SlidersAdapter extends PagerAdapter {
         size = sliders.size();
         sliderSize.size(size);
         container.addView(layoutBinding.getRoot());
-        layoutBinding.viewPagerItemImage1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-//                bundle.putInt("itemId", Integer.parseInt(sliders.get(position).getItemId()));
-                // Navigation.findNavController(view).navigate(R.id.choiceDetailsFragment, bundle);
-
-            }
-        });
 
         return layoutBinding.getRoot();
     }

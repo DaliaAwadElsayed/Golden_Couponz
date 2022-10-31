@@ -59,6 +59,13 @@
         android:label="home_fragment"
         tools:layout="@layout/home_fragment">
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            android:id="@+id/storeDetailsFragment"
+            app:destination="@id/storeDetailsFragment" />
+        <action
             android:id="@+id/profileFragment"
             app:destination="@id/profileFragment"
             app:enterAnim="@anim/slide_in_right"
@@ -164,5 +171,17 @@
             app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/profileFragment"
             app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/storeDetailsFragment"
+        android:name="com.goldencouponz.fragments.stores.StoreDetailsFragment"
+        android:label="StoreDetailsFragment" >
+        <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            android:id="@+id/homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

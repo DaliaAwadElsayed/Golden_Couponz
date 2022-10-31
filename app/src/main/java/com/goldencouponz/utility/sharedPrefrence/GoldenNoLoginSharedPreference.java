@@ -11,6 +11,7 @@ public class GoldenNoLoginSharedPreference {
     private static final String LANG_KEY = "chosen_lang_key";
     private static final String COUNTRY_NAME = "chosen_country";
     private static final String COUNTRY_ID = "chosen_country_id";
+    private static final String POSITION = "position";
     private static Application application;
     SharedPreferences sharedPref = application.getApplicationContext().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
     public SharedPreferences.Editor editor = sharedPref.edit();
@@ -24,11 +25,12 @@ public class GoldenNoLoginSharedPreference {
                 .apply();
     }
 
-    public static void saveUserCountry(Context context, int countryId, String country) {
+    public static void saveUserCountry(Context context, int position,int countryId, String country) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(COUNTRY_NAME, country)
                 .putInt(COUNTRY_ID, countryId)
+                .putInt(POSITION, position)
                 .apply();
     }
     /**
@@ -52,7 +54,13 @@ public class GoldenNoLoginSharedPreference {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getInt(COUNTRY_ID, 0);
     }
-
+    /**
+     * @return the user country id choice
+     */
+    public static int getUsePositionCountryId(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt(POSITION, 0);
+    }
     /**
      * @return the user language choice
      */

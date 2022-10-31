@@ -97,4 +97,9 @@
     <string name="all_label">All</string>
     <string name="coupons_for_count_label">Coupons:</string>
     <string name="favorite_label">Favorite</string>
+    <string name="coupons_label">Coupons</string>
+    <string name="product_offers">Product offers</string>
+    <string name="get_the_offer">Get the offer now</string>
+    <string name="last_used_from">Last used from</string>
+    <string name="sar">SAR</string>
 </resources>

@@ -98,5 +98,10 @@
     <string name="all_label">الكل</string>
     <string name="coupons_for_count_label">عدد الكوبونات:</string>
     <string name="favorite_label">المفضلة</string>
+    <string name="coupons_label">الكوبونات</string>
+    <string name="product_offers">عروض المنتجات</string>
+    <string name="get_the_offer">الحصول علي العرض الآن</string>
+    <string name="last_used_from">اخر استخدام منذ</string>
+    <string name="sar">ريال</string>
 
 </resources>

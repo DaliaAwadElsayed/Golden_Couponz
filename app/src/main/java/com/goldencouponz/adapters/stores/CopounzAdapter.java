@@ -1,18 +1,14 @@
-package com.goldencouponz.adapters.home;
+package com.goldencouponz.adapters.stores;
 
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.e.goldencouponz.R;
-import com.e.goldencouponz.databinding.StoreListItemBinding;
+import com.e.goldencouponz.databinding.StoreGrideItemBinding;
 import com.goldencouponz.models.home.Store;
 import com.goldencouponz.utility.Utility;
 import com.squareup.picasso.Picasso;
@@ -20,12 +16,12 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StoresListAdapter extends RecyclerView.Adapter<StoresListAdapter.HomePageViewHolder> {
+public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePageViewHolder> {
     private LayoutInflater inflater;
     private List<Store> store = new ArrayList<>();
     Context context;
 
-    public StoresListAdapter(Context context) {
+    public CopounzAdapter(Context context) {
         this.context = context;
     }
 
@@ -45,7 +41,7 @@ public class StoresListAdapter extends RecyclerView.Adapter<StoresListAdapter.Ho
         if (inflater == null) {
             inflater = LayoutInflater.from(parent.getContext());
         }
-        return new HomePageViewHolder(StoreListItemBinding.inflate(inflater, parent, false));
+        return new HomePageViewHolder(StoreGrideItemBinding.inflate(inflater, parent, false));
     }
 
     @Override
@@ -64,33 +60,17 @@ public class StoresListAdapter extends RecyclerView.Adapter<StoresListAdapter.Ho
     }
 
     class HomePageViewHolder extends RecyclerView.ViewHolder {
-        private StoreListItemBinding storeGrideItemBinding;
+        private StoreGrideItemBinding storeGrideItemBinding;
 
-        HomePageViewHolder(@NonNull StoreListItemBinding storeGrideItemBinding) {
+        HomePageViewHolder(@NonNull StoreGrideItemBinding storeGrideItemBinding) {
             super(storeGrideItemBinding.getRoot());
             this.storeGrideItemBinding = storeGrideItemBinding;
         }
 
         private void bindRestaurant(Store store) {
-            if (store.getIsFavorite()==1){
-                storeGrideItemBinding.favId.setVisibility(View.GONE);
-                storeGrideItemBinding.addFavId.setVisibility(View.VISIBLE);
-            }else {
-                storeGrideItemBinding.favId.setVisibility(View.VISIBLE);
-                storeGrideItemBinding.addFavId.setVisibility(View.GONE);
-            }
             storeGrideItemBinding.storeNameId.setText(Utility.fixNullString(String.valueOf(store.getTitle())));
             storeGrideItemBinding.couponCountId.setText(Utility.fixNullString(String.valueOf(store.getStoreCouponsCount())));
             Picasso.get().load(store.getFile()).into(storeGrideItemBinding.storeImgId);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("storeId", store.getId());
-                    Navigation.findNavController(v).navigate(R.id.storeDetailsFragment, bundle);
-                }
-            });
-
         }
 
     }

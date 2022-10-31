@@ -39,11 +39,13 @@ public class Store {
     private Integer isFavorite;
     @SerializedName("store_sliders")
     @Expose
-    private List<StoreSlider> storeSliders = null;
+    private List<Slider> storeSliders = null;
     @SerializedName("store_categories")
     @Expose
     private List<StoreCategory> storeCategories = null;
-
+    @SerializedName("store_coupons")
+    @Expose
+    private List<StoreCategory> store_coupons = null;
     public Integer getId() {
         return id;
     }
@@ -124,11 +126,11 @@ public class Store {
         this.isFavorite = isFavorite;
     }
 
-    public List<StoreSlider> getStoreSliders() {
+    public List<Slider> getStoreSliders() {
         return storeSliders;
     }
 
-    public void setStoreSliders(List<StoreSlider> storeSliders) {
+    public void setStoreSliders(List<Slider> storeSliders) {
         this.storeSliders = storeSliders;
     }
 

@@ -2,12 +2,16 @@ package com.goldencouponz.adapters.home;
 
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.StoreGrideItemBinding;
 import com.goldencouponz.models.home.Store;
 import com.goldencouponz.utility.Utility;
@@ -71,6 +75,14 @@ public class StoresGridAdapter extends RecyclerView.Adapter<StoresGridAdapter.Ho
             storeGrideItemBinding.storeNameId.setText(Utility.fixNullString(String.valueOf(store.getTitle())));
             storeGrideItemBinding.couponCountId.setText(Utility.fixNullString(String.valueOf(store.getStoreCouponsCount())));
             Picasso.get().load(store.getFile()).into(storeGrideItemBinding.storeImgId);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("storeId", store.getId());
+                    Navigation.findNavController(v).navigate(R.id.storeDetailsFragment, bundle);
+                }
+            });
         }
 
     }

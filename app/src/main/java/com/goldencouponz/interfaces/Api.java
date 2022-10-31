@@ -12,6 +12,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Api {
@@ -56,8 +57,13 @@ public interface Api {
     @GET("api/sliders")
     Call<ApiResponse> addSlider();
 
+
     ///api/stores
     @GET("api/stores")
     Call<ApiResponse> getStore(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Query("category_id") int category_id);
+
+    ///api/stores
+    @GET("api/stores/{id}")
+    Call<ApiResponse> getSingleStore(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Header("country") int countryId, @Path("id") String id);
 
 }
