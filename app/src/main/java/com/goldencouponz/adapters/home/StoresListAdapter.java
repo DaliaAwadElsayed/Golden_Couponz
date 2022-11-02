@@ -29,16 +29,6 @@ public class StoresListAdapter extends RecyclerView.Adapter<StoresListAdapter.Ho
         this.context = context;
     }
 
-    public void addCategory(List<Store> store) {
-        this.store.addAll(store);
-        notifyDataSetChanged();
-    }
-
-    public List<Store> getCategories() {
-        return store;
-    }
-
-
     @NonNull
     @Override
     public HomePageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -72,10 +62,10 @@ public class StoresListAdapter extends RecyclerView.Adapter<StoresListAdapter.Ho
         }
 
         private void bindRestaurant(Store store) {
-            if (store.getIsFavorite()==1){
+            if (store.getIsFavorite() == 1) {
                 storeGrideItemBinding.favId.setVisibility(View.GONE);
                 storeGrideItemBinding.addFavId.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 storeGrideItemBinding.favId.setVisibility(View.VISIBLE);
                 storeGrideItemBinding.addFavId.setVisibility(View.GONE);
             }

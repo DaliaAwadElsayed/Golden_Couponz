@@ -84,7 +84,6 @@
 
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/sliderId"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/storeCatId"
@@ -95,7 +94,8 @@
                         android:animateLayoutChanges="true"
                         android:background="@drawable/slider_card_bg"
                         android:backgroundTint="@color/white"
-                        android:scrollIndicators="top" />
+                        android:scrollIndicators="top"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -162,21 +162,144 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    tools:ignore="MissingConstraints">
+              >
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tabLayoutId"
-                        app:tabGravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <androidx.viewpager.widget.ViewPager
-                        android:id="@+id/viewPagerId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:layout_editor_absoluteX="8dp">
+                        app:tabGravity="center" />
 
-                    </androidx.viewpager.widget.ViewPager>
+
+                    <LinearLayout
+                        android:id="@+id/couponzLinearId"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+
+                        <androidx.core.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/recyclerId"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:nestedScrollingEnabled="false"
+                                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                                    tools:listitem="@layout/coupon_item" />
+
+                                <!--we are adding progress bar
+                                    for the purpose of loading-->
+                            </LinearLayout>
+
+                        </androidx.core.widget.NestedScrollView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/productLinearId"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <androidx.core.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_12sdp"
+                            android:layout_marginEnd="@dimen/_12sdp"
+                            android:fillViewport="true">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/_4sdp"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:padding="@dimen/_4sdp">
+
+                                <LinearLayout
+                                    android:id="@+id/linearId"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_4sdp"
+                                    android:layout_marginEnd="@dimen/_4sdp"
+                                    android:background="@drawable/bk_category_uncheck"
+                                    android:gravity="center"
+                                    android:paddingStart="@dimen/_2sdp"
+                                    android:paddingTop="@dimen/_4sdp"
+                                    android:paddingEnd="@dimen/_4sdp"
+                                    android:paddingBottom="@dimen/_2sdp">
+
+
+                                    <TextView
+                                        android:id="@+id/textId"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_2sdp"
+                                        android:layout_marginEnd="@dimen/_2sdp"
+                                        android:layout_weight="500"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold"
+                                        tools:text="@string/all_label" />
+                                </LinearLayout>
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/category_recycler_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:nestedScrollingEnabled="false"
+                                    android:orientation="horizontal"
+                                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                                    tools:listitem="@layout/product_categories_item" />
+
+                            </LinearLayout>
+                        </androidx.core.widget.NestedScrollView>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/sub_category_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                            tools:listitem="@layout/sub_product_categories_item" />
+
+                        <androidx.core.widget.NestedScrollView
+                            android:id="@+id/idNesteddSV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/idRVUsers"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:nestedScrollingEnabled="false"
+                                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                                    app:spanCount="2"
+                                    tools:listitem="@layout/product_item" />
+
+                                <!--we are adding progress bar
+                                    for the purpose of loading-->
+                                    </LinearLayout>
+
+                        </androidx.core.widget.NestedScrollView>
+                    </LinearLayout>
 
                 </LinearLayout>
 

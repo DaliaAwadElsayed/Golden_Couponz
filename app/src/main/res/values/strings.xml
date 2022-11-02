@@ -102,4 +102,7 @@
     <string name="get_the_offer">Get the offer now</string>
     <string name="last_used_from">Last used from</string>
     <string name="sar">SAR</string>
+    <string name="copy_the_coupon">Copy the coupon</string>
+    <string name="copied_label">copied</string>
+    <string name="time">time</string>
 </resources>

@@ -103,5 +103,8 @@
     <string name="get_the_offer">الحصول علي العرض الآن</string>
     <string name="last_used_from">اخر استخدام منذ</string>
     <string name="sar">ريال</string>
+    <string name="copy_the_coupon">انسخ الكوبون</string>
+    <string name="copied_label">تم النسخ</string>
+    <string name="time">مرة</string>
 
 </resources>

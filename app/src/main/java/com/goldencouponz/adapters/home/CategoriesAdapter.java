@@ -36,14 +36,6 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ho
         this.context = context;
     }
 
-    public void addCategory(List<Category> categories) {
-        this.categories.addAll(categories);
-        notifyDataSetChanged();
-    }
-
-    public List<Category> getCategories() {
-        return categories;
-    }
 
 
     @NonNull

@@ -29,16 +29,6 @@ public class StoresGridAdapter extends RecyclerView.Adapter<StoresGridAdapter.Ho
         this.context = context;
     }
 
-    public void addCategory(List<Store> store) {
-        this.store.addAll(store);
-        notifyDataSetChanged();
-    }
-
-    public List<Store> getCategories() {
-        return store;
-    }
-
-
     @NonNull
     @Override
     public HomePageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

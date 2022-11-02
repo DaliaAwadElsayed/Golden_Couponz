@@ -6,16 +6,17 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.viewpager.widget.ViewPager;
 
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.StoreDetailsFragmentBinding;
 import com.goldencouponz.adapters.home.SlidersAdapter;
-import com.goldencouponz.adapters.stores.TabLayoutAdapter;
+import com.goldencouponz.adapters.stores.CopounzAdapter;
+import com.goldencouponz.adapters.stores.ProductAdapter;
 import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
@@ -128,14 +129,29 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                         if (!response.body().getStore().getStoreSliders().isEmpty()) {
                             addsBannerAdapter.setSliders(response.body().getStore().getStoreSliders());
                         }
+                        if (!response.body().getStore().getStore_coupons().isEmpty()) {
+                            Log.i("RECYCLERR", ",,");
+                            CopounzAdapter categoriesAdapter = new CopounzAdapter(context);
+                            categoriesAdapter.setStores(response.body().getStore().getStore_coupons());
+                            storeDetailsFragmentBinding.recyclerId.setAdapter(categoriesAdapter);
 
+                        }
+                        if (!response.body().getStore().getStore_products().isEmpty()) {
+                            Log.i("RECYCLERR", ",,");
+                            ProductAdapter storeProduct = new ProductAdapter(context);
+                            storeProduct.setStores(response.body().getStore().getStore_products());
+                            storeDetailsFragmentBinding.idRVUsers.setAdapter(storeProduct);
+
+                        }
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-
+                Log.i("onFailure", t.toString());
+                storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
+                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -164,15 +180,18 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         storeDetailsFragmentBinding.tabLayoutId.addTab(storeDetailsFragmentBinding.tabLayoutId.newTab().setText(context.getResources().getString(R.string.coupons_label)));
         storeDetailsFragmentBinding.tabLayoutId.addTab(storeDetailsFragmentBinding.tabLayoutId.newTab().setText(context.getResources().getString(R.string.product_offers)));
         storeDetailsFragmentBinding.tabLayoutId.setTabGravity(TabLayout.GRAVITY_FILL);
-        final TabLayoutAdapter adapter = new TabLayoutAdapter(context, ((AppCompatActivity) context).getSupportFragmentManager(), storeDetailsFragmentBinding.tabLayoutId.getTabCount());
-        storeDetailsFragmentBinding.viewPagerId.setAdapter(adapter);
-        storeDetailsFragmentBinding.viewPagerId.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(storeDetailsFragmentBinding.tabLayoutId));
-        storeDetailsFragmentBinding.viewPagerId.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(storeDetailsFragmentBinding.tabLayoutId));
-
         storeDetailsFragmentBinding.tabLayoutId.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-//              storeDetailsFragmentBinding.viewPager.setCurrentItem(tab.getPosition());
+                if (tab.getPosition() == 0) {
+                    storeDetailsFragmentBinding.recyclerId.setVisibility(View.VISIBLE);
+                    storeDetailsFragmentBinding.productLinearId.setVisibility(View.GONE);
+                } else {
+                    storeDetailsFragmentBinding.productLinearId.setVisibility(View.VISIBLE);
+                    storeDetailsFragmentBinding.recyclerId.setVisibility(View.GONE);
+
+                }
+
             }
 
             @Override
