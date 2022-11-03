@@ -57,13 +57,17 @@ public interface Api {
     @GET("api/sliders")
     Call<ApiResponse> addSlider();
 
-
-    ///api/stores
+    //api/stores
     @GET("api/stores")
     Call<ApiResponse> getStore(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Query("category_id") int category_id);
 
-    ///api/stores
+    //api/stores
     @GET("api/stores/{id}")
     Call<ApiResponse> getSingleStore(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Header("country") int countryId, @Path("id") String id);
+
+    //api/copy-coupon?
+    @FormUrlEncoded
+    @POST("api/copy-coupon")
+    Call<ApiResponse> copyCoupon(@Field("coupon_id") int coupon_id);
 
 }

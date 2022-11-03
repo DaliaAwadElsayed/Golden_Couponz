@@ -19,8 +19,41 @@ public class Category {
     @SerializedName("created_at")
     @Expose
     private String createdAt;
+    @SerializedName("category_id")
+    @Expose
+    private Integer categoryId;
+    @SerializedName("store_id")
+    @Expose
+    private Integer storeId;
+    @SerializedName("category")
+    @Expose
+    private Category category;
 
     public Category() {
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Integer getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Integer getId() {

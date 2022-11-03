@@ -200,7 +200,7 @@
                             android:background="@drawable/bk_notification_layout"
                             android:backgroundTint="#F5F5F5"
                             android:drawableStart="@drawable/ic_search"
-                            android:drawablePadding="@dimen/_8sdp"
+                            android:drawablePadding="@dimen/_4sdp"
                             android:gravity="fill"
                             android:padding="@dimen/_5sdp"
                             android:text="@string/find_store_you_want"
@@ -245,7 +245,6 @@
                         android:layout_marginEnd="@dimen/_12sdp">
 
                         <LinearLayout
-                            android:gravity="center"
                             android:layout_gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -258,7 +257,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/bk_category_uncheck"
-                                android:gravity="center"
                                 android:paddingStart="@dimen/_2sdp"
                                 android:paddingTop="@dimen/_4sdp"
                                 android:paddingEnd="@dimen/_4sdp"

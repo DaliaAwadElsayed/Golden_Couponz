@@ -44,7 +44,7 @@ public class Store {
     private List<Slider> storeSliders = null;
     @SerializedName("store_categories")
     @Expose
-    private List<StoreCategory> storeCategories = null;
+    private List<Category> storeCategories = null;
     @SerializedName("store_coupons")
     @Expose
     private List<StoreCoupons> store_coupons = null;
@@ -155,11 +155,11 @@ public class Store {
         this.storeSliders = storeSliders;
     }
 
-    public List<StoreCategory> getStoreCategories() {
+    public List<Category> getStoreCategories() {
         return storeCategories;
     }
 
-    public void setStoreCategories(List<StoreCategory> storeCategories) {
+    public void setStoreCategories(List<Category> storeCategories) {
         this.storeCategories = storeCategories;
     }
 }

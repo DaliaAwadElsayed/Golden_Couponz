@@ -105,4 +105,20 @@
     <string name="copy_the_coupon">Copy the coupon</string>
     <string name="copied_label">copied</string>
     <string name="time">time</string>
+    <string name="copy_the_code">Copy the code and go to buy the product</string>
+    <string name="learn_how">Learn how to use the coupon!</string>
+    <string name="follow_us">Follow us on social media</string>
+    <string name="how_was_experiance">How was your experience?</string>
+    <string name="is_coupon_active_question">Is the coupon active?</string>
+    <string name="yes_active">Yes active</string>
+    <string name="didnt_work">No it didn\'t work</string>
+    <string name="thank_you">Thank you</string>
+    <string name="recommend_up">Recommend us to others by rating us on the App Store</string>
+    <string name="rate_us">Rate us now</string>
+    <string name="no_thank_you">No thank you</string>
+    <string name="code_copy">Code Copied</string>
+    <string name="share_msg_part1">Get a big discount using the discount code</string>
+    <string name="share_msg_part2">when ordering from</string>
+    <string name="share_via">Share Via</string>
+    <string name="click_link">To use the coupon, click on the following link</string>
 </resources>

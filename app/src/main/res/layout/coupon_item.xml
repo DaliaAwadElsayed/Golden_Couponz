@@ -27,7 +27,8 @@
             android:id="@+id/discountDetailsId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
             android:layout_weight="500"
             android:textColor="#7A7A7A"
             android:textSize="11sp"
@@ -42,14 +43,15 @@
             android:orientation="horizontal">
 
             <TextView
-                android:paddingBottom="@dimen/_4sdp"
-                android:layout_marginTop="@dimen/_4sdp"
                 android:id="@+id/copyCouponId"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_4sdp"
                 android:layout_weight="8"
                 android:background="@drawable/coupon_bg"
                 android:gravity="center"
+                android:paddingBottom="@dimen/_4sdp"
                 android:text="@string/copy_the_coupon"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
@@ -60,7 +62,7 @@
             <TextView
                 android:id="@+id/getOfferId"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_35sdp"
                 android:layout_alignParentBottom="true"
                 android:layout_weight="8"
                 android:background="@drawable/bk_button"
@@ -75,23 +77,23 @@
             <ImageView
                 android:id="@+id/favId"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginStart="@dimen/_6sdp"
                 android:layout_marginEnd="@dimen/_6sdp"
                 android:layout_weight="1"
                 android:background="@drawable/bk_border_button"
-                android:padding="@dimen/_4sdp"
+                android:padding="@dimen/_5sdp"
                 android:src="@drawable/ic_fav"
                 app:tint="#1A2421" />
 
             <ImageView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_weight="1"
                 android:background="@drawable/bk_border_button"
-                android:padding="@dimen/_4sdp"
+                android:padding="@dimen/_5sdp"
                 android:src="@drawable/ic_share"
-                app:tint="@color/black" />
+                app:tint="#1A2421" />
         </LinearLayout>
 
         <View
@@ -110,9 +112,11 @@
                 android:id="@+id/numberOfCopiesId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/_4sdp"
                 android:background="@drawable/bk_notification_layout"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="@dimen/_2sdp"
                 android:visibility="gone">
@@ -120,11 +124,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:drawableStart="@drawable/ic_copy"
                     android:drawablePadding="@dimen/_2sdp"
+                    android:gravity="center"
                     android:text="@string/copied_label"
                     android:textColor="#7a7a7a"
-                    android:textSize="11sp"
+                    android:textSize="9sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -134,7 +140,7 @@
                     android:layout_marginStart="@dimen/_4sdp"
                     android:layout_marginEnd="@dimen/_4sdp"
                     android:textColor="@color/black"
-                    android:textSize="11sp"
+                    android:textSize="9sp"
                     android:textStyle="bold"
                     tools:text="11 hours" />
             </LinearLayout>
@@ -142,30 +148,36 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/_4sdp"
                 android:background="@drawable/bk_notification_layout"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="@dimen/_2sdp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:drawableStart="@drawable/ic_history"
                     android:drawablePadding="@dimen/_2sdp"
+                    android:gravity="center"
                     android:text="@string/last_used_from"
                     android:textColor="#7a7a7a"
-                    android:textSize="11sp"
+                    android:textSize="9sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/hoursId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_4sdp"
                     android:layout_marginEnd="@dimen/_4sdp"
+                    android:gravity="center"
                     android:textColor="@color/black"
-                    android:textSize="11sp"
+                    android:textSize="9sp"
                     android:textStyle="bold"
                     tools:text="11 hours" />
             </LinearLayout>

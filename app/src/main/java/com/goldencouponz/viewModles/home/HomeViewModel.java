@@ -307,7 +307,6 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                             storesListAdapter = new StoresListAdapter(context);
                             storesListAdapter.setStores(response.body().getStores());
                             homeFragmentBinding.homeListRecyclerView.setAdapter(storesListAdapter);
-
                         } else {
                             Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
                             homeFragmentBinding.progress.setVisibility(View.GONE);

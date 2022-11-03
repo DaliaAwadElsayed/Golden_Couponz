@@ -106,5 +106,21 @@
     <string name="copy_the_coupon">انسخ الكوبون</string>
     <string name="copied_label">تم النسخ</string>
     <string name="time">مرة</string>
+    <string name="copy_the_code">نسخ الكود والذهاب لشراء المنتج</string>
+    <string name="learn_how">تعرف على كيفية استخدام الكوبون!</string>
+    <string name="follow_us">تابعنا علي وسائل التواصل الإجتماعي</string>
+    <string name="how_was_experiance">كيف كانت تجربتك؟</string>
+    <string name="is_coupon_active_question">هل الكوبون فعال؟</string>
+    <string name="yes_active">نعم فعال</string>
+    <string name="didnt_work">لا لم يعمل</string>
+    <string name="thank_you">شكراً لك</string>
+    <string name="recommend_up">أوصي بنا للآخرين من خلال تقييمنا على متجر التطبيقات</string>
+    <string name="rate_us">قيمنا الآن</string>
+    <string name="no_thank_you">لا شكرا</string>
+    <string name="code_copy">تم نسخ الكود</string>
+    <string name="share_msg_part1">احصل على خصم كبير بستخدام كود الخصم</string>
+    <string name="share_msg_part2">"عند طلب الشراء من "</string>
+    <string name="share_via">المشاركة عبر</string>
+    <string name="click_link">لاستخدام الكوبون اضغط علي اللينك التالي </string>
 
 </resources>
