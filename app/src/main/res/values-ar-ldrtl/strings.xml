@@ -122,5 +122,9 @@
     <string name="share_msg_part2">"عند طلب الشراء من "</string>
     <string name="share_via">المشاركة عبر</string>
     <string name="click_link">لاستخدام الكوبون اضغط علي اللينك التالي </string>
+    <string name="sure_log_out">هل أنت متأكد انك تريد تسجيل الخروج من التطبيق؟</string>
+    <string name="cancel_label">إلغاء</string>
+    <string name="must_be_sing_in">يجب تسجيل الدخول</string>
+    <string name="create_account_active_list">"قم بإنشاء حسابك لتفعيل قائمة المتاجر المفضلة لديك لتكون قادر علي استقبال اشعارات خاصة بها "</string>
 
 </resources>

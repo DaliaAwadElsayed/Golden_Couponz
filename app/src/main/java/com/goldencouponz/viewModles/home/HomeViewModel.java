@@ -6,7 +6,10 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -181,13 +184,23 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         homeFragmentBinding.listId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_list));
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
             categories("en");
-            stores("en", 0);
+            if (GoldenSharedPreference.isLoggedIn(context)) {
+                stores("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
+            } else {
+                stores("", "en", 0);
+
+            }
             homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
             homeFragmentBinding.allId.setBackgroundTintList(null);
 
         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             categories("ar");
-            stores("ar", 0);
+            if (GoldenSharedPreference.isLoggedIn(context)) {
+                stores("Bearer" + GoldenSharedPreference.getToken(context), "ar", 0);
+            } else {
+                stores("", "ar", 0);
+
+            }
             homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
             homeFragmentBinding.allId.setBackgroundTintList(null);
         }
@@ -198,11 +211,21 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                 homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
                 homeFragmentBinding.allId.setBackgroundTintList(null);
                 if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
-                    stores("en", 0);
+                    if (GoldenSharedPreference.isLoggedIn(context)) {
+                        stores("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
+                    } else {
+                        stores("", "en", 0);
+                    }
                     categories("en");
                 } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
-                    stores("ar", 0);
+                    if (GoldenSharedPreference.isLoggedIn(context)) {
+                        stores("Bearer" + GoldenSharedPreference.getToken(context), "ar", 0);
+                    } else {
+                        stores("", "ar", 0);
+
+                    }
                     categories("ar");
+
                 }
 
             }
@@ -216,13 +239,23 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         homeFragmentBinding.listId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_grid));
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
             categories("en");
-            storesList("en", 0);
+            if (GoldenSharedPreference.isLoggedIn(context)) {
+                storesList("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
+            } else {
+                storesList("", "en", 0);
+
+            }
             homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
             homeFragmentBinding.allId.setBackgroundTintList(null);
 
         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             categories("ar");
-            storesList("ar", 0);
+            if (GoldenSharedPreference.isLoggedIn(context)) {
+                storesList("Bearer" + GoldenSharedPreference.getToken(context), "ar", 0);
+            } else {
+                storesList("", "ar", 0);
+
+            }
             homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
             homeFragmentBinding.allId.setBackgroundTintList(null);
         }
@@ -232,10 +265,20 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                 homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
                 homeFragmentBinding.allId.setBackgroundTintList(null);
                 if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
-                    storesList("en", 0);
+                    if (GoldenSharedPreference.isLoggedIn(context)) {
+                        storesList("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
+                    } else {
+                        storesList("", "en", 0);
+
+                    }
                     categories("en");
                 } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
-                    storesList("ar", 0);
+                    if (GoldenSharedPreference.isLoggedIn(context)) {
+                        storesList("Bearer" + GoldenSharedPreference.getToken(context), "ar", 0);
+                    } else {
+                        storesList("", "ar", 0);
+
+                    }
                     categories("ar");
                 }
 
@@ -263,15 +306,35 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
 //                                    homeFragmentBinding.allId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
                                     if (homeFragmentBinding.listId.getVisibility() == View.VISIBLE) {
                                         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
-                                            stores("en", categoryId);
+                                            if (GoldenSharedPreference.isLoggedIn(context)) {
+                                                stores("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
+                                            } else {
+                                                stores("", "en", 0);
+
+                                            }
                                         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
-                                            stores("ar", categoryId);
+                                            if (GoldenSharedPreference.isLoggedIn(context)) {
+                                                stores("Bearer" + GoldenSharedPreference.getToken(context), "ar", 0);
+                                            } else {
+                                                stores("", "ar", 0);
+
+                                            }
                                         }
                                     } else if (homeFragmentBinding.gridId.getVisibility() == View.VISIBLE) {
                                         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
-                                            storesList("en", categoryId);
+                                            if (GoldenSharedPreference.isLoggedIn(context)) {
+                                                storesList("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
+                                            } else {
+                                                storesList("", "en", 0);
+
+                                            }
                                         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
-                                            storesList("ar", categoryId);
+                                            if (GoldenSharedPreference.isLoggedIn(context)) {
+                                                storesList("Bearer" + GoldenSharedPreference.getToken(context), "ar", 0);
+                                            } else {
+                                                storesList("", "ar", 0);
+
+                                            }
                                         }
                                     }
                                 }
@@ -293,18 +356,18 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         });
     }
 
-    private void storesList(String lang, int categoryId) {
+    private void storesList(String token, String lang, int categoryId) {
         homeFragmentBinding.homeListRecyclerView.setVisibility(View.VISIBLE);
         homeFragmentBinding.homeGrideRecyclerView.setVisibility(View.GONE);
         homeFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStore(lang, "deviceToken", categoryId).enqueue(new Callback<ApiResponse>() {
+        apiInterface.getStore(token, lang, "deviceToken", categoryId).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.code() == 200 && response.body() != null) {
                         if (!response.body().getStores().isEmpty()) {
                             internet();
-                            storesListAdapter = new StoresListAdapter(context);
+                            storesListAdapter = new StoresListAdapter(context, listener);
                             storesListAdapter.setStores(response.body().getStores());
                             homeFragmentBinding.homeListRecyclerView.setAdapter(storesListAdapter);
                         } else {
@@ -323,11 +386,11 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         });
     }
 
-    private void stores(String lang, int categoryId) {
+    private void stores(String token, String lang, int categoryId) {
         homeFragmentBinding.homeListRecyclerView.setVisibility(View.GONE);
         homeFragmentBinding.homeGrideRecyclerView.setVisibility(View.VISIBLE);
         homeFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStore(lang, "deviceToken", categoryId).enqueue(new Callback<ApiResponse>() {
+        apiInterface.getStore(token, lang, "deviceToken", categoryId).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
@@ -379,6 +442,53 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                     deviceToken = task.getResult();
                     Log.d("deviceTokenIn", deviceToken);
                 });
+    }
+
+    HomeViewModel.Listener listener = new HomeViewModel.Listener() {
+        @Override
+        public void click(int click) {
+            click = click;
+            if (click == 1) {
+                if (GoldenSharedPreference.isLoggedIn(context)) {
+                    storesList("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
+                } else {
+                    storesList("", "en", 0);
+
+                }
+            }
+            if (click == 2) {
+                homeFragmentBinding.logLinearId.setVisibility(View.VISIBLE);
+                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
+                homeFragmentBinding.logLinearId.startAnimation(animation);
+                homeFragmentBinding.relativeId.setVisibility(View.VISIBLE);
+                homeFragmentBinding.signId.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.loginFragment));
+                homeFragmentBinding.slideDownLogId.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        downLogin();
+                        return true;
+                    }
+                });
+                homeFragmentBinding.cancelLogId.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        downLogin();
+                    }
+                });
+            }
+        }
+
+    };
+
+    private void downLogin() {
+        homeFragmentBinding.relativeId.setVisibility(View.GONE);
+        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
+        homeFragmentBinding.logLinearId.startAnimation(animation);
+        homeFragmentBinding.logLinearId.setVisibility(View.VISIBLE);
+    }
+
+    public interface Listener {
+        void click(int click);
     }
 
 }

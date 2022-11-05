@@ -121,4 +121,8 @@
     <string name="share_msg_part2">when ordering from</string>
     <string name="share_via">Share Via</string>
     <string name="click_link">To use the coupon, click on the following link</string>
+    <string name="sure_log_out">Are you sure you want to log out of the application?</string>
+    <string name="cancel_label">Cancel</string>
+    <string name="must_be_sing_in">You must be sign in</string>
+    <string name="create_account_active_list">Create your account to activate the list of your favorite stores to be able to receive special notifications</string>
 </resources>

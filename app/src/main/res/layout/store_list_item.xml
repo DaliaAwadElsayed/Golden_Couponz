@@ -84,19 +84,6 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/addFavId"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="@dimen/_4sdp"
-                android:layout_marginTop="@dimen/small_margin"
-                android:layout_marginEnd="@dimen/_4sdp"
-                android:background="@drawable/bk_border_button"
-                android:padding="@dimen/_4sdp"
-                android:src="@drawable/ic_add_fav"
-                android:visibility="gone" />
-
-            <ImageView
                 android:id="@+id/favId"
                 android:layout_width="@dimen/_25sdp"
                 android:layout_height="@dimen/_25sdp"
@@ -106,8 +93,7 @@
                 android:layout_marginEnd="@dimen/_4sdp"
                 android:background="@drawable/bk_border_button"
                 android:padding="@dimen/_4sdp"
-                android:src="@drawable/ic_fav"
-              />
+                android:src="@drawable/ic_fav" />
         </RelativeLayout>
 
         <View

@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFF">
+
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
@@ -125,6 +126,7 @@
                             android:src="@drawable/ic_baseline_keyboard_backspace_24" />
 
                         <ImageView
+                            android:id="@+id/favId"
                             android:layout_width="@dimen/_25sdp"
                             android:layout_height="@dimen/_25sdp"
                             android:layout_alignParentEnd="true"
@@ -145,9 +147,10 @@
 
 
         </com.google.android.material.appbar.AppBarLayout>
+
         <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
             android:id="@+id/nestedId"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
@@ -304,8 +307,16 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/relativeId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.5"
             android:visibility="gone"
+            android:background="@color/grey"
+            />
+
+        <LinearLayout
             android:id="@+id/copyCouponLinearId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -313,7 +324,7 @@
             android:animateLayoutChanges="true"
             android:background="@drawable/bk_layout"
             android:orientation="vertical"
-      >
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/slideDownCopyCouponId"
@@ -485,15 +496,16 @@
 
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/copyCouponLinear2Id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:animateLayoutChanges="true"
             android:background="@drawable/bk_layout"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/slideDownCopyCoupon2Id"
@@ -775,6 +787,90 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/logLinearId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/bk_layout"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/slideDownLogId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:src="@drawable/ic_line" />
+
+            <ImageView
+                android:id="@+id/cancelLogId"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="start"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:src="@drawable/ic_baseline_close_24"
+                app:tint="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:gravity="center"
+                    android:text="@string/must_be_sing_in"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textFontWeight="1000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:gravity="center"
+                    android:text="@string/sign_in_and_save_offers"
+                    android:textAllCaps="false"
+                    android:textColor="#7A7A7A"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/signId"
+                    style="@style/ButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_margin"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginEnd="@dimen/small_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/bk_button"
+                    android:gravity="center"
+                    android:text="@string/sign_in_sign_up"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"

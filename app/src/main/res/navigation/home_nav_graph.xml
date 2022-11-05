@@ -183,19 +183,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/copounzFragment"
-            app:destination="@id/copounzFragment" />
-        <action
-            android:id="@+id/proudctsFragment"
-            app:destination="@id/proudctsFragment" />
+
     </fragment>
-    <fragment
-        android:id="@+id/copounzFragment"
-        android:name="com.goldencouponz.fragments.stores.CopounzFragment"
-        android:label="CopounzFragment" />
-    <fragment
-        android:id="@+id/proudctsFragment"
-        android:name="com.goldencouponz.fragments.stores.ProudctsFragment"
-        android:label="ProudctsFragment" />
+
 </navigation>

@@ -8,12 +8,14 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
 
 import com.e.goldencouponz.R;
@@ -35,6 +38,7 @@ import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
+import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 import com.goldencouponz.viewModles.home.HomeViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
@@ -64,34 +68,26 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         this.context = context;
         this.storeDetailsFragmentBinding = storeDetailsFragmentBinding;
         this.storeId = storeId;
+        if (GoldenSharedPreference.isLoggedIn(context)) {
+            getStoreDetails(GoldenSharedPreference.getToken(context));
+        } else {
+            getStoreDetails("");
+        }
+        storeDetailsFragmentBinding.backId.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.homeFragment));
         storeDetailsFragmentBinding.cancelCopyCouponId.setOnClickListener(v -> {
-            storeDetailsFragmentBinding.appbar.setBackgroundColor(context.getResources().getColor(R.color.white));
-            storeDetailsFragmentBinding.appbar.setAlpha(1f);
-            storeDetailsFragmentBinding.nestedId.setBackgroundColor(context.getResources().getColor(R.color.white));
-            storeDetailsFragmentBinding.nestedId.setAlpha(1f);
-            for (int i = 0; i < storeDetailsFragmentBinding.nestedId.getChildCount(); i++) {
-                View child = storeDetailsFragmentBinding.nestedId.getChildAt(i);
-                child.setEnabled(true);
-            }
-            for (int i = 0; i <  storeDetailsFragmentBinding.appbar.getChildCount(); i++) {
-                View child = storeDetailsFragmentBinding.appbar.getChildAt(i);
-                child.setEnabled(true);
-            }
+            storeDetailsFragmentBinding.relativeId.setVisibility(View.GONE);
             storeDetailsFragmentBinding.copyCouponLinearId.setVisibility(View.GONE);
             Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
             storeDetailsFragmentBinding.copyCouponLinearId.startAnimation(animation);
 
         });
         storeDetailsFragmentBinding.cancelCopyCoupon2Id.setOnClickListener(v -> {
-            storeDetailsFragmentBinding.appbar.setBackgroundColor(context.getResources().getColor(R.color.white));
-            storeDetailsFragmentBinding.appbar.setAlpha(1f);
-            storeDetailsFragmentBinding.nestedId.setBackgroundColor(context.getResources().getColor(R.color.white));
-            storeDetailsFragmentBinding.nestedId.setAlpha(1f);
+            storeDetailsFragmentBinding.relativeId.setVisibility(View.GONE);
             for (int i = 0; i < storeDetailsFragmentBinding.nestedId.getChildCount(); i++) {
                 View child = storeDetailsFragmentBinding.nestedId.getChildAt(i);
                 child.setEnabled(true);
             }
-            for (int i = 0; i <  storeDetailsFragmentBinding.appbar.getChildCount(); i++) {
+            for (int i = 0; i < storeDetailsFragmentBinding.appbar.getChildCount(); i++) {
                 View child = storeDetailsFragmentBinding.appbar.getChildAt(i);
                 child.setEnabled(true);
             }
@@ -139,7 +135,11 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         }, DELAY_MS, PERIOD_MS);
         storeDetailsFragmentBinding.sliderId.setAdapter(addsBannerAdapter);
         storeDetailsFragmentBinding.sliderId.addOnPageChangeListener(this);
-        getStoreDetails();
+        if (GoldenSharedPreference.isLoggedIn(context)) {
+            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
+        } else {
+            getStoreDetails("");
+        }
 
     }
 
@@ -182,17 +182,44 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
 
     }
 
-    private void getStoreDetails() {
+    private void downLogin() {
+        storeDetailsFragmentBinding.relativeId.setVisibility(View.GONE);
+        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
+        storeDetailsFragmentBinding.logLinearId.startAnimation(animation);
+        storeDetailsFragmentBinding.logLinearId.setVisibility(View.VISIBLE);
+    }
+
+    private void getStoreDetails(String token) {
         String lang = GoldenNoLoginSharedPreference.getUserLanguage(context);
         String fcmToken = "";
         int countryId = GoldenNoLoginSharedPreference.getUserCountryId(context);
         int id = storeId;
         Log.i("COUNTRYID", countryId + "?");
-        apiInterface.getSingleStore(lang, fcmToken, countryId, String.valueOf(id)).enqueue(new Callback<ApiResponse>() {
+        apiInterface.getSingleStore(token, lang, fcmToken, countryId, String.valueOf(id)).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.code() == 200 && response.body() != null) {
+                        if (response.body().getStore().getIsFavorite() == 0) {
+                            storeDetailsFragmentBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_fav));
+                            storeDetailsFragmentBinding.favId.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.black)));
+                        } else {
+                            storeDetailsFragmentBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_fav));
+                            storeDetailsFragmentBinding.favId.setImageTintList(null);
+
+                        }
+                        storeDetailsFragmentBinding.favId.setOnClickListener(v -> {
+                            if (GoldenSharedPreference.isLoggedIn(context)) {
+                                if (response.body().getStore().getIsFavorite() == 0) {
+                                    storeFav();
+                                } else {
+                                    removeFav();
+                                }
+                            } else {
+                                loginCheck();
+                            }
+                        });
+
                         Picasso.get().load(response.body().getStore().getFile()).into(storeDetailsFragmentBinding.storeImgId);
                         Picasso.get().load(response.body().getStore().getCover()).into(storeDetailsFragmentBinding.coverId);
                         storeDetailsFragmentBinding.storeNameId.setText(response.body().getStore().getTitle());
@@ -222,15 +249,12 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                             storeDetailsFragmentBinding.copyId.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    storeDetailsFragmentBinding.appbar.setBackgroundColor(context.getResources().getColor(R.color.alpha));
-                                    storeDetailsFragmentBinding.appbar.setAlpha(0.5f);
-                                    storeDetailsFragmentBinding.nestedId.setBackgroundColor(context.getResources().getColor(R.color.alpha));
-                                    storeDetailsFragmentBinding.nestedId.setAlpha(0.5f);
+                                    storeDetailsFragmentBinding.relativeId.setVisibility(View.VISIBLE);
                                     for (int i = 0; i < storeDetailsFragmentBinding.nestedId.getChildCount(); i++) {
                                         View child = storeDetailsFragmentBinding.nestedId.getChildAt(i);
                                         child.setEnabled(false);
                                     }
-                                    for (int i = 0; i <  storeDetailsFragmentBinding.appbar.getChildCount(); i++) {
+                                    for (int i = 0; i < storeDetailsFragmentBinding.appbar.getChildCount(); i++) {
                                         View child = storeDetailsFragmentBinding.appbar.getChildAt(i);
                                         child.setEnabled(false);
                                     }
@@ -378,10 +402,6 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         });
     }
 
-    public interface Listener {
-        void click(int click, int position);
-    }
-
     private void shareVia(String coupon, String store, String url) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
@@ -391,6 +411,64 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.share_via)));
+    }
+
+    private void storeFav() {
+        String lang = GoldenNoLoginSharedPreference.getUserLanguage(context);
+        String token = GoldenSharedPreference.getToken(context);
+        apiInterface.userMakeFav("Bearer" + token, lang, String.valueOf(storeId)).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.code() == 200 && response.body() != null) {
+                        storeDetailsFragmentBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_fav));
+                        storeDetailsFragmentBinding.favId.setImageTintList(null);
+                        if (GoldenSharedPreference.isLoggedIn(context)) {
+                            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
+                        } else {
+                            getStoreDetails("");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.i("onFailure", t.toString());
+                storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
+                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void removeFav() {
+        String lang = GoldenNoLoginSharedPreference.getUserLanguage(context);
+        String token = GoldenSharedPreference.getToken(context);
+        apiInterface.userRemoveFav("Bearer" + token, lang, String.valueOf(storeId)).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.code() == 200 && response.body() != null) {
+                        storeDetailsFragmentBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_fav));
+                        storeDetailsFragmentBinding.favId.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.black)));
+                        if (GoldenSharedPreference.isLoggedIn(context)) {
+                            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
+                        } else {
+                            getStoreDetails("");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.i("onFailure", t.toString());
+                storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
+                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     private void disableClicksDialog1() {
@@ -424,6 +502,12 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
 
     }
 
+    public interface Listener {
+        void click(int click, int position);
+
+        void clickShare(String coupon, String store, String url);
+    }
+
     Listener listener = new Listener() {
         @Override
         public void click(int click, int position) {
@@ -431,22 +515,47 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
             position = position;
             if (click == 1) {
                 storeDetailsFragmentBinding.copyCouponLinearId.setVisibility(View.VISIBLE);
-                storeDetailsFragmentBinding.appbar.setBackgroundColor(context.getResources().getColor(R.color.alpha));
-                storeDetailsFragmentBinding.appbar.setAlpha(0.5f);
-                storeDetailsFragmentBinding.nestedId.setBackgroundColor(context.getResources().getColor(R.color.alpha));
-                storeDetailsFragmentBinding.nestedId.setAlpha(0.5f);
-                for (int i = 0; i < storeDetailsFragmentBinding.nestedId.getChildCount(); i++) {
-                    View child = storeDetailsFragmentBinding.nestedId.getChildAt(i);
-                    child.setEnabled(false);
-                }
-                for (int i = 0; i <  storeDetailsFragmentBinding.appbar.getChildCount(); i++) {
-                    View child = storeDetailsFragmentBinding.appbar.getChildAt(i);
-                    child.setEnabled(false);
-                }
+                storeDetailsFragmentBinding.relativeId.setVisibility(View.VISIBLE);
                 Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
                 storeDetailsFragmentBinding.copyCouponLinearId.startAnimation(animation);
             }
+            if (click == 3) {
+                if (GoldenSharedPreference.isLoggedIn(context)) {
+                    getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
+                } else {
+                    getStoreDetails("");
+                }
+            }
+            if (click == 5) {
+                loginCheck();
+            }
+        }
+
+        //String coupon, String store, String url
+        public void clickShare(String coupon, String store, String url) {
+            shareVia(coupon, store, url);
         }
 
     };
+
+    private void loginCheck() {
+        storeDetailsFragmentBinding.logLinearId.setVisibility(View.VISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
+        storeDetailsFragmentBinding.logLinearId.startAnimation(animation);
+        storeDetailsFragmentBinding.relativeId.setVisibility(View.VISIBLE);
+        storeDetailsFragmentBinding.signId.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.loginFragment));
+        storeDetailsFragmentBinding.slideDownLogId.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                downLogin();
+                return true;
+            }
+        });
+        storeDetailsFragmentBinding.cancelLogId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downLogin();
+            }
+        });
+    }
 }

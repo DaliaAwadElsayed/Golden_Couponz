@@ -59,15 +59,31 @@ public interface Api {
 
     //api/stores
     @GET("api/stores")
-    Call<ApiResponse> getStore(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Query("category_id") int category_id);
+    Call<ApiResponse> getStore(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Query("category_id") int category_id);
 
     //api/stores
     @GET("api/stores/{id}")
-    Call<ApiResponse> getSingleStore(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Header("country") int countryId, @Path("id") String id);
+    Call<ApiResponse> getSingleStore(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Header("country") int countryId, @Path("id") String id);
 
     //api/copy-coupon?
     @FormUrlEncoded
     @POST("api/copy-coupon")
     Call<ApiResponse> copyCoupon(@Field("coupon_id") int coupon_id);
+
+    //api/fav-stores/
+    @GET("api/fav-stores/{id}")
+    Call<ApiResponse> userMakeFav(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Path("id") String id);
+
+    //api/remove-fav-stores/
+    @GET("api/remove-fav-stores/{id}")
+    Call<ApiResponse> userRemoveFav(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Path("id") String id);
+
+    //api/fav-store-coupons/2
+    @GET("api/fav-store-coupons/{id}")
+    Call<ApiResponse> userMakeFavCoupons(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Path("id") String id);
+
+    //api/remove-fav-store-coupons/2
+    @GET("api/remove-fav-store-coupons/{id}")
+    Call<ApiResponse> userRemoveFavCoupons(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Path("id") String id);
 
 }

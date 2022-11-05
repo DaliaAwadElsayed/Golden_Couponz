@@ -3,7 +3,7 @@ package com.goldencouponz.models.store;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class StoreCoupons {
+public class  StoreCoupons {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -40,9 +40,19 @@ public class StoreCoupons {
     @SerializedName("created_at")
     @Expose
     private String createdAt;
-
+    @SerializedName("is_favorite")
+    @Expose
+    private Integer isFavorite;
     public Integer getId() {
         return id;
+    }
+
+    public Integer getIsFavorite() {
+        return isFavorite;
+    }
+
+    public void setIsFavorite(Integer isFavorite) {
+        this.isFavorite = isFavorite;
     }
 
     public void setId(Integer id) {

@@ -87,6 +87,7 @@
                 app:tint="#1A2421" />
 
             <ImageView
+                android:id="@+id/shareId"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_weight="1"

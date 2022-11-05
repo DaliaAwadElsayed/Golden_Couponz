@@ -47,8 +47,11 @@ public class ProfileViewModel extends ViewModel {
         this.profileFragmentBinding = profileFragmentBinding;
         this.activity = (FragmentActivity) context;
         Log.i("langChangeId", GoldenNoLoginSharedPreference.getUserLanguage(context) + "??");
-        Log.i("countryChangeId", GoldenNoLoginSharedPreference.getUserCountryName(context) + "??");
+        Log.i("countryChangeName", GoldenNoLoginSharedPreference.getUserCountryName(context) + "??");
+        Log.i("countryChangeId", GoldenNoLoginSharedPreference.getUserCountryId(context) + "??");
         profileFragmentBinding.countryChangeId.setText(GoldenNoLoginSharedPreference.getUserCountryName(context));
+        profileFragmentBinding.countryNumId.setText(""+GoldenNoLoginSharedPreference.getUserCountryId(context));
+
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             profileFragmentBinding.langChangeId.setText(R.string.arabic_label);
         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
@@ -92,7 +95,7 @@ public class ProfileViewModel extends ViewModel {
                             countriesAdapter.setOnItemClickListener(new CountriesAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View viewItem, int position, int id, String code) {
-                                    countrySavedId=id;
+                                    countrySavedId = id;
                                     profileFragmentBinding.relativeId.setBackgroundColor(0);
                                     profileFragmentBinding.relativeId.setAlpha(1f);
                                     enableClick(true);
@@ -152,43 +155,71 @@ public class ProfileViewModel extends ViewModel {
     private void logOut() {
         ///TODO DELETE THIS
         /////////
-        GoldenSharedPreference.clearSharedPreference(context);
-        Navigation.findNavController(profileFragmentBinding.getRoot()).navigate(R.id.homeFragment);
-        if (profileFragmentBinding.langChangeId.getText().equals("اللغة العربية")) {
-            GoldenNoLoginSharedPreference.saveUserLang(context, "ar");
-        } else if (profileFragmentBinding.langChangeId.getText().equals("English")) {
-            GoldenNoLoginSharedPreference.saveUserLang(context, "en");
-        }
-        GoldenNoLoginSharedPreference.saveUserCountry(context, 0, countrySavedId, profileFragmentBinding.countryChangeId.getText().toString());
-        ////////
-        profileFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.userLogOut("Bearer" + GoldenSharedPreference.getToken(context)).enqueue(new Callback<ApiResponse>() {
+        profileFragmentBinding.logOutSureId.setEnabled(true);
+        profileFragmentBinding.logOutSureId.setClickable(true);
+        profileFragmentBinding.cancelId.setEnabled(true);
+        profileFragmentBinding.cancelId.setClickable(true);
+        profileFragmentBinding.cancelLogOutId.setEnabled(true);
+        profileFragmentBinding.cancelLogOutId.setClickable(true);
+        enableClick(false);
+        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
+        profileFragmentBinding.logOutLinearId.startAnimation(animation);
+        profileFragmentBinding.relativeId.setBackgroundColor(context.getResources().getColor(R.color.alpha));
+        profileFragmentBinding.relativeId.setAlpha(0.5f);
+        profileFragmentBinding.logOutLinearId.setVisibility(View.VISIBLE);
+        profileFragmentBinding.cancelId.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.code() == 200) {
-                    GoldenSharedPreference.clearSharedPreference(context);
-                    if (profileFragmentBinding.langChangeId.getText().equals("اللغة العربية")) {
-                        GoldenNoLoginSharedPreference.saveUserLang(context, "ar");
-                    } else if (profileFragmentBinding.langChangeId.getText().equals("English")) {
-                        GoldenNoLoginSharedPreference.saveUserLang(context, "en");
-                    }
-                    GoldenNoLoginSharedPreference.saveUserCountry(context, 0,countrySavedId, profileFragmentBinding.countryChangeId.getText().toString());
-                    Navigation.findNavController(profileFragmentBinding.getRoot()).navigate(R.id.homeFragment);
-                    profileFragmentBinding.progress.setVisibility(View.GONE);
-                }
+            public void onClick(View v) {
+                logoutDown();
             }
-
+        });
+        profileFragmentBinding.cancelLogOutId.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                profileFragmentBinding.progress.setVisibility(View.GONE);
-                Log.i("ONFAILURE", t.toString());
+            public void onClick(View v) {
+                logoutDown();
+            }
+        });
+        profileFragmentBinding.logOutSureId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GoldenSharedPreference.clearSharedPreference(context);
+                if (profileFragmentBinding.langChangeId.getText().equals("اللغة العربية")) {
+                    GoldenNoLoginSharedPreference.saveUserLang(context, "ar");
+                } else if (profileFragmentBinding.langChangeId.getText().equals("English")) {
+                    GoldenNoLoginSharedPreference.saveUserLang(context, "en");
+                }
+                countrySavedId= Integer.parseInt(profileFragmentBinding.countryNumId.getText().toString());
+                GoldenNoLoginSharedPreference.saveUserCountry(context, 0, countrySavedId, profileFragmentBinding.countryChangeId.getText().toString());
+                Navigation.findNavController(profileFragmentBinding.getRoot()).navigate(R.id.homeFragment);
+                profileFragmentBinding.progress.setVisibility(View.VISIBLE);
+                apiInterface.userLogOut("Bearer" + GoldenSharedPreference.getToken(context)).enqueue(new Callback<ApiResponse>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                        if (response.code() == 200) {
+                            profileFragmentBinding.progress.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                        profileFragmentBinding.progress.setVisibility(View.GONE);
+                        Log.i("ONFAILURE", t.toString());
 //                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         });
 
     }
 
     void clicks() {
+        profileFragmentBinding.cancelLogOutId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logoutDown();
+            }
+        });
         profileFragmentBinding.supportUsId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -235,6 +266,14 @@ public class ProfileViewModel extends ViewModel {
             @Override
             public void onClick(View view) {
                 profileDown();
+            }
+        });
+
+        profileFragmentBinding.slideDownLogId.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                logoutDown();
+                return true;
             }
         });
         profileFragmentBinding.slideDownProfileId.setOnTouchListener(new View.OnTouchListener() {
@@ -323,6 +362,21 @@ public class ProfileViewModel extends ViewModel {
         profileFragmentBinding.relativeId.setAlpha(1f);
         profileFragmentBinding.profileLinearId.setVisibility(View.GONE);
 
+    }
+
+    private void logoutDown() {
+        enableClick(true);
+        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
+        profileFragmentBinding.logOutLinearId.startAnimation(animation);
+        profileFragmentBinding.relativeId.setBackgroundColor(0);
+        profileFragmentBinding.relativeId.setAlpha(1f);
+        profileFragmentBinding.logOutLinearId.setVisibility(View.GONE);
+        profileFragmentBinding.logOutSureId.setEnabled(false);
+        profileFragmentBinding.logOutSureId.setClickable(false);
+        profileFragmentBinding.cancelId.setEnabled(false);
+        profileFragmentBinding.cancelId.setClickable(false);
+        profileFragmentBinding.cancelLogOutId.setEnabled(false);
+        profileFragmentBinding.cancelLogOutId.setClickable(false);
     }
 
     private void supportUs() {
