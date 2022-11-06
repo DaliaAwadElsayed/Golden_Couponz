@@ -177,13 +177,26 @@
         android:name="com.goldencouponz.fragments.stores.StoreDetailsFragment"
         android:label="StoreDetailsFragment">
         <action
-            android:id="@+id/cou"
+            android:id="@+id/homeFragment"
             app:destination="@id/homeFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="com.goldencouponz.fragments.favourite.FavouriteFragment"
+        android:label="FavouriteFragment"
+        tools:layout="@layout/fragment_favourite">
+        <action
+            android:id="@+id/loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
 </navigation>

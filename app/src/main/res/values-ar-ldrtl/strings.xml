@@ -102,7 +102,6 @@
     <string name="product_offers">عروض المنتجات</string>
     <string name="get_the_offer">الحصول علي العرض الآن</string>
     <string name="last_used_from">اخر استخدام منذ</string>
-    <string name="sar">ريال</string>
     <string name="copy_the_coupon">انسخ الكوبون</string>
     <string name="copied_label">تم النسخ</string>
     <string name="time">مرة</string>
@@ -126,5 +125,6 @@
     <string name="cancel_label">إلغاء</string>
     <string name="must_be_sing_in">يجب تسجيل الدخول</string>
     <string name="create_account_active_list">"قم بإنشاء حسابك لتفعيل قائمة المتاجر المفضلة لديك لتكون قادر علي استقبال اشعارات خاصة بها "</string>
+    <string name="nothing_offers_added">لم يتم اضافة أي شئ للمفضلة بعد قم بإختيار متاجرك المفضلة لتجدها بمكان واحد</string>
 
 </resources>

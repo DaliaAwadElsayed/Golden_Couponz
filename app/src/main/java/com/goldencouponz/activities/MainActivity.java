@@ -79,9 +79,10 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         if (extras != null) {
             String value = extras.getString("language");
             String country = GoldenNoLoginSharedPreference.getUserCountryName(MainActivity.this);
+            String currency = GoldenNoLoginSharedPreference.getUserCurrency(MainActivity.this);
             int id = GoldenNoLoginSharedPreference.getUserCountryId(MainActivity.this);
             Log.i("COUNTRY", country + "");
-            GoldenNoLoginSharedPreference.saveUserCountry(MainActivity.this, 0, id, country);
+            GoldenNoLoginSharedPreference.saveUserCountry(MainActivity.this, 0, id, country,currency);
             Local.Companion.updateResources(this);
             LocaleHelper.setLocale(this, value);
             if (value.equals("ar") || GoldenNoLoginSharedPreference.getUserLanguage(this).equals("ar")) {
@@ -107,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
                         int itemId = item.getItemId();
                         if (itemId == R.id.homeFragment) {
                             navController.navigate(R.id.homeFragment);
-                        } else if (itemId == R.id.favouriteStoresFragment) {
-                            navController.navigate(R.id.homeFragment);
+                        } else if (itemId == R.id.favouriteFragment) {
+                            navController.navigate(R.id.favouriteFragment);
                         } else if (itemId == R.id.product) {
                             navController.navigate(R.id.homeFragment);
                         } else if (itemId == R.id.profileFragment) {

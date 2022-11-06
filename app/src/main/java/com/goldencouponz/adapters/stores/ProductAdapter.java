@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.ProductItemBinding;
 import com.goldencouponz.models.store.StoreProduct;
 import com.goldencouponz.utility.Utility;
@@ -68,10 +67,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HomePage
             }
             storeGrideItemBinding.oldPriceId.setPaintFlags(storeGrideItemBinding.oldPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             storeGrideItemBinding.discountId.setText(Utility.fixNullString(String.valueOf(store.getProductCountry().getDiscount())));
-            storeGrideItemBinding.oldPriceId.setText(Utility.fixNullString(String.valueOf(store.getProductCountry().getDiscountPrice()) + " " + context.getResources().getString(R.string.sar)));
+            storeGrideItemBinding.oldPriceId.setText(Utility.fixNullString(String.valueOf(store.getProductCountry().getDiscountPrice()) + " " + GoldenNoLoginSharedPreference.getUserCurrency(context)));
             storeGrideItemBinding.newPriceId.setText(Utility.fixNullString(String.valueOf(store.getProductCountry().getPrice())));
             storeGrideItemBinding.titleId.setText(Utility.fixNullString(String.valueOf(store.getTitle())));
             Picasso.get().load(store.getFile()).into(storeGrideItemBinding.productId);
+            storeGrideItemBinding.currencyId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
+            Picasso.get().load(store.getStore().getFile()).into(storeGrideItemBinding.storeImgId);
+
         }
 
     }

@@ -86,4 +86,16 @@ public interface Api {
     @GET("api/remove-fav-store-coupons/{id}")
     Call<ApiResponse> userRemoveFavCoupons(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Path("id") String id);
 
+    //api/products?store_id=35
+    @GET("api/products")
+    Call<ApiResponse> getStoreProducts(@Header("fcm-token") String fcmToken,@Header("country") int country, @Header("Accept-Language") String AcceptLanguage, @Query("store_id") int store_id,@Query("category_id") String category_id,@Query("subcategory_id") String subcategory_id);
+
+    //api/user-fav-store-coupons
+    @GET("api/user-fav-store-coupons")
+    Call<ApiResponse> getFavouriteCopounz(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage);
+
+    //api/user-fav-stores
+    @GET("api/user-fav-stores")
+    Call<ApiResponse> getFavouriteStores(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage);
+
 }

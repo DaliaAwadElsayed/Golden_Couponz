@@ -5,6 +5,8 @@ import com.goldencouponz.models.appsetting.Country;
 import com.goldencouponz.models.home.Category;
 import com.goldencouponz.models.home.Slider;
 import com.goldencouponz.models.home.Store;
+import com.goldencouponz.models.store.StoreCoupons;
+import com.goldencouponz.models.store.StoreProduct;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -50,7 +52,29 @@ public class ApiResponse {
     @SerializedName("store")
     @Expose
     private Store store = null;
+    @SerializedName("products")
+    @Expose
+    private StoreProduct products;
+    @SerializedName("coupons")
+    @Expose
+    private List<StoreCoupons> coupons = null;
     public ApiResponse() {
+    }
+
+    public List<StoreCoupons> getCoupons() {
+        return coupons;
+    }
+
+    public void setCoupons(List<StoreCoupons> coupons) {
+        this.coupons = coupons;
+    }
+
+    public StoreProduct getProducts() {
+        return products;
+    }
+
+    public void setProducts(StoreProduct products) {
+        this.products = products;
     }
 
     public Store getStore() {

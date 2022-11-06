@@ -307,6 +307,18 @@
                                     android:textStyle="bold"
                                     tools:text="Egypt" />
                                 <TextView
+                                    android:id="@+id/currencyNumId"
+                                    android:layout_width="1sp"
+                                    android:layout_height="1sp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_gravity="end"
+                                    android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_right_24"
+                                    android:gravity="center"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    tools:text="Egypt" />
+                                <TextView
                                     android:id="@+id/countryChangeId"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"

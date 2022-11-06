@@ -24,12 +24,13 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Home
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(View viewItem,int position,int countryId, String name);
+        void onItemClick(View viewItem, int position, int countryId, String name, String currency);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
+
     public CountriesAdapter(Context context) {
         this.context = context;
     }
@@ -93,9 +94,10 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Home
                 if (checkedPosition != getAdapterPosition()) {
                     notifyItemChanged(checkedPosition);
                     checkedPosition = getAdapterPosition();
-                    String countryName=countries.getTitle();
-                    int countryId=countries.getId();
-                    listener.onItemClick(countryItemBinding.getRoot(), checkedPosition,countryId,countryName);
+                    String countryName = countries.getTitle();
+                    int countryId = countries.getId();
+                    String currency = countries.getCurrency();
+                    listener.onItemClick(countryItemBinding.getRoot(), checkedPosition, countryId, countryName,currency);
 
                 }
             });

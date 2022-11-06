@@ -50,7 +50,7 @@ public class ProfileViewModel extends ViewModel {
         Log.i("countryChangeName", GoldenNoLoginSharedPreference.getUserCountryName(context) + "??");
         Log.i("countryChangeId", GoldenNoLoginSharedPreference.getUserCountryId(context) + "??");
         profileFragmentBinding.countryChangeId.setText(GoldenNoLoginSharedPreference.getUserCountryName(context));
-        profileFragmentBinding.countryNumId.setText(""+GoldenNoLoginSharedPreference.getUserCountryId(context));
+        profileFragmentBinding.countryNumId.setText("" + GoldenNoLoginSharedPreference.getUserCountryId(context));
 
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             profileFragmentBinding.langChangeId.setText(R.string.arabic_label);
@@ -94,7 +94,7 @@ public class ProfileViewModel extends ViewModel {
                             enableClick(false);
                             countriesAdapter.setOnItemClickListener(new CountriesAdapter.OnItemClickListener() {
                                 @Override
-                                public void onItemClick(View viewItem, int position, int id, String code) {
+                                public void onItemClick(View viewItem, int position, int id, String code, String currency) {
                                     countrySavedId = id;
                                     profileFragmentBinding.relativeId.setBackgroundColor(0);
                                     profileFragmentBinding.relativeId.setAlpha(1f);
@@ -104,7 +104,7 @@ public class ProfileViewModel extends ViewModel {
                                     Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
                                     profileFragmentBinding.countriesLinearId.startAnimation(animation);
                                     profileFragmentBinding.countryChangeId.setText(code);
-                                    GoldenNoLoginSharedPreference.saveUserCountry(context, position, id, code);
+                                    GoldenNoLoginSharedPreference.saveUserCountry(context, position, id, code, currency);
 
                                 }
                             });
@@ -188,8 +188,10 @@ public class ProfileViewModel extends ViewModel {
                 } else if (profileFragmentBinding.langChangeId.getText().equals("English")) {
                     GoldenNoLoginSharedPreference.saveUserLang(context, "en");
                 }
-                countrySavedId= Integer.parseInt(profileFragmentBinding.countryNumId.getText().toString());
-                GoldenNoLoginSharedPreference.saveUserCountry(context, 0, countrySavedId, profileFragmentBinding.countryChangeId.getText().toString());
+                countrySavedId = Integer.parseInt(profileFragmentBinding.countryNumId.getText().toString());
+                GoldenNoLoginSharedPreference.saveUserCountry(context, 0, countrySavedId, profileFragmentBinding.countryChangeId.getText().toString(),
+                        profileFragmentBinding.currencyNumId.getText().toString()
+                );
                 Navigation.findNavController(profileFragmentBinding.getRoot()).navigate(R.id.homeFragment);
                 profileFragmentBinding.progress.setVisibility(View.VISIBLE);
                 apiInterface.userLogOut("Bearer" + GoldenSharedPreference.getToken(context)).enqueue(new Callback<ApiResponse>() {

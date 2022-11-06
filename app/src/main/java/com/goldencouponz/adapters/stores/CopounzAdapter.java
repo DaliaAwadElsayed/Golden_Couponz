@@ -98,15 +98,13 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
                 }
             });
             if (GoldenSharedPreference.isLoggedIn(context)) {
-                //TODO UNCOMMENT THIS
-//                if (store.getIsFavorite() == 0) {
-//                    storeGrideItemBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_fav));
-//                    storeGrideItemBinding.favId.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.black)));
-//                } else {
-//                    storeGrideItemBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_fav));
-//                    storeGrideItemBinding.favId.setImageTintList(null);
-//
-//                }
+                if (store.getIsFavorite() == 0) {
+                    storeGrideItemBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_fav));
+                    storeGrideItemBinding.favId.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.black)));
+                } else {
+                    storeGrideItemBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_fav));
+                    storeGrideItemBinding.favId.setImageTintList(null);
+                }
             }
             storeGrideItemBinding.shareId.setOnClickListener(new View.OnClickListener() {
                 @Override

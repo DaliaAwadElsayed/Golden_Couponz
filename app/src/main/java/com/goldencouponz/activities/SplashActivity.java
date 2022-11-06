@@ -144,9 +144,9 @@ public class SplashActivity extends AppCompatActivity {
                             splashFragmentBinding.homeRecyclerView.setAdapter(countriesAdapter);
                             countriesAdapter.setOnItemClickListener(new CountriesAdapter.OnItemClickListener() {
                                 @Override
-                                public void onItemClick(View viewItem, int position,int id,String name) {
+                                public void onItemClick(View viewItem, int position,int id,String name,String currency) {
                                     if (position != -1) {
-                                        GoldenNoLoginSharedPreference.saveUserCountry(SplashActivity.this,position,id,name);
+                                        GoldenNoLoginSharedPreference.saveUserCountry(SplashActivity.this,position,id,name,currency);
                                         splashFragmentBinding.continueId.setAlpha(1f);
                                         splashFragmentBinding.continueId.setEnabled(true);
                                         splashFragmentBinding.continueId.setBackground(getResources().getDrawable(R.drawable.bk_button));

@@ -211,7 +211,7 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
-                        <androidx.core.widget.NestedScrollView
+                        <HorizontalScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_12sdp"
@@ -221,7 +221,6 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/_4sdp"
                                 android:gravity="center"
                                 android:orientation="horizontal"
@@ -229,29 +228,28 @@
 
                                 <LinearLayout
                                     android:id="@+id/allId"
+                                    android:layout_marginStart="@dimen/_4sdp"
+                                    android:layout_marginEnd="@dimen/_4sdp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/bk_category_uncheck"
                                     android:gravity="center"
-                                    android:paddingStart="@dimen/_2sdp"
-                                    android:paddingTop="@dimen/_4sdp"
-                                    android:paddingEnd="@dimen/_4sdp"
-                                    android:paddingBottom="@dimen/_2sdp">
+                                   >
 
                                     <TextView
                                         android:id="@+id/textId"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
-                                        android:layout_marginStart="@dimen/_8sdp"
-                                        android:layout_marginTop="@dimen/_2sdp"
-                                        android:layout_marginEnd="@dimen/_8sdp"
-                                        android:layout_marginBottom="@dimen/_2sdp"
+                                        android:paddingEnd="@dimen/_6sdp"
+                                        android:paddingTop="@dimen/_2sdp"
+                                        android:paddingBottom="@dimen/_2sdp"
+                                        android:paddingStart="@dimen/_6sdp"
                                         android:layout_weight="500"
                                         android:gravity="center"
                                         android:text="@string/all_label"
                                         android:textColor="@color/black"
-                                        android:textSize="12sp"
+                                        android:textSize="14sp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -262,14 +260,15 @@
                                     android:nestedScrollingEnabled="false"
                                     android:orientation="horizontal"
                                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                                    tools:listitem="@layout/categories_item" />
+                                    tools:listitem="@layout/product_categories_item" />
 
                             </LinearLayout>
-                        </androidx.core.widget.NestedScrollView>
+                        </HorizontalScrollView>
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/sub_category_recycler_view"
                             android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/_4sdp"
                             android:layout_height="wrap_content"
                             android:nestedScrollingEnabled="false"
                             android:orientation="horizontal"
@@ -315,7 +314,10 @@
             android:visibility="gone"
             android:background="@color/grey"
             />
-
+        <FrameLayout
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/copyCouponLinearId"
             android:layout_width="match_parent"
@@ -486,17 +488,20 @@
                     android:src="@drawable/ic_snapchat" />
 
                 <ImageView
-                    android:id="@+id/twitterId"
+                    android:id="@+id/fbId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp"
-                    android:src="@drawable/ic_twitter" />
+                    android:src="@drawable/ic_facebook" />
 
             </LinearLayout>
-        </LinearLayout>
-
+        </LinearLayout></FrameLayout>
+        <FrameLayout
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/copyCouponLinear2Id"
             android:layout_width="match_parent"
@@ -700,6 +705,8 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
                     android:id="@+id/noActiveId"
                     style="@style/ButtonStyle"
                     android:layout_width="0dp"
@@ -777,99 +784,104 @@
                     android:src="@drawable/ic_snapchat" />
 
                 <ImageView
-                    android:id="@+id/twitter2Id"
+                    android:id="@+id/fb2Id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp"
-                    android:src="@drawable/ic_twitter" />
+                    android:src="@drawable/ic_facebook" />
 
             </LinearLayout>
-        </LinearLayout>
+        </LinearLayout></FrameLayout>
+<FrameLayout
+    android:layout_gravity="bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/logLinearId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/bk_layout"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/slideDownLogId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:src="@drawable/ic_line" />
+
+        <ImageView
+            android:id="@+id/cancelLogId"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="start"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:src="@drawable/ic_baseline_close_24"
+            app:tint="@color/black" />
 
         <LinearLayout
-            android:id="@+id/logLinearId"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:animateLayoutChanges="true"
-            android:background="@drawable/bk_layout"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/slideDownLogId"
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:src="@drawable/ic_line" />
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:gravity="center"
+                android:text="@string/must_be_sing_in"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textFontWeight="1000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/cancelLogId"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_gravity="start"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginEnd="@dimen/_12sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:src="@drawable/ic_baseline_close_24"
-                app:tint="@color/black" />
-
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginEnd="@dimen/_12sdp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:gravity="center"
+                android:text="@string/sign_in_and_save_offers"
+                android:textAllCaps="false"
+                android:textColor="#7A7A7A"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:gravity="center"
-                    android:text="@string/must_be_sing_in"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black"
-                    android:textFontWeight="1000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:gravity="center"
-                    android:text="@string/sign_in_and_save_offers"
-                    android:textAllCaps="false"
-                    android:textColor="#7A7A7A"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/signId"
-                    style="@style/ButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/small_margin"
-                    android:layout_marginTop="@dimen/small_margin"
-                    android:layout_marginEnd="@dimen/small_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/bk_button"
-                    android:gravity="center"
-                    android:text="@string/sign_in_sign_up"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/signId"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/small_margin"
+                android:layout_marginTop="@dimen/small_margin"
+                android:layout_marginEnd="@dimen/small_margin"
+                android:layout_weight="1"
+                android:background="@drawable/bk_button"
+                android:gravity="center"
+                android:text="@string/sign_in_sign_up"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
         </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
 
         <ProgressBar
             android:id="@+id/progress"

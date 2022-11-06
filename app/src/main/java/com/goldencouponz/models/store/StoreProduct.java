@@ -1,8 +1,11 @@
 package com.goldencouponz.models.store;
 
 import com.goldencouponz.models.home.Category;
+import com.goldencouponz.models.home.Store;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class StoreProduct {
     @SerializedName("id")
@@ -59,9 +62,30 @@ public class StoreProduct {
     @SerializedName("sub_category")
     @Expose
     private Category subCategory;
-
+    @SerializedName("store")
+    @Expose
+    private Store store;
+    @SerializedName("data")
+    @Expose
+    private List<StoreProduct> data = null;
     public Integer getId() {
         return id;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public List<StoreProduct> getData() {
+        return data;
+    }
+
+    public void setData(List<StoreProduct> data) {
+        this.data = data;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public void setId(Integer id) {

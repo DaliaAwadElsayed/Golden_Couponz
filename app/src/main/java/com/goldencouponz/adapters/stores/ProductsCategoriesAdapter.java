@@ -1,6 +1,7 @@
 package com.goldencouponz.adapters.stores;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,11 +71,13 @@ public class ProductsCategoriesAdapter extends RecyclerView.Adapter<ProductsCate
         }
 
         private void bindRestaurant(Category category) {
-            categoriesItemBinding.textId.setText(Utility.fixNullString(category.getTitle()));
+            Log.i("cat",category.getTitle()+"?");
+            categoriesItemBinding.textId.setText(Utility.fixNullString(category.getCategory().getTitle()));
             if (checkedPosition == -1) {
                 categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
 //                categoriesItemBinding.linearId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
-            } else {
+            }
+            else {
                 if (checkedPosition == getAdapterPosition()) {
                     categoriesItemBinding.linearId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
                     categoriesItemBinding.linearId.setBackgroundTintList(null);
@@ -89,12 +92,11 @@ public class ProductsCategoriesAdapter extends RecyclerView.Adapter<ProductsCate
                 if (checkedPosition != getAdapterPosition()) {
                     notifyItemChanged(checkedPosition);
                     checkedPosition = getAdapterPosition();
-                    int categoryId = category.getId();
+                    int categoryId = category.getCategory().getId();
                     listener.onItemClick(categoriesItemBinding.getRoot(), checkedPosition, categoryId);
 
                 }
             });
-
         }
 
 

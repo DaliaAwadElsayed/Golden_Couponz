@@ -248,11 +248,12 @@
                             android:layout_marginTop="@dimen/_4sdp"
                             android:orientation="horizontal"
                             android:padding="@dimen/_4sdp">
+
                             <LinearLayout
-                                android:layout_alignParentStart="@id/category_recycler_view"
                                 android:id="@+id/allId"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="@id/category_recycler_view"
                                 android:background="@drawable/bk_category_uncheck"
                                 android:paddingStart="@dimen/_2sdp"
                                 android:paddingTop="@dimen/_4sdp"
@@ -275,16 +276,14 @@
                                     android:textSize="12sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
-
-
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/category_recycler_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
+                                android:layout_marginStart="@dimen/_43sdp"
+                                android:layout_marginEnd="@dimen/_43sdp"
                                 android:nestedScrollingEnabled="false"
-                                android:layout_marginEnd="@dimen/_50sdp"
-                                android:layout_marginStart="@dimen/_50sdp"
+                                android:orientation="horizontal"
                                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                                 tools:listitem="@layout/categories_item" />
 
