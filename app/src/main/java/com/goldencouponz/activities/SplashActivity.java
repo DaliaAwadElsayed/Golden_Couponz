@@ -35,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
     ActivitySplashBinding splashFragmentBinding;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
     CountriesAdapter countriesAdapter;
-    String language,country;
+    String language, country;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -71,7 +71,7 @@ public class SplashActivity extends AppCompatActivity {
             getCountries("ar");
             language = "ar";
             //TODO UPDATE USER COUNTRY AND ID
-            GoldenNoLoginSharedPreference.saveUserLang(SplashActivity.this,"ar");
+            GoldenNoLoginSharedPreference.saveUserLang(SplashActivity.this, "ar");
 
         });
         splashFragmentBinding.enButtonId.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +86,7 @@ public class SplashActivity extends AppCompatActivity {
                 splashFragmentBinding.enButtonId.setBackground(getResources().getDrawable(R.drawable.bk_button));
                 getCountries("en");
                 language = "en";
-                GoldenNoLoginSharedPreference.saveUserLang(SplashActivity.this,"en");
+                GoldenNoLoginSharedPreference.saveUserLang(SplashActivity.this, "en");
             }
         });
 
@@ -144,9 +144,10 @@ public class SplashActivity extends AppCompatActivity {
                             splashFragmentBinding.homeRecyclerView.setAdapter(countriesAdapter);
                             countriesAdapter.setOnItemClickListener(new CountriesAdapter.OnItemClickListener() {
                                 @Override
-                                public void onItemClick(View viewItem, int position,int id,String name,String currency) {
+                                public void onItemClick(View viewItem, int position, int id, String name, String currency) {
                                     if (position != -1) {
-                                        GoldenNoLoginSharedPreference.saveUserCountry(SplashActivity.this,position,id,name,currency);
+                                        Log.i("CURRENCY", currency + "?");
+                                        GoldenNoLoginSharedPreference.saveUserCountry(SplashActivity.this, position, id, name, currency);
                                         splashFragmentBinding.continueId.setAlpha(1f);
                                         splashFragmentBinding.continueId.setEnabled(true);
                                         splashFragmentBinding.continueId.setBackground(getResources().getDrawable(R.drawable.bk_button));

@@ -49,8 +49,11 @@ public class ProfileViewModel extends ViewModel {
         Log.i("langChangeId", GoldenNoLoginSharedPreference.getUserLanguage(context) + "??");
         Log.i("countryChangeName", GoldenNoLoginSharedPreference.getUserCountryName(context) + "??");
         Log.i("countryChangeId", GoldenNoLoginSharedPreference.getUserCountryId(context) + "??");
+        Log.i("currencyChangeId", GoldenNoLoginSharedPreference.getUserCurrency(context) + "??");
+
         profileFragmentBinding.countryChangeId.setText(GoldenNoLoginSharedPreference.getUserCountryName(context));
         profileFragmentBinding.countryNumId.setText("" + GoldenNoLoginSharedPreference.getUserCountryId(context));
+        profileFragmentBinding.currencyNumId.setText("" + GoldenNoLoginSharedPreference.getUserCurrency(context));
 
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             profileFragmentBinding.langChangeId.setText(R.string.arabic_label);
@@ -104,6 +107,7 @@ public class ProfileViewModel extends ViewModel {
                                     Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
                                     profileFragmentBinding.countriesLinearId.startAnimation(animation);
                                     profileFragmentBinding.countryChangeId.setText(code);
+                                    profileFragmentBinding.currencyNumId.setText(currency);
                                     GoldenNoLoginSharedPreference.saveUserCountry(context, position, id, code, currency);
 
                                 }
@@ -189,6 +193,8 @@ public class ProfileViewModel extends ViewModel {
                     GoldenNoLoginSharedPreference.saveUserLang(context, "en");
                 }
                 countrySavedId = Integer.parseInt(profileFragmentBinding.countryNumId.getText().toString());
+                Log.i("DATAIS", countrySavedId+"/"+ profileFragmentBinding.countryChangeId.getText().toString()+"/"+
+                        profileFragmentBinding.currencyNumId.getText().toString());
                 GoldenNoLoginSharedPreference.saveUserCountry(context, 0, countrySavedId, profileFragmentBinding.countryChangeId.getText().toString(),
                         profileFragmentBinding.currencyNumId.getText().toString()
                 );

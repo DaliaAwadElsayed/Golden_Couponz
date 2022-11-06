@@ -64,6 +64,7 @@ public class StoresGridAdapter extends RecyclerView.Adapter<StoresGridAdapter.Ho
         private void bindRestaurant(Store store) {
             storeGrideItemBinding.storeNameId.setText(Utility.fixNullString(String.valueOf(store.getTitle())));
             storeGrideItemBinding.couponCountId.setText(Utility.fixNullString(String.valueOf(store.getStoreCouponsCount())));
+
             Picasso.get().load(store.getFile()).into(storeGrideItemBinding.storeImgId);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

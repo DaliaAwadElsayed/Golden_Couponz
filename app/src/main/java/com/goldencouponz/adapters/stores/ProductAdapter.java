@@ -62,12 +62,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HomePage
         private void bindRestaurant(StoreProduct store) {
             if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
                 storeGrideItemBinding.discountId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                storeGrideItemBinding.oldPriceId.setText(Utility.fixNullString(String.valueOf(store.getProductCountry().getDiscountPrice()) + " " + GoldenNoLoginSharedPreference.getUserCurrency(context)));
+
             } else {
+                storeGrideItemBinding.oldPriceId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context))+" "+store.getProductCountry().getDiscountPrice());
                 storeGrideItemBinding.discountId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             }
             storeGrideItemBinding.oldPriceId.setPaintFlags(storeGrideItemBinding.oldPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             storeGrideItemBinding.discountId.setText(Utility.fixNullString(String.valueOf(store.getProductCountry().getDiscount())));
-            storeGrideItemBinding.oldPriceId.setText(Utility.fixNullString(String.valueOf(store.getProductCountry().getDiscountPrice()) + " " + GoldenNoLoginSharedPreference.getUserCurrency(context)));
             storeGrideItemBinding.newPriceId.setText(Utility.fixNullString(String.valueOf(store.getProductCountry().getPrice())));
             storeGrideItemBinding.titleId.setText(Utility.fixNullString(String.valueOf(store.getTitle())));
             Picasso.get().load(store.getFile()).into(storeGrideItemBinding.productId);

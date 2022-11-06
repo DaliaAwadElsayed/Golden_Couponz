@@ -58,11 +58,10 @@
             android:layout_weight="500"
             android:textColor="@color/black"
             android:gravity="center"
-            android:maxLines="1"
             android:textSize="@dimen/small_text_size"
             android:textStyle="bold"
-            android:ellipsize="end"
-            tools:text="EGYPT" />
+            tools:text="EGYPttttT"
+            android:singleLine="true" />
     </LinearLayout>
 
 

@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
             String country = GoldenNoLoginSharedPreference.getUserCountryName(MainActivity.this);
             String currency = GoldenNoLoginSharedPreference.getUserCurrency(MainActivity.this);
             int id = GoldenNoLoginSharedPreference.getUserCountryId(MainActivity.this);
-            Log.i("COUNTRY", country + "");
+            Log.i("COUNTRY", currency + "");
             GoldenNoLoginSharedPreference.saveUserCountry(MainActivity.this, 0, id, country,currency);
             Local.Companion.updateResources(this);
             LocaleHelper.setLocale(this, value);
