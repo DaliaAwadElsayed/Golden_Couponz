@@ -126,5 +126,11 @@
     <string name="must_be_sing_in">يجب تسجيل الدخول</string>
     <string name="create_account_active_list">"قم بإنشاء حسابك لتفعيل قائمة المتاجر المفضلة لديك لتكون قادر علي استقبال اشعارات خاصة بها "</string>
     <string name="nothing_offers_added">لم يتم اضافة أي شئ للمفضلة بعد قم بإختيار متاجرك المفضلة لتجدها بمكان واحد</string>
+    <string name="current_price">السعر الحالي</string>
+    <string name="price_after">السعر بعد استخدام الكوبون</string>
+    <string name="copy_code_go_to_store">انسخ الكود واذهب للمتجر وأضف المنتج للسلة وادخل الكود للحصول علي الخصم</string>
+    <string name="copy_code_and_buy">نسخ الكود والذهاب لشراء المنتج</string>
+    <string name="go_buy_product_now">إذهب لشراء المنتج الأن</string>
+    <string name="exclusive_offers">العروض الحصرية</string>
 
 </resources>

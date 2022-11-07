@@ -125,4 +125,10 @@
     <string name="must_be_sing_in">You must be sign in</string>
     <string name="nothing_offers_added">Nothing has been added to your favourites yet Choose your favorite stores to find them in one place</string>
     <string name="create_account_active_list">Create your account to activate the list of your favorite stores to be able to receive special notifications</string>
+    <string name="current_price">Current price</string>
+    <string name="price_after">Price after using the coupon</string>
+    <string name="copy_code_go_to_store">Copy the code, go to the store, add the product to the basket, and enter the code to get the discount</string>
+    <string name="copy_code_and_buy">Copy the code and go to buy the product</string>
+    <string name="go_buy_product_now">Go buy the product now</string>
+    <string name="exclusive_offers">Exclusive Offers</string>
 </resources>

@@ -237,6 +237,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         homeFragmentBinding.listId.setVisibility(View.GONE);
         homeFragmentBinding.gridId.setVisibility(View.VISIBLE);
         homeFragmentBinding.listId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_grid));
+        Log.i("Language", GoldenNoLoginSharedPreference.getUserLanguage(context) + "?");
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
             categories("en");
             if (GoldenSharedPreference.isLoggedIn(context)) {
@@ -450,15 +451,15 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
             click = click;
             if (click == 1) {
                 if (GoldenSharedPreference.isLoggedIn(context)) {
-                    storesList("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
+                    storesList("Bearer" + GoldenSharedPreference.getToken(context), GoldenNoLoginSharedPreference.getSelectedLanguageValue(context), 0);
                 } else {
-                    storesList("", "en", 0);
+                    storesList("", GoldenNoLoginSharedPreference.getSelectedLanguageValue(context), 0);
 
                 }
             }
             if (click == 2) {
                 homeFragmentBinding.logLinearId.setVisibility(View.VISIBLE);
-                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
+                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_in_left);
                 homeFragmentBinding.logLinearId.startAnimation(animation);
                 homeFragmentBinding.relativeId.setVisibility(View.VISIBLE);
                 homeFragmentBinding.signId.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.loginFragment));
@@ -482,7 +483,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
 
     private void downLogin() {
         homeFragmentBinding.relativeId.setVisibility(View.GONE);
-        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
+        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_in_left);
         homeFragmentBinding.logLinearId.startAnimation(animation);
         homeFragmentBinding.logLinearId.setVisibility(View.VISIBLE);
     }

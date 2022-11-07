@@ -120,7 +120,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void animation() {
         splashFragmentBinding.langLinearId.setVisibility(View.VISIBLE);
-        Animation animation = AnimationUtils.loadAnimation(this.getApplicationContext(), R.anim.slide_up);
+        Animation animation = AnimationUtils.loadAnimation(this.getApplicationContext(), R.anim.slide_in_left);
         splashFragmentBinding.langLinearId.startAnimation(animation);
         splashFragmentBinding.logoId.startAnimation(animation);
     }

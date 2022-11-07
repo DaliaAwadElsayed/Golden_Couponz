@@ -3,16 +3,14 @@ package com.goldencouponz.viewModles.authentication;
 import android.content.Context;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
 
 import com.e.goldencouponz.R;
+import com.e.goldencouponz.databinding.CountryDialogBinding;
 import com.e.goldencouponz.databinding.RegisterationFragmentBinding;
 import com.goldencouponz.adapters.countries.CountriesCodeAdapter;
 import com.goldencouponz.interfaces.Api;
@@ -21,6 +19,7 @@ import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,10 +31,14 @@ public class RegisterationViewModel extends ViewModel {
     UserRegisteration userRegistration;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
     CountriesCodeAdapter countriesAdapter;
+    BottomSheetDialog showCountryDialog;
+    CountryDialogBinding countryDialogBinding;
 
-    public void init(RegisterationFragmentBinding registerationFragmentBinding, Context context) {
+    public void init(RegisterationFragmentBinding registerationFragmentBinding, CountryDialogBinding countryDialogBinding, Context context) {
         this.context = context;
         this.registerationFragmentBinding = registerationFragmentBinding;
+        this.countryDialogBinding = countryDialogBinding;
+        showCountryDialog = new BottomSheetDialog(context);
         registerationFragmentBinding.toolBarId.setClickable(true);
         registerationFragmentBinding.backId.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.loginFragment));
         registerationFragmentBinding.signUpId.setOnClickListener(new View.OnClickListener() {
@@ -46,52 +49,11 @@ public class RegisterationViewModel extends ViewModel {
                 }
             }
         });
-        registerationFragmentBinding.relativeRegistId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                registerationFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
-                registerationFragmentBinding.relativeRegistId.setVisibility(View.GONE);
-                registerationFragmentBinding.countriesLinearId.setVisibility(View.GONE);
-                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
-                registerationFragmentBinding.countriesLinearId.startAnimation(animation);
-                registerationFragmentBinding.relativeRegistId.setBackgroundColor(context.getResources().getColor(R.color.antique_white));
-
-            }
-        });
-        registerationFragmentBinding.slideDownId.setOnGenericMotionListener(new View.OnGenericMotionListener() {
-            @Override
-            public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-                registerationFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
-                registerationFragmentBinding.relativeRegistId.setVisibility(View.GONE);
-                registerationFragmentBinding.countriesLinearId.setVisibility(View.GONE);
-                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
-                registerationFragmentBinding.countriesLinearId.startAnimation(animation);
-                registerationFragmentBinding.relativeRegistId.setBackgroundColor(context.getResources().getColor(R.color.antique_white));
-
-                return true;
-            }
-        });
-        registerationFragmentBinding.slideDownId.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                registerationFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
-                registerationFragmentBinding.relativeRegistId.setVisibility(View.GONE);
-                registerationFragmentBinding.countriesLinearId.setVisibility(View.GONE);
-                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
-                registerationFragmentBinding.countriesLinearId.startAnimation(animation);
-                registerationFragmentBinding.relativeRegistId.setBackgroundColor(context.getResources().getColor(R.color.antique_white));
-                return true;
-            }
-        });
         registerationFragmentBinding.codeId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("LANGUAGEE",GoldenNoLoginSharedPreference.getUserLanguage(context)+"");
-                if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
-                    getCountries("en");
-                } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
-                    getCountries("ar");
-                }
+                Log.i("LANGUAGEE", GoldenNoLoginSharedPreference.getUserLanguage(context) + "");
+                showCountryDialog();
 
             }
         });
@@ -109,45 +71,34 @@ public class RegisterationViewModel extends ViewModel {
                     if (response.body().getSuccess() && response.body() != null) {
                         registerationFragmentBinding.progress.setVisibility(View.GONE);
                         if (!response.body().getCountries().isEmpty()) {
-                            registerationFragmentBinding.countriesLinearId.setVisibility(View.VISIBLE);
-                            Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
-                            registerationFragmentBinding.countriesLinearId.startAnimation(animation);
-                            registerationFragmentBinding.homeRecyclerView.setVisibility(View.VISIBLE);
-                            registerationFragmentBinding.prefCountryId.setVisibility(View.VISIBLE);
+                            countryDialogBinding.homeRecyclerView.setVisibility(View.VISIBLE);
+                            countryDialogBinding.prefCountryId.setVisibility(View.VISIBLE);
                             countriesAdapter.setCountries(response.body().getCountries());
-                            registerationFragmentBinding.homeRecyclerView.setAdapter(countriesAdapter);
-                            registerationFragmentBinding.relativeRegistId.setVisibility(View.VISIBLE);
+                            countryDialogBinding.homeRecyclerView.setAdapter(countriesAdapter);
                             countriesAdapter.setOnItemClickListener(new CountriesCodeAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View viewItem, String code) {
-                                    registerationFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
-                                    registerationFragmentBinding.relativeRegistId.setVisibility(View.GONE);
-                                    registerationFragmentBinding.countriesLinearId.setVisibility(View.GONE);
-                                    Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
-                                    registerationFragmentBinding.countriesLinearId.startAnimation(animation);
+                                    showCountryDialog.dismiss();
                                     registerationFragmentBinding.codeId.setText("+" + code);
                                 }
                             });
 
                         } else {
-                            registerationFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
-                            registerationFragmentBinding.relativeRegistId.setVisibility(View.GONE);
+                            countryDialogBinding.homeRecyclerView.setVisibility(View.GONE);
                             Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                            registerationFragmentBinding.countriesLinearId.setVisibility(View.GONE);
+                            countryDialogBinding.countriesLinearId.setVisibility(View.GONE);
                             registerationFragmentBinding.progress.setVisibility(View.GONE);
                         }
                     } else {
-                        registerationFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
-                        registerationFragmentBinding.relativeRegistId.setVisibility(View.GONE);
-                        registerationFragmentBinding.countriesLinearId.setVisibility(View.GONE);
+                        countryDialogBinding.homeRecyclerView.setVisibility(View.GONE);
+                        countryDialogBinding.countriesLinearId.setVisibility(View.GONE);
                         registerationFragmentBinding.progress.setVisibility(View.GONE);
                         Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    registerationFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
-                    registerationFragmentBinding.relativeRegistId.setVisibility(View.GONE);
+                    countryDialogBinding.homeRecyclerView.setVisibility(View.GONE);
                     Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                    registerationFragmentBinding.countriesLinearId.setVisibility(View.GONE);
+                    countryDialogBinding.countriesLinearId.setVisibility(View.GONE);
                     registerationFragmentBinding.progress.setVisibility(View.GONE);
 
                 }
@@ -156,7 +107,7 @@ public class RegisterationViewModel extends ViewModel {
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
-                registerationFragmentBinding.countriesLinearId.setVisibility(View.GONE);
+                countryDialogBinding.countriesLinearId.setVisibility(View.GONE);
                 registerationFragmentBinding.progress.setVisibility(View.GONE);
 
             }
@@ -219,6 +170,17 @@ public class RegisterationViewModel extends ViewModel {
 
     }
 
+    private void showCountryDialog() {
+        final View view3 = countryDialogBinding.getRoot();
+        showCountryDialog.setContentView(view3);
+        showCountryDialog.setCancelable(true);
+        showCountryDialog.show();
+        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+            getCountries("en");
+        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+            getCountries("ar");
+        }
+    }
 
     private boolean inputValid() {
         return nameValid() && phoneValid() && codeValid() && emailValid() && emailsIsValid() && passwordStrongValid() && confirmPasswordStrongValid() && passwordsIsValid();

@@ -18,6 +18,12 @@ import androidx.navigation.Navigation;
 
 import com.com.dtag.livia.utility.Local;
 import com.e.goldencouponz.R;
+import com.e.goldencouponz.databinding.CountryDialogBinding;
+import com.e.goldencouponz.databinding.EditProfileDialogBinding;
+import com.e.goldencouponz.databinding.EditProfileFragmentBinding;
+import com.e.goldencouponz.databinding.LangDialogBinding;
+import com.e.goldencouponz.databinding.LogOutDialogBinding;
+import com.e.goldencouponz.databinding.ProfileCountriesDialogBinding;
 import com.e.goldencouponz.databinding.ProfileFragmentBinding;
 import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.adapters.countries.CountriesAdapter;
@@ -29,6 +35,7 @@ import com.goldencouponz.utility.LocaleHelper;
 import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,10 +48,30 @@ public class ProfileViewModel extends ViewModel {
     CountriesAdapter countriesAdapter;
     private FragmentActivity activity;
     int countrySavedId;
+    LogOutDialogBinding logOutDialogBinding;
+    EditProfileDialogBinding editProfileDialogBinding;
+    LangDialogBinding langDialogBinding;
+    ProfileCountriesDialogBinding profileCountriesDialogBinding;
+    BottomSheetDialog showProfileCountryDialog;
+    BottomSheetDialog showEditProfileDialog;
+    BottomSheetDialog showLangDialog;
+    BottomSheetDialog showLogOutDialog;
 
-    public void init(ProfileFragmentBinding profileFragmentBinding, Context context) {
+    public void init(ProfileFragmentBinding profileFragmentBinding, LogOutDialogBinding logOutDialogBinding,
+                     EditProfileDialogBinding editProfileDialogBinding,
+                     LangDialogBinding langDialogBinding,
+                     ProfileCountriesDialogBinding profileCountriesDialogBinding, Context context) {
         this.context = context;
+        this.editProfileDialogBinding = editProfileDialogBinding;
+        this.langDialogBinding = langDialogBinding;
+        this.profileCountriesDialogBinding = profileCountriesDialogBinding;
+        this.logOutDialogBinding = logOutDialogBinding;
         this.profileFragmentBinding = profileFragmentBinding;
+        showProfileCountryDialog = new BottomSheetDialog(context);
+        showEditProfileDialog = new BottomSheetDialog(context);
+        showLogOutDialog = new BottomSheetDialog(context);
+        showLangDialog = new BottomSheetDialog(context);
+
         this.activity = (FragmentActivity) context;
         Log.i("langChangeId", GoldenNoLoginSharedPreference.getUserLanguage(context) + "??");
         Log.i("countryChangeName", GoldenNoLoginSharedPreference.getUserCountryName(context) + "??");
@@ -86,58 +113,38 @@ public class ProfileViewModel extends ViewModel {
                     if (response.body().getSuccess() && response.body() != null) {
                         profileFragmentBinding.progress.setVisibility(View.GONE);
                         if (!response.body().getCountries().isEmpty()) {
-                            profileFragmentBinding.countriesLinearId.setVisibility(View.VISIBLE);
-                            Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
-                            profileFragmentBinding.countriesLinearId.startAnimation(animation);
-                            profileFragmentBinding.homeRecyclerView.setVisibility(View.VISIBLE);
+                            profileCountriesDialogBinding.homeRecyclerView.setVisibility(View.VISIBLE);
                             countriesAdapter.setCountries(response.body().getCountries());
-                            profileFragmentBinding.homeRecyclerView.setAdapter(countriesAdapter);
-                            profileFragmentBinding.relativeId.setBackgroundColor(context.getResources().getColor(R.color.alpha));
-                            profileFragmentBinding.relativeId.setAlpha(0.5f);
-                            enableClick(false);
+                            profileCountriesDialogBinding.homeRecyclerView.setAdapter(countriesAdapter);
+
                             countriesAdapter.setOnItemClickListener(new CountriesAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View viewItem, int position, int id, String code, String currency) {
                                     countrySavedId = id;
-                                    profileFragmentBinding.relativeId.setBackgroundColor(0);
-                                    profileFragmentBinding.relativeId.setAlpha(1f);
-                                    enableClick(true);
-                                    profileFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
-                                    profileFragmentBinding.countriesLinearId.setVisibility(View.GONE);
-                                    Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
-                                    profileFragmentBinding.countriesLinearId.startAnimation(animation);
+                                    profileCountriesDialogBinding.homeRecyclerView.setVisibility(View.GONE);
                                     profileFragmentBinding.countryChangeId.setText(code);
                                     profileFragmentBinding.currencyNumId.setText(currency);
                                     GoldenNoLoginSharedPreference.saveUserCountry(context, position, id, code, currency);
-
+                                    showProfileCountryDialog.dismiss();
                                 }
                             });
 
                         } else {
-                            enableClick(true);
-                            profileFragmentBinding.relativeId.setBackgroundColor(0);
-                            profileFragmentBinding.relativeId.setAlpha(1f);
-                            profileFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
+                            showProfileCountryDialog.dismiss();
+                            profileCountriesDialogBinding.homeRecyclerView.setVisibility(View.GONE);
                             Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                            profileFragmentBinding.countriesLinearId.setVisibility(View.GONE);
                             profileFragmentBinding.progress.setVisibility(View.GONE);
                         }
                     } else {
-                        enableClick(true);
-                        profileFragmentBinding.relativeId.setBackgroundColor(0);
-                        profileFragmentBinding.relativeId.setAlpha(1f);
-                        profileFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
-                        profileFragmentBinding.countriesLinearId.setVisibility(View.GONE);
+                        showProfileCountryDialog.dismiss();
+                        profileCountriesDialogBinding.homeRecyclerView.setVisibility(View.GONE);
                         profileFragmentBinding.progress.setVisibility(View.GONE);
                         Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    enableClick(true);
-                    profileFragmentBinding.relativeId.setBackgroundColor(0);
-                    profileFragmentBinding.relativeId.setAlpha(1f);
-                    profileFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
+                    showProfileCountryDialog.dismiss();
+                    profileCountriesDialogBinding.homeRecyclerView.setVisibility(View.GONE);
                     Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                    profileFragmentBinding.countriesLinearId.setVisibility(View.GONE);
                     profileFragmentBinding.progress.setVisibility(View.GONE);
 
                 }
@@ -146,12 +153,8 @@ public class ProfileViewModel extends ViewModel {
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
-                profileFragmentBinding.countriesLinearId.setVisibility(View.GONE);
                 profileFragmentBinding.progress.setVisibility(View.GONE);
-                profileFragmentBinding.relativeId.setBackgroundColor(0);
-                profileFragmentBinding.relativeId.setAlpha(1f);
-                enableClick(true);
-
+                showProfileCountryDialog.dismiss();
             }
         });
     }
@@ -193,7 +196,7 @@ public class ProfileViewModel extends ViewModel {
                     GoldenNoLoginSharedPreference.saveUserLang(context, "en");
                 }
                 countrySavedId = Integer.parseInt(profileFragmentBinding.countryNumId.getText().toString());
-                Log.i("DATAIS", countrySavedId+"/"+ profileFragmentBinding.countryChangeId.getText().toString()+"/"+
+                Log.i("DATAIS", countrySavedId + "/" + profileFragmentBinding.countryChangeId.getText().toString() + "/" +
                         profileFragmentBinding.currencyNumId.getText().toString());
                 GoldenNoLoginSharedPreference.saveUserCountry(context, 0, countrySavedId, profileFragmentBinding.countryChangeId.getText().toString(),
                         profileFragmentBinding.currencyNumId.getText().toString()
@@ -339,53 +342,7 @@ public class ProfileViewModel extends ViewModel {
 
     }
 
-    private void countryDown() {
-        enableClick(true);
-        profileFragmentBinding.homeRecyclerView.setVisibility(View.GONE);
-        profileFragmentBinding.countriesLinearId.setVisibility(View.GONE);
-        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
-        profileFragmentBinding.countriesLinearId.startAnimation(animation);
-        profileFragmentBinding.relativeId.setBackgroundColor(0);
-        profileFragmentBinding.relativeId.setAlpha(1f);
 
-    }
-
-    private void langDown() {
-        enableClick(true);
-        Animation animation1 = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
-        profileFragmentBinding.languageLinearId.startAnimation(animation1);
-        profileFragmentBinding.languageLinearId.setVisibility(View.GONE);
-        profileFragmentBinding.languageLinearId.setVisibility(View.INVISIBLE);
-        Log.i("VISIBILTY", profileFragmentBinding.languageLinearId.getVisibility() + "?");
-        profileFragmentBinding.relativeId.setBackgroundColor(0);
-        profileFragmentBinding.relativeId.setAlpha(1f);
-
-    }
-
-    private void profileDown() {
-        enableClick(true);
-        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
-        profileFragmentBinding.profileLinearId.startAnimation(animation);
-        profileFragmentBinding.relativeId.setBackgroundColor(0);
-        profileFragmentBinding.relativeId.setAlpha(1f);
-        profileFragmentBinding.profileLinearId.setVisibility(View.GONE);
-
-    }
-
-    private void logoutDown() {
-        enableClick(true);
-        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_down);
-        profileFragmentBinding.logOutLinearId.startAnimation(animation);
-        profileFragmentBinding.relativeId.setBackgroundColor(0);
-        profileFragmentBinding.relativeId.setAlpha(1f);
-        profileFragmentBinding.logOutLinearId.setVisibility(View.GONE);
-        profileFragmentBinding.logOutSureId.setEnabled(false);
-        profileFragmentBinding.logOutSureId.setClickable(false);
-        profileFragmentBinding.cancelId.setEnabled(false);
-        profileFragmentBinding.cancelId.setClickable(false);
-        profileFragmentBinding.cancelLogOutId.setEnabled(false);
-        profileFragmentBinding.cancelLogOutId.setClickable(false);
-    }
 
     private void supportUs() {
         //https://play.google.com/store/apps/details?id=com.codesroots.goldencoupon

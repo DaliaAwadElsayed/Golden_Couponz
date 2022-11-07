@@ -10,6 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.e.goldencouponz.databinding.EditProfileDialogBinding;
+import com.e.goldencouponz.databinding.LangDialogBinding;
+import com.e.goldencouponz.databinding.LogOutDialogBinding;
+import com.e.goldencouponz.databinding.ProfileCountriesDialogBinding;
 import com.e.goldencouponz.databinding.ProfileFragmentBinding;
 import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.authentication.ProfileViewModel;
@@ -18,7 +22,10 @@ public class ProfileFragment extends Fragment {
 
     private ProfileViewModel mViewModel;
     ProfileFragmentBinding profileFragmentBinding;
-
+    LogOutDialogBinding logOutDialogBinding;
+    EditProfileDialogBinding editProfileDialogBinding;
+    LangDialogBinding langDialogBinding;
+    ProfileCountriesDialogBinding profileCountriesDialogBinding;
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
     }
@@ -27,6 +34,11 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         profileFragmentBinding = ProfileFragmentBinding.inflate(inflater, container, false);
+        logOutDialogBinding = LogOutDialogBinding.inflate(inflater, container, false);
+        editProfileDialogBinding = EditProfileDialogBinding.inflate(inflater, container, false);
+        langDialogBinding = LangDialogBinding.inflate(inflater, container, false);
+        profileCountriesDialogBinding = ProfileCountriesDialogBinding.inflate(inflater, container, false);
+
         return profileFragmentBinding.getRoot();
     }
 
@@ -35,7 +47,8 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         ((MainActivity) getActivity()).showBottomMenu();
-        mViewModel.init(profileFragmentBinding, getContext());
+        mViewModel.init(profileFragmentBinding,logOutDialogBinding, editProfileDialogBinding,langDialogBinding,
+                profileCountriesDialogBinding, getContext());
 
     }
 

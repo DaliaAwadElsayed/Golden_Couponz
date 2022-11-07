@@ -13,6 +13,7 @@ import com.e.goldencouponz.databinding.ProductItemBinding;
 import com.goldencouponz.models.store.StoreProduct;
 import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
+import com.goldencouponz.viewModles.stores.StoreDetailsViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,9 +23,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HomePage
     private LayoutInflater inflater;
     private List<StoreProduct> store = new ArrayList<>();
     Context context;
+    StoreDetailsViewModel.Listener listener;
 
-    public ProductAdapter(Context context) {
+    public ProductAdapter(Context context, StoreDetailsViewModel.Listener listener) {
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -33,7 +36,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HomePage
         if (inflater == null) {
             inflater = LayoutInflater.from(parent.getContext());
         }
-        return new HomePageViewHolder(ProductItemBinding.inflate(inflater, parent, false));
+        return new HomePageViewHolder(ProductItemBinding.inflate(inflater, parent, false), listener);
     }
 
     @Override
@@ -53,10 +56,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HomePage
 
     class HomePageViewHolder extends RecyclerView.ViewHolder {
         private ProductItemBinding storeGrideItemBinding;
+        StoreDetailsViewModel.Listener listener;
 
-        HomePageViewHolder(@NonNull ProductItemBinding storeGrideItemBinding) {
+        HomePageViewHolder(@NonNull ProductItemBinding storeGrideItemBinding, StoreDetailsViewModel.Listener listener) {
             super(storeGrideItemBinding.getRoot());
             this.storeGrideItemBinding = storeGrideItemBinding;
+            this.listener = listener;
         }
 
         private void bindRestaurant(StoreProduct store) {
@@ -65,7 +70,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HomePage
                 storeGrideItemBinding.oldPriceId.setText(Utility.fixNullString(String.valueOf(store.getProductCountry().getDiscountPrice()) + " " + GoldenNoLoginSharedPreference.getUserCurrency(context)));
 
             } else {
-                storeGrideItemBinding.oldPriceId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context))+" "+store.getProductCountry().getDiscountPrice());
+                storeGrideItemBinding.oldPriceId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)) + " " + store.getProductCountry().getDiscountPrice());
                 storeGrideItemBinding.discountId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             }
             storeGrideItemBinding.oldPriceId.setPaintFlags(storeGrideItemBinding.oldPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -75,7 +80,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HomePage
             Picasso.get().load(store.getFile()).into(storeGrideItemBinding.productId);
             storeGrideItemBinding.currencyId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
             Picasso.get().load(store.getStore().getFile()).into(storeGrideItemBinding.storeImgId);
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.click(4, getAdapterPosition());
+                }
+            });
         }
 
     }
