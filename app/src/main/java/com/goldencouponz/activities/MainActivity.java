@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
                             navController.navigate(R.id.homeFragment);
                         } else if (itemId == R.id.favouriteFragment) {
                             navController.navigate(R.id.favouriteFragment);
-                        } else if (itemId == R.id.product) {
-                            navController.navigate(R.id.homeFragment);
+                        } else if (itemId == R.id.productsFragment) {
+                            navController.navigate(R.id.productsFragment);
                         } else if (itemId == R.id.profileFragment) {
                             navController.navigate(R.id.profileFragment);
                         }

@@ -153,7 +153,7 @@ public class RegisterationViewModel extends ViewModel {
                     registerationFragmentBinding.progress.setVisibility(View.GONE);
                     GoldenSharedPreference.saveUser(context, response.body(), response.body().getId());
                     //TODO change to fav stores
-                    Navigation.findNavController(registerationFragmentBinding.getRoot()).navigate(R.id.homeFragment);
+                    Navigation.findNavController(registerationFragmentBinding.getRoot()).navigate(R.id.favouriteStoresFragment);
                 } else {
                     registerationFragmentBinding.progress.setVisibility(View.GONE);
                     Toast.makeText(context, R.string.thereisanerrorwiththedata, Toast.LENGTH_LONG).show();

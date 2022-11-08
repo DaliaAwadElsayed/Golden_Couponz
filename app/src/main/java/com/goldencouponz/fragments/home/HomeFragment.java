@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.HomeFragmentBinding;
+import com.e.goldencouponz.databinding.LoginCheckDialogBinding;
+import com.e.goldencouponz.databinding.SeeAllDialogBinding;
 import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.home.HomeViewModel;
 
@@ -18,6 +20,8 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel mViewModel;
     HomeFragmentBinding homeFragmentBinding;
+    LoginCheckDialogBinding loginCheckDialogBinding;
+    SeeAllDialogBinding seeAllDialogBinding;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -27,6 +31,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         homeFragmentBinding = HomeFragmentBinding.inflate(inflater, container, false);
+        loginCheckDialogBinding = LoginCheckDialogBinding.inflate(inflater, container, false);
+        seeAllDialogBinding = SeeAllDialogBinding.inflate(inflater, container, false);
         return homeFragmentBinding.getRoot();
     }
 
@@ -35,7 +41,7 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         ((MainActivity) getActivity()).showBottomMenu();
-        mViewModel.init(homeFragmentBinding, getContext());
+        mViewModel.init(homeFragmentBinding, seeAllDialogBinding, loginCheckDialogBinding, getContext());
     }
 
 }

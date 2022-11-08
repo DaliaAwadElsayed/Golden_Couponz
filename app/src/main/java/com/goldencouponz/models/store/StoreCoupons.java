@@ -1,5 +1,6 @@
 package com.goldencouponz.models.store;
 
+import com.goldencouponz.models.home.Store;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -43,8 +44,19 @@ public class  StoreCoupons {
     @SerializedName("is_favorite")
     @Expose
     private Integer isFavorite;
+    @SerializedName("store")
+    @Expose
+    private Store store;
     public Integer getId() {
         return id;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public Integer getIsFavorite() {

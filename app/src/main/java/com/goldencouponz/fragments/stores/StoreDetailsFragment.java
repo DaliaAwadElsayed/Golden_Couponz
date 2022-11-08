@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.CopyCouponDialogBinding;
 import com.e.goldencouponz.databinding.LoginCheckDialogBinding;
+import com.e.goldencouponz.databinding.NoCouponProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.ProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.SecondCopyCouponDialogBinding;
 import com.e.goldencouponz.databinding.SecondProductDetailsDialogBinding;
@@ -28,6 +29,7 @@ public class StoreDetailsFragment extends Fragment {
     ProductDetailsDialogBinding productDetailsDialogBinding;
     LoginCheckDialogBinding loginCheckDialogBinding;
     SecondProductDetailsDialogBinding secondProductDetailsDialogBinding;
+    NoCouponProductDetailsDialogBinding noCouponProductDetailsDialogBinding;
 
     public static StoreDetailsFragment newInstance() {
         return new StoreDetailsFragment();
@@ -42,6 +44,7 @@ public class StoreDetailsFragment extends Fragment {
         secondCopyCouponDialogBinding = SecondCopyCouponDialogBinding.inflate(inflater, container, false);
         productDetailsDialogBinding = ProductDetailsDialogBinding.inflate(inflater, container, false);
         secondProductDetailsDialogBinding = SecondProductDetailsDialogBinding.inflate(inflater, container, false);
+        noCouponProductDetailsDialogBinding = NoCouponProductDetailsDialogBinding.inflate(inflater, container, false);
         loginCheckDialogBinding = LoginCheckDialogBinding.inflate(inflater, container, false);
         return storeDetailsFragmentBinding.getRoot();
     }
@@ -52,7 +55,9 @@ public class StoreDetailsFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(StoreDetailsViewModel.class);
         ((MainActivity) getActivity()).hideBottomMenu();
         mViewModel.init(storeDetailsFragmentBinding, copyCouponDialogBinding, secondCopyCouponDialogBinding, productDetailsDialogBinding
-                ,secondProductDetailsDialogBinding , loginCheckDialogBinding, getContext(), getArguments().getInt("storeId"));
+                , secondProductDetailsDialogBinding,
+                noCouponProductDetailsDialogBinding,
+                loginCheckDialogBinding, getContext(), getArguments().getInt("storeId"));
     }
 
 }

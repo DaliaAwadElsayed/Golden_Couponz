@@ -85,7 +85,12 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
                 storeGrideItemBinding.copyCouponId.setVisibility(View.VISIBLE);
                 storeGrideItemBinding.getOfferId.setVisibility(View.GONE);
                 storeGrideItemBinding.numberOfCopiesId.setVisibility(View.VISIBLE);
-                storeGrideItemBinding.timeId.setText(Utility.fixNullString((store.getCopies()) + " " + context.getResources().getString(R.string.time)));
+                if (store.getCopies() != null) {
+                    storeGrideItemBinding.timeId.setText(Utility.fixNullString((store.getCopies()) + " " + context.getResources().getString(R.string.time)));
+                }
+                else {
+                    storeGrideItemBinding.timeId.setText("0" + " " + context.getResources().getString(R.string.time));
+                }
             } else {
                 storeGrideItemBinding.numberOfCopiesId.setVisibility(View.GONE);
                 storeGrideItemBinding.copyCouponId.setVisibility(View.GONE);
@@ -94,7 +99,7 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
             storeGrideItemBinding.copyCouponId.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.click(1, getAdapterPosition());
+                    listener.click(1, getAdapterPosition(), store.getCoupon());
                 }
             });
             if (GoldenSharedPreference.isLoggedIn(context)) {
@@ -111,7 +116,11 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
                 public void onClick(View v) {
                     //shareVia(String coupon, String store, String url
                     //todo change title to store name
-                    listener.clickShare(store.getCoupon(),store.getTitle(),store.getCouponLink());
+                    if (store.getCouponType().equals("coupon")) {
+                        listener.clickShare(store.getCoupon(), store.getTitle(), store.getCouponLink());
+                    } else {
+                        listener.clickShare("no", store.getTitle(), store.getCouponLink());
+                    }
                 }
             });
             storeGrideItemBinding.favId.setOnClickListener(v -> {
@@ -121,9 +130,8 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
                     } else {
                         removeFav();
                     }
-                }
-                else {
-                    listener.click(5,getAdapterPosition());
+                } else {
+                    listener.click(5, getAdapterPosition(), store.getCoupon());
                 }
             });
             storeGrideItemBinding.getOfferId.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +154,7 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
                         if (response.code() == 200 && response.body() != null) {
                             storeGrideItemBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_fav));
                             storeGrideItemBinding.favId.setImageTintList(null);
-                            listener.click(3, getAdapterPosition());
+                            listener.click(3, getAdapterPosition(), store.get(getAdapterPosition()).getCoupon());
                         }
                     }
                 }
@@ -170,7 +178,7 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
                         if (response.code() == 200 && response.body() != null) {
                             storeGrideItemBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_fav));
                             storeGrideItemBinding.favId.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.black)));
-                            listener.click(3, getAdapterPosition());
+                            listener.click(3, getAdapterPosition(), store.get(getAdapterPosition()).getCoupon());
                         }
                     }
                 }

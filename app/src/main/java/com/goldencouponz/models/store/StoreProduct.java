@@ -52,7 +52,7 @@ public class StoreProduct {
     private String createdAt;
     @SerializedName("brand")
     @Expose
-    private String brand;
+    private Brand brand;
     @SerializedName("product_country")
     @Expose
     private ProductCountry productCountry;
@@ -196,11 +196,11 @@ public class StoreProduct {
         this.createdAt = createdAt;
     }
 
-    public String getBrand() {
+    public Brand getBrand() {
         return brand;
     }
 
-    public void setBrand(String brand) {
+    public void setBrand(Brand brand) {
         this.brand = brand;
     }
 

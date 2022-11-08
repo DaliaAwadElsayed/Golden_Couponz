@@ -131,4 +131,10 @@
     <string name="copy_code_and_buy">Copy the code and go to buy the product</string>
     <string name="go_buy_product_now">Go buy the product now</string>
     <string name="exclusive_offers">Exclusive Offers</string>
+    <string name="update_to_latest_version">The current version of the application is no longer supported, the application must be updated to the latest version</string>
+    <string name="app_must_updated">The app must be updated</string>
+    <string name="update_now">Update now</string>
+    <string name="your_favorite_store">Your favorite stores</string>
+    <string name="choose_favorite_store">Choose your favorite stores to be aware of their discount codes first</string>
+
 </resources>

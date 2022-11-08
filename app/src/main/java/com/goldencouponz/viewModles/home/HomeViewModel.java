@@ -4,12 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -19,7 +17,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.HomeFragmentBinding;
+import com.e.goldencouponz.databinding.LoginCheckDialogBinding;
+import com.e.goldencouponz.databinding.SeeAllDialogBinding;
 import com.goldencouponz.adapters.home.CategoriesAdapter;
+import com.goldencouponz.adapters.home.SeeAllAdapter;
 import com.goldencouponz.adapters.home.SlidersAdapter;
 import com.goldencouponz.adapters.home.StoresGridAdapter;
 import com.goldencouponz.adapters.home.StoresListAdapter;
@@ -29,6 +30,7 @@ import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.rd.animation.type.AnimationType;
 
@@ -55,6 +57,10 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
     final long PERIOD_MS = 3000; // time in milliseconds between successive task executions.
     Activity activity;
     String deviceToken;
+    BottomSheetDialog loginCheckDialog;
+    BottomSheetDialog seeAllDialog;
+    LoginCheckDialogBinding loginCheckDialogBinding;
+    SeeAllDialogBinding seeAllDialogBinding;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -74,6 +80,18 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                     if (response.code() == 200 && response.body() != null) {
                         if (!response.body().getSliders().isEmpty()) {
                             addsBannerAdapter.setSliders(response.body().getSliders());
+                            SeeAllAdapter seeAllAdapter = new SeeAllAdapter(context);
+                            seeAllDialogBinding.bannerRecyclerId.setAdapter(seeAllAdapter);
+                            seeAllAdapter.setStores(response.body().getSliders());
+                            seeAllAdapter.setOnItemClickListener(new SeeAllAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View viewItem, int position, int storeId) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("storeId", storeId);
+                                    Navigation.findNavController(homeFragmentBinding.getRoot()).navigate(R.id.storeDetailsFragment, bundle);
+                                    seeAllDialog.dismiss();
+                                }
+                            });
                         }
                     }
                 }
@@ -111,9 +129,19 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         void size(int size);
     }
 
-    public void init(HomeFragmentBinding homeFragmentBinding, Context context) {
+    public void init(HomeFragmentBinding homeFragmentBinding, SeeAllDialogBinding seeAllDialogBinding, LoginCheckDialogBinding loginCheckDialogBinding, Context context) {
         this.context = context;
+        this.seeAllDialogBinding = seeAllDialogBinding;
+        this.loginCheckDialogBinding = loginCheckDialogBinding;
         this.homeFragmentBinding = homeFragmentBinding;
+        loginCheckDialog = new BottomSheetDialog(context);
+        seeAllDialog = new BottomSheetDialog(context);
+        homeFragmentBinding.seeAllId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                seeAllDialog();
+            }
+        });
 //        getUserDeviceToken();
 //        Log.d("deviceTokenOut", deviceToken);
         changeLayout();
@@ -308,16 +336,16 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                                     if (homeFragmentBinding.listId.getVisibility() == View.VISIBLE) {
                                         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
                                             if (GoldenSharedPreference.isLoggedIn(context)) {
-                                                stores("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
+                                                stores("Bearer" + GoldenSharedPreference.getToken(context), "en", categoryId);
                                             } else {
-                                                stores("", "en", 0);
+                                                stores("", "en", categoryId);
 
                                             }
                                         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
                                             if (GoldenSharedPreference.isLoggedIn(context)) {
-                                                stores("Bearer" + GoldenSharedPreference.getToken(context), "ar", 0);
+                                                stores("Bearer" + GoldenSharedPreference.getToken(context), "ar", categoryId);
                                             } else {
-                                                stores("", "ar", 0);
+                                                stores("", "ar", categoryId);
 
                                             }
                                         }
@@ -326,20 +354,21 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                                             if (GoldenSharedPreference.isLoggedIn(context)) {
                                                 storesList("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
                                             } else {
-                                                storesList("", "en", 0);
+                                                storesList("", "en", categoryId);
 
                                             }
                                         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
                                             if (GoldenSharedPreference.isLoggedIn(context)) {
                                                 storesList("Bearer" + GoldenSharedPreference.getToken(context), "ar", 0);
                                             } else {
-                                                storesList("", "ar", 0);
+                                                storesList("", "ar", categoryId);
 
                                             }
                                         }
                                     }
                                 }
                             });
+
 
                         } else {
                             Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
@@ -458,38 +487,50 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                 }
             }
             if (click == 2) {
-                homeFragmentBinding.logLinearId.setVisibility(View.VISIBLE);
-                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_in_left);
-                homeFragmentBinding.logLinearId.startAnimation(animation);
-                homeFragmentBinding.relativeId.setVisibility(View.VISIBLE);
-                homeFragmentBinding.signId.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.loginFragment));
-                homeFragmentBinding.slideDownLogId.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        downLogin();
-                        return true;
-                    }
-                });
-                homeFragmentBinding.cancelLogId.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        downLogin();
-                    }
-                });
+                loginCheckDialog();
             }
         }
 
     };
 
-    private void downLogin() {
-        homeFragmentBinding.relativeId.setVisibility(View.GONE);
-        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_in_left);
-        homeFragmentBinding.logLinearId.startAnimation(animation);
-        homeFragmentBinding.logLinearId.setVisibility(View.VISIBLE);
-    }
-
     public interface Listener {
         void click(int click);
+    }
+
+    private void seeAllDialog() {
+        final View view2 = seeAllDialogBinding.getRoot();
+        seeAllDialog.setContentView(view2);
+        seeAllDialog.setCancelable(true);
+        seeAllDialog.show();
+        seeAllDialogBinding.cancelLogId.setOnClickListener(v -> {
+            seeAllDialog.dismiss();
+        });
+
+
+    }
+
+    private void loginCheckDialog() {
+        final View view2 = loginCheckDialogBinding.getRoot();
+        loginCheckDialog.setContentView(view2);
+        loginCheckDialog.setCancelable(true);
+        loginCheckDialog.show();
+        loginCheckDialogBinding.signId.setOnClickListener(v -> {
+            loginCheckDialog.dismiss();
+            Navigation.findNavController(homeFragmentBinding.getRoot()).navigate(R.id.loginFragment);
+        });
+
+        loginCheckDialogBinding.cancelLogId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginCheckDialog.dismiss();
+            }
+        });
+        loginCheckDialogBinding.cancelLogId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginCheckDialog.dismiss();
+            }
+        });
     }
 
 }

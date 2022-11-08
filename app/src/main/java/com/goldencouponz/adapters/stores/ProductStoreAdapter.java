@@ -2,6 +2,7 @@ package com.goldencouponz.adapters.stores;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,22 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.e.goldencouponz.databinding.ProductItemBinding;
-import com.goldencouponz.viewModles.home.ProductsViewModel;
 import com.goldencouponz.models.store.StoreProduct;
 import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
+import com.goldencouponz.viewModles.stores.StoreDetailsViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HomePageViewHolder> {
+public class ProductStoreAdapter extends RecyclerView.Adapter<ProductStoreAdapter.HomePageViewHolder> {
     private LayoutInflater inflater;
     private List<StoreProduct> store = new ArrayList<>();
     Context context;
-    ProductsViewModel.Listener listener;
+    StoreDetailsViewModel.Listener listener;
 
-    public ProductAdapter(Context context, ProductsViewModel.Listener listener) {
+    public ProductStoreAdapter(Context context, StoreDetailsViewModel.Listener listener) {
         this.context = context;
         this.listener = listener;
     }
@@ -56,9 +57,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HomePage
 
     class HomePageViewHolder extends RecyclerView.ViewHolder {
         private ProductItemBinding storeGrideItemBinding;
-        ProductsViewModel.Listener listener;
+        StoreDetailsViewModel.Listener listener;
 
-        HomePageViewHolder(@NonNull ProductItemBinding storeGrideItemBinding, ProductsViewModel.Listener listener) {
+        HomePageViewHolder(@NonNull ProductItemBinding storeGrideItemBinding, StoreDetailsViewModel.Listener listener) {
             super(storeGrideItemBinding.getRoot());
             this.storeGrideItemBinding = storeGrideItemBinding;
             this.listener = listener;
@@ -83,6 +84,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HomePage
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.i("COUUUU",store.getCoupon()+"?");
                     listener.click(4, getAdapterPosition(),store.getCoupon());
                 }
             });

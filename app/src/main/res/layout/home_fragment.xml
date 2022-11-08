@@ -58,6 +58,7 @@
 
 
                             <TextView
+                                android:id="@+id/seeAllId"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
@@ -237,13 +238,13 @@
                     </LinearLayout>
 
                     <HorizontalScrollView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_12sdp"
                         android:layout_marginEnd="@dimen/_12sdp"
                         >
                         <RelativeLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_4sdp"
                             android:orientation="horizontal"
@@ -276,14 +277,17 @@
                                     android:textSize="12sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/category_recycler_view"
                                 android:layout_width="wrap_content"
+                             app:stackFromEnd="false"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_43sdp"
                                 android:layout_marginEnd="@dimen/_43sdp"
                                 android:nestedScrollingEnabled="false"
                                 android:orientation="horizontal"
+                                android:scrollbars="horizontal"
                                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                                 tools:listitem="@layout/categories_item" />
 
@@ -369,89 +373,6 @@
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/logLinearId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:animateLayoutChanges="true"
-            android:background="@drawable/bk_layout"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/slideDownLogId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:src="@drawable/ic_line" />
-
-            <ImageView
-                android:id="@+id/cancelLogId"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_gravity="start"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginEnd="@dimen/_12sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:src="@drawable/ic_baseline_close_24"
-                app:tint="@color/black" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginEnd="@dimen/_12sdp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:gravity="center"
-                    android:text="@string/must_be_sing_in"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black"
-                    android:textFontWeight="1000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:gravity="center"
-                    android:text="@string/sign_in_and_save_offers"
-                    android:textAllCaps="false"
-                    android:textColor="#7A7A7A"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/signId"
-                    style="@style/ButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/small_margin"
-                    android:layout_marginTop="@dimen/small_margin"
-                    android:layout_marginEnd="@dimen/small_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/bk_button"
-                    android:gravity="center"
-                    android:text="@string/sign_in_sign_up"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-            </LinearLayout>
         </LinearLayout>
 
         <ProgressBar

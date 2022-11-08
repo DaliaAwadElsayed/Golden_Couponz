@@ -132,5 +132,12 @@
     <string name="copy_code_and_buy">نسخ الكود والذهاب لشراء المنتج</string>
     <string name="go_buy_product_now">إذهب لشراء المنتج الأن</string>
     <string name="exclusive_offers">العروض الحصرية</string>
+    <string name="update_to_latest_version"> الإصدار الحالي من التطبيق لم يعد مدعوماً، يجب تحديث التطبيق احدث اصدار</string>
+    <string name="app_must_updated">يجب تحديث التطبيق</string>
+    <string name="update_now">التحديث الآن</string>
+    <string name="your_favorite_store">متاجرك المفضلة</string>
+    <string name="choose_favorite_store">إختر متاجرك المفضلة لتكون علي دراية بأكواد الخصم الخاصة بها أول بأول</string>
+
+
 
 </resources>

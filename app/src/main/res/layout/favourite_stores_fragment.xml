@@ -1,13 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.goldencouponz.fragments.favourite.FavouriteStoresFragment">
 
-    <TextView
+    <RelativeLayout
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/favStores_tv"
+            style="@style/TabViewBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="@dimen/_8sdp"
+            android:text="@string/your_favorite_store"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textFontWeight="600"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/chooseYourFavStore_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/favStores_tv"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:gravity="center"
+            android:text="@string/choose_favorite_store"
+            android:textAlignment="center"
+            android:textColor="#7A7A7A"
+            android:textFontWeight="400"
+            android:textSize="15sp" />
+        <ScrollView
+            android:layout_below="@+id/chooseYourFavStore_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/home_gride_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/chooseYourFavStore_tv"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:scrollbars="vertical"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            tools:listitem="@layout/fav_store_gride_item" />
+
+        </ScrollView>
+        <TextView
+            android:id="@+id/nextId"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bk_button"
+            android:gravity="center"
+            android:paddingTop="@dimen/_6sdp"
+            android:paddingBottom="@dimen/_6sdp"
+            android:text="@string/next_label"
+            android:textAlignment="center"
+            android:textFontWeight="700"
+            android:textSize="@dimen/_14sdp"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </RelativeLayout>
+</layout>

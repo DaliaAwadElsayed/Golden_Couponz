@@ -1,13 +1,16 @@
 package com.goldencouponz.adapters.home;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.BannerLayoutBinding;
 import com.goldencouponz.models.home.Slider;
 import com.goldencouponz.viewModles.home.HomeViewModel;
@@ -59,6 +62,14 @@ public class SlidersAdapter extends PagerAdapter {
         size = sliders.size();
         sliderSize.size(size);
         container.addView(layoutBinding.getRoot());
+        layoutBinding.viewPagerItemImage1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("storeId", sliders.get(position).getStoreId());
+                Navigation.findNavController(v).navigate(R.id.storeDetailsFragment, bundle);
+            }
+        });
 
         return layoutBinding.getRoot();
     }

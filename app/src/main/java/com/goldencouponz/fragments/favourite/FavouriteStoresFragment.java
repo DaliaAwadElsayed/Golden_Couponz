@@ -10,13 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.e.goldencouponz.R;
+import com.e.goldencouponz.databinding.FavouriteStoresFragmentBinding;
 import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.favourite.FavouriteStoresViewModel;
 
 public class FavouriteStoresFragment extends Fragment {
 
     private FavouriteStoresViewModel mViewModel;
+    FavouriteStoresFragmentBinding favouriteStoresFragmentBinding;
 
     public static FavouriteStoresFragment newInstance() {
         return new FavouriteStoresFragment();
@@ -25,14 +26,17 @@ public class FavouriteStoresFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.favourite_stores_fragment, container, false);
+        favouriteStoresFragmentBinding = FavouriteStoresFragmentBinding.inflate(inflater, container, false);
+        return favouriteStoresFragmentBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(FavouriteStoresViewModel.class);
-        ((MainActivity) getActivity()).showBottomMenu();
+        mViewModel.init(favouriteStoresFragmentBinding,getContext());
+        ((MainActivity) getActivity()).hideBottomMenu();
+
     }
 
 }

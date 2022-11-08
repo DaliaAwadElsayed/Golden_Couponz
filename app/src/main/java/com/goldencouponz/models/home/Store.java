@@ -51,8 +51,23 @@ public class Store {
     @SerializedName("store_products")
     @Expose
     private List<StoreProduct> store_products = null;
+    @SerializedName("ids")
+    @Expose
+    private List<Integer> ids = null;
     public Integer getId() {
         return id;
+    }
+
+    public Store(List<Integer> ids) {
+        this.ids = ids;
+    }
+
+    public List<Integer> getIds() {
+        return ids;
+    }
+
+    public void setIds(List<Integer> ids) {
+        this.ids = ids;
     }
 
     public List<StoreProduct> getStore_products() {

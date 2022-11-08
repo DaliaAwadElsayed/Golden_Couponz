@@ -10,7 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.e.goldencouponz.databinding.CopyCouponDialogBinding;
 import com.e.goldencouponz.databinding.FragmentFavouriteBinding;
+import com.e.goldencouponz.databinding.SecondCopyCouponDialogBinding;
 import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.favourite.FavouriteViewModel;
 
@@ -18,6 +20,8 @@ public class FavouriteFragment extends Fragment {
 
     private FavouriteViewModel mViewModel;
     FragmentFavouriteBinding fragmentFavouriteBinding;
+    CopyCouponDialogBinding copyCouponDialogBinding;
+    SecondCopyCouponDialogBinding secondCopyCouponDialogBinding;
 
     public static FavouriteFragment newInstance() {
         return new FavouriteFragment();
@@ -27,6 +31,8 @@ public class FavouriteFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         fragmentFavouriteBinding = FragmentFavouriteBinding.inflate(inflater, container, false);
+        copyCouponDialogBinding = copyCouponDialogBinding.inflate(inflater, container, false);
+        secondCopyCouponDialogBinding = SecondCopyCouponDialogBinding.inflate(inflater, container, false);
         return fragmentFavouriteBinding.getRoot();
     }
 
@@ -35,7 +41,8 @@ public class FavouriteFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(FavouriteViewModel.class);
         ((MainActivity) getActivity()).showBottomMenu();
-        mViewModel.init(fragmentFavouriteBinding,getContext());
+        mViewModel.init(fragmentFavouriteBinding, copyCouponDialogBinding,
+                secondCopyCouponDialogBinding, getContext());
     }
 
 }

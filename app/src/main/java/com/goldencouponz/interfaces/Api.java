@@ -1,6 +1,7 @@
 package com.goldencouponz.interfaces;
 
 import com.goldencouponz.models.appsetting.AboutApp;
+import com.goldencouponz.models.home.Store;
 import com.goldencouponz.models.user.ChangePassword;
 import com.goldencouponz.models.user.UserRegisteration;
 import com.goldencouponz.models.wrapper.ApiResponse;
@@ -88,7 +89,7 @@ public interface Api {
 
     //api/products?store_id=35
     @GET("api/products")
-    Call<ApiResponse> getStoreProducts(@Header("fcm-token") String fcmToken,@Header("country") int country, @Header("Accept-Language") String AcceptLanguage, @Query("store_id") int store_id,@Query("category_id") String category_id,@Query("subcategory_id") String subcategory_id);
+    Call<ApiResponse> getStoreProducts(@Header("fcm-token") String fcmToken, @Header("country") int country, @Header("Accept-Language") String AcceptLanguage, @Query("store_id") String store_id, @Query("category_id") String category_id, @Query("subcategory_id") String subcategory_id);
 
     //api/user-fav-store-coupons
     @GET("api/user-fav-store-coupons")
@@ -98,4 +99,7 @@ public interface Api {
     @GET("api/user-fav-stores")
     Call<ApiResponse> getFavouriteStores(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage);
 
+    //api/fav-stores
+    @POST("api/fav-stores")
+    Call<ApiResponse> favMultiStore(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage,@Body Store userRegisteration);
 }

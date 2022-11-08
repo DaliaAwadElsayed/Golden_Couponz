@@ -4,20 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/clickId"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_height="@dimen/_120sdp"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
         app:cardCornerRadius="@dimen/small_margin">
 
         <ImageView
             android:id="@+id/viewPagerItem_image1"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_125sdp"
-            android:scaleType="fitXY"
+            android:layout_height="@dimen/_120sdp"
             android:adjustViewBounds="true"
-            tools:src="@drawable/ic_third_skip"
- />
+            android:scaleType="fitXY"
+            tools:src="@drawable/ic_third_skip" />
 
     </com.google.android.material.card.MaterialCardView>
 </layout>

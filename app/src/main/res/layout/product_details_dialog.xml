@@ -189,9 +189,7 @@
                 android:id="@+id/detailsId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:gravity="end"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 tools:text="123333 sar" />

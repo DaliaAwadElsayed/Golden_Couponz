@@ -6,10 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
@@ -18,9 +15,7 @@ import androidx.navigation.Navigation;
 
 import com.com.dtag.livia.utility.Local;
 import com.e.goldencouponz.R;
-import com.e.goldencouponz.databinding.CountryDialogBinding;
 import com.e.goldencouponz.databinding.EditProfileDialogBinding;
-import com.e.goldencouponz.databinding.EditProfileFragmentBinding;
 import com.e.goldencouponz.databinding.LangDialogBinding;
 import com.e.goldencouponz.databinding.LogOutDialogBinding;
 import com.e.goldencouponz.databinding.ProfileCountriesDialogBinding;
@@ -81,7 +76,7 @@ public class ProfileViewModel extends ViewModel {
         profileFragmentBinding.countryChangeId.setText(GoldenNoLoginSharedPreference.getUserCountryName(context));
         profileFragmentBinding.countryNumId.setText("" + GoldenNoLoginSharedPreference.getUserCountryId(context));
         profileFragmentBinding.currencyNumId.setText("" + GoldenNoLoginSharedPreference.getUserCurrency(context));
-
+        Log.i("GoldenPreference", GoldenNoLoginSharedPreference.getUserLanguage(context) + "?");
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             profileFragmentBinding.langChangeId.setText(R.string.arabic_label);
         } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
@@ -102,8 +97,65 @@ public class ProfileViewModel extends ViewModel {
 
     }
 
+    private void showLogOutDialog() {
+        final View view3 = logOutDialogBinding.getRoot();
+        showLogOutDialog.setContentView(view3);
+        showLogOutDialog.setCancelable(true);
+        showLogOutDialog.show();
+
+        logOut();
+    }
+
+    private void showProfileCountryDialog() {
+        final View view3 = profileCountriesDialogBinding.getRoot();
+        showProfileCountryDialog.setContentView(view3);
+        showProfileCountryDialog.setCancelable(true);
+        showProfileCountryDialog.show();
+        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+            getCountries("en");
+        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+            getCountries("ar");
+        }
+        profileCountriesDialogBinding.cancelCountryId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProfileCountryDialog.dismiss();
+            }
+        });
+    }
+
+    private void showEditProfileDialog() {
+        final View view3 = editProfileDialogBinding.getRoot();
+        showEditProfileDialog.setContentView(view3);
+        showEditProfileDialog.setCancelable(true);
+        showEditProfileDialog.show();
+        editProfileDialogBinding.passwordRelativeId.setOnClickListener(view -> {
+            showEditProfileDialog.dismiss();
+            Navigation.findNavController(profileFragmentBinding.getRoot()).navigate(R.id.changePasswordFragment);
+        });
+        editProfileDialogBinding.editRelativeId.setOnClickListener(view -> {
+            showEditProfileDialog.dismiss();
+            Navigation.findNavController(profileFragmentBinding.getRoot()).navigate(R.id.editProfileFragment);
+        });
+
+        editProfileDialogBinding.cancelProfileId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditProfileDialog.dismiss();
+            }
+        });
+    }
+
+    private void showLangDialog() {
+        final View view3 = langDialogBinding.getRoot();
+        showLangDialog.setContentView(view3);
+        showLangDialog.setCancelable(true);
+        showLangDialog.show();
+        langDialogBinding.cancelLangId.setOnClickListener(v -> showLangDialog.dismiss());
+        changeLanguage();
+    }
+
     private void getCountries(String lang) {
-        enableClick(false);
         countriesAdapter = new CountriesAdapter(context);
         profileFragmentBinding.progress.setVisibility(View.VISIBLE);
         apiInterface.getCountries(lang).enqueue(new Callback<ApiResponse>() {
@@ -160,33 +212,19 @@ public class ProfileViewModel extends ViewModel {
     }
 
     private void logOut() {
-        ///TODO DELETE THIS
-        /////////
-        profileFragmentBinding.logOutSureId.setEnabled(true);
-        profileFragmentBinding.logOutSureId.setClickable(true);
-        profileFragmentBinding.cancelId.setEnabled(true);
-        profileFragmentBinding.cancelId.setClickable(true);
-        profileFragmentBinding.cancelLogOutId.setEnabled(true);
-        profileFragmentBinding.cancelLogOutId.setClickable(true);
-        enableClick(false);
-        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
-        profileFragmentBinding.logOutLinearId.startAnimation(animation);
-        profileFragmentBinding.relativeId.setBackgroundColor(context.getResources().getColor(R.color.alpha));
-        profileFragmentBinding.relativeId.setAlpha(0.5f);
-        profileFragmentBinding.logOutLinearId.setVisibility(View.VISIBLE);
-        profileFragmentBinding.cancelId.setOnClickListener(new View.OnClickListener() {
+        logOutDialogBinding.cancelId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logoutDown();
+                showLogOutDialog.dismiss();
             }
         });
-        profileFragmentBinding.cancelLogOutId.setOnClickListener(new View.OnClickListener() {
+        logOutDialogBinding.cancelLogOutId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logoutDown();
+                showLogOutDialog.dismiss();
             }
         });
-        profileFragmentBinding.logOutSureId.setOnClickListener(new View.OnClickListener() {
+        logOutDialogBinding.logOutSureId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GoldenSharedPreference.clearSharedPreference(context);
@@ -201,6 +239,7 @@ public class ProfileViewModel extends ViewModel {
                 GoldenNoLoginSharedPreference.saveUserCountry(context, 0, countrySavedId, profileFragmentBinding.countryChangeId.getText().toString(),
                         profileFragmentBinding.currencyNumId.getText().toString()
                 );
+                showLogOutDialog.dismiss();
                 Navigation.findNavController(profileFragmentBinding.getRoot()).navigate(R.id.homeFragment);
                 profileFragmentBinding.progress.setVisibility(View.VISIBLE);
                 apiInterface.userLogOut("Bearer" + GoldenSharedPreference.getToken(context)).enqueue(new Callback<ApiResponse>() {
@@ -225,12 +264,6 @@ public class ProfileViewModel extends ViewModel {
     }
 
     void clicks() {
-        profileFragmentBinding.cancelLogOutId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logoutDown();
-            }
-        });
         profileFragmentBinding.supportUsId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -243,85 +276,20 @@ public class ProfileViewModel extends ViewModel {
                 Navigation.findNavController(view).navigate(R.id.loginFragment);
             }
         });
-        //Language
-        profileFragmentBinding.cancelLangId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                langDown();
-            }
-        });
-        profileFragmentBinding.slideDownLangId.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                langDown();
-                return true;
-            }
-        });
-        //Country
-        profileFragmentBinding.cancelCountryId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                countryDown();
 
-            }
-        });
-        profileFragmentBinding.slideDownCountryId.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                countryDown();
-                return true;
-            }
-        });
-        //Profile
-        profileFragmentBinding.cancelProfileId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                profileDown();
-            }
-        });
-
-        profileFragmentBinding.slideDownLogId.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                logoutDown();
-                return true;
-            }
-        });
-        profileFragmentBinding.slideDownProfileId.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                profileDown();
-                return true;
-            }
-        });
         //click buttons
-        profileFragmentBinding.codeId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
-                    getCountries("en");
-                } else {
-                    getCountries("ar");
-                }
-
-            }
-        });
+        profileFragmentBinding.codeId.setOnClickListener(view -> showProfileCountryDialog());
+        profileFragmentBinding.editId.setOnClickListener(view -> showEditProfileDialog());
         profileFragmentBinding.langId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeLanguage();
-            }
-        });
-        profileFragmentBinding.editId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                editProfile();
+                showLangDialog();
             }
         });
         profileFragmentBinding.logOutId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logOut();
+                showLogOutDialog();
             }
         });
         profileFragmentBinding.whoAreId.setOnClickListener(view -> {
@@ -343,7 +311,6 @@ public class ProfileViewModel extends ViewModel {
     }
 
 
-
     private void supportUs() {
         //https://play.google.com/store/apps/details?id=com.codesroots.goldencoupon
         Uri uri = Uri.parse("market://details?id=" + "com.codesroots.goldencoupon");
@@ -355,63 +322,32 @@ public class ProfileViewModel extends ViewModel {
         }
     }
 
-    private void enableClick(Boolean aBoolean) {
-        profileFragmentBinding.codeId.setClickable(aBoolean);
-        profileFragmentBinding.editId.setClickable(aBoolean);
-        profileFragmentBinding.langId.setClickable(aBoolean);
-        profileFragmentBinding.termsId.setClickable(aBoolean);
-        profileFragmentBinding.privacyId.setClickable(aBoolean);
-        profileFragmentBinding.whoAreId.setClickable(aBoolean);
-        profileFragmentBinding.logOutId.setClickable(aBoolean);
-        profileFragmentBinding.supportUsId.setClickable(aBoolean);
-    }
-
-    private void editProfile() {
-        enableClick(false);
-        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
-        profileFragmentBinding.profileLinearId.startAnimation(animation);
-        profileFragmentBinding.relativeId.setBackgroundColor(context.getResources().getColor(R.color.alpha));
-        profileFragmentBinding.relativeId.setAlpha(0.5f);
-        profileFragmentBinding.profileLinearId.setVisibility(View.VISIBLE);
-        profileFragmentBinding.passwordRelativeId.setOnClickListener(view -> {
-            Navigation.findNavController(view).navigate(R.id.changePasswordFragment);
-        });
-        profileFragmentBinding.editRelativeId.setOnClickListener(view -> {
-            Navigation.findNavController(view).navigate(R.id.editProfileFragment);
-        });
-
-    }
 
     private void changeLanguage() {
-        enableClick(false);
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
-            profileFragmentBinding.checkEnglishId.setVisibility(View.VISIBLE);
-            profileFragmentBinding.checkArabicId.setVisibility(View.GONE);
+            langDialogBinding.checkEnglishId.setVisibility(View.VISIBLE);
+            langDialogBinding.checkArabicId.setVisibility(View.GONE);
 
         } else {
-            profileFragmentBinding.checkEnglishId.setVisibility(View.GONE);
-            profileFragmentBinding.checkArabicId.setVisibility(View.VISIBLE);
+            langDialogBinding.checkEnglishId.setVisibility(View.GONE);
+            langDialogBinding.checkArabicId.setVisibility(View.VISIBLE);
         }
-        Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_up);
-        profileFragmentBinding.languageLinearId.startAnimation(animation);
-        profileFragmentBinding.relativeId.setBackgroundColor(context.getResources().getColor(R.color.alpha));
-        profileFragmentBinding.relativeId.setAlpha(0.5f);
-        profileFragmentBinding.languageLinearId.setVisibility(View.VISIBLE);
-        profileFragmentBinding.englishRelativeId.setOnClickListener(view -> {
+        langDialogBinding.englishRelativeId.setOnClickListener(view -> {
+            Log.i("clickss","SAVED");
             GoldenNoLoginSharedPreference.saveUserLang(context, "en");
             LocaleHelper.setLocale(context, "en");
             Local.Companion.updateResources(context);
             resetApplication();
-
         });
-
-        profileFragmentBinding.arabicRelativeId.setOnClickListener(view -> {
+        langDialogBinding.arabicRelativeId.setOnClickListener(view -> {
+            Log.i("clickss","SAVEDDD");
             GoldenNoLoginSharedPreference.saveUserLang(context, "ar");
             LocaleHelper.setLocale(context, "ar");
             Local.Companion.updateResources(context);
             resetApplication();
         });
     }
+
 
     private void resetApplication() {
         activity.startActivity(new Intent(activity, MainActivity.class));

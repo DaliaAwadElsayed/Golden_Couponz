@@ -8,7 +8,7 @@
         android:tooltipText="@string/stores_label" />
 
     <item
-        android:id="@+id/product"
+        android:id="@+id/productsFragment"
         android:icon="@drawable/ic_products"
         android:iconTint="#7A7A7A"
         android:title="@string/products_label"

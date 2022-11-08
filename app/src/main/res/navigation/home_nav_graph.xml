@@ -31,7 +31,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-
+        <action
+            android:id="@+id/favouriteStoresFragment"
+            app:destination="@id/favouriteStoresFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/forgetPasswordFragment"
@@ -198,5 +204,9 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="com.goldencouponz.fragments.home.ProductsFragment"
+        android:label="ProductsFragment" />
 
 </navigation>

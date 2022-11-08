@@ -86,7 +86,12 @@ public class CopounzFavAdapter extends RecyclerView.Adapter<CopounzFavAdapter.Ho
                 couponItemBinding.copyCouponId.setVisibility(View.VISIBLE);
                 couponItemBinding.getOfferId.setVisibility(View.GONE);
                 couponItemBinding.numberOfCopiesId.setVisibility(View.VISIBLE);
-                couponItemBinding.timeId.setText(Utility.fixNullString((coupons.getCopies()) + " " + context.getResources().getString(R.string.time)));
+                if (coupons.getCopies() != null) {
+                    couponItemBinding.timeId.setText(Utility.fixNullString((coupons.getCopies()) + " " + context.getResources().getString(R.string.time)));
+                } else {
+                    couponItemBinding.timeId.setText("0" + " " + context.getResources().getString(R.string.time));
+
+                }
             } else {
                 couponItemBinding.numberOfCopiesId.setVisibility(View.GONE);
                 couponItemBinding.copyCouponId.setVisibility(View.GONE);
@@ -95,7 +100,7 @@ public class CopounzFavAdapter extends RecyclerView.Adapter<CopounzFavAdapter.Ho
             couponItemBinding.copyCouponId.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.click(1, getAdapterPosition());
+                    listener.click(5, getAdapterPosition());
                 }
             });
 

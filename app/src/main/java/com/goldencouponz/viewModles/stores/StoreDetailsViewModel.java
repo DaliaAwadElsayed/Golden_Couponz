@@ -29,13 +29,14 @@ import androidx.viewpager.widget.ViewPager;
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.CopyCouponDialogBinding;
 import com.e.goldencouponz.databinding.LoginCheckDialogBinding;
+import com.e.goldencouponz.databinding.NoCouponProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.ProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.SecondCopyCouponDialogBinding;
 import com.e.goldencouponz.databinding.SecondProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.StoreDetailsFragmentBinding;
 import com.goldencouponz.adapters.home.SlidersAdapter;
 import com.goldencouponz.adapters.stores.CopounzAdapter;
-import com.goldencouponz.adapters.stores.ProductAdapter;
+import com.goldencouponz.adapters.stores.ProductStoreAdapter;
 import com.goldencouponz.adapters.stores.ProductsCategoriesAdapter;
 import com.goldencouponz.adapters.stores.ProductsSubCategoriesAdapter;
 import com.goldencouponz.interfaces.Api;
@@ -70,23 +71,30 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
     private ClipboardManager myClipboard;
     private ClipData myClip;
     int all = 0;
-    int productPosition;
     CopyCouponDialogBinding copyCouponDialogBinding;
     SecondCopyCouponDialogBinding secondCopyCouponDialogBinding;
     SecondProductDetailsDialogBinding secondProductDetailsDialogBinding;
     ProductDetailsDialogBinding productDetailsDialogBinding;
+    NoCouponProductDetailsDialogBinding noCouponProductDetailsDialogBinding;
     LoginCheckDialogBinding loginCheckDialogBinding;
     BottomSheetDialog showCopyCouponDialog;
     BottomSheetDialog loginCheckDialog;
     BottomSheetDialog showProductDetailsDialog;
     BottomSheetDialog secondShowProductDetailsDialog;
     BottomSheetDialog showSecondCopyCouponDialog;
+    BottomSheetDialog showNoCouponDialog;
+
+    String youTube = "https://www.youtube.com/@goldencouponz";
+    String snapChat = "https://www.snapchat.com/add/goldencouponz?share_id=9XqCMUv88XE&locale=ar-EG*/";
+    String instagram = "https://www.instagram.com/golden.couponz/";
+    String facebook = "https://www.facebook.com/goldencouponzz/";
 
     public void init(StoreDetailsFragmentBinding storeDetailsFragmentBinding,
                      CopyCouponDialogBinding copyCouponDialogBinding,
                      SecondCopyCouponDialogBinding secondCopyCouponDialogBinding,
                      ProductDetailsDialogBinding productDetailsDialogBinding,
                      SecondProductDetailsDialogBinding secondProductDetailsDialogBinding,
+                     NoCouponProductDetailsDialogBinding noCouponProductDetailsDialogBinding,
                      LoginCheckDialogBinding loginCheckDialogBinding,
                      Context context, int storeId) {
         this.context = context;
@@ -96,15 +104,17 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         this.secondProductDetailsDialogBinding = secondProductDetailsDialogBinding;
         this.productDetailsDialogBinding = productDetailsDialogBinding;
         this.loginCheckDialogBinding = loginCheckDialogBinding;
+        this.noCouponProductDetailsDialogBinding = noCouponProductDetailsDialogBinding;
         this.storeId = storeId;
         showCopyCouponDialog = new BottomSheetDialog(context);
         loginCheckDialog = new BottomSheetDialog(context);
         showSecondCopyCouponDialog = new BottomSheetDialog(context);
+        showNoCouponDialog = new BottomSheetDialog(context);
         secondShowProductDetailsDialog = new BottomSheetDialog(context);
         showProductDetailsDialog = new BottomSheetDialog(context);
         storeDetailsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
         storeDetailsFragmentBinding.allId.setBackgroundTintList(null);
-        getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), storeId, "", "");
+        getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "");
         if (GoldenSharedPreference.isLoggedIn(context)) {
             getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
         } else {
@@ -156,25 +166,25 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         copyCouponDialogBinding.fbId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.facebook.com/goldencouponzz/");
+                openUrl(facebook);
             }
         });
         copyCouponDialogBinding.snapId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.snapchat.com/add/goldencouponz?share_id=9XqCMUv88XE&locale=ar-EG*/");
+                openUrl(snapChat);
             }
         });
         copyCouponDialogBinding.instagramId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.instagram.com/golden.couponz/");
+                openUrl(instagram);
             }
         });
         copyCouponDialogBinding.youtubeId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://m.youtube.com/channel/UCBGqENRX6vzULXYfan-1hgw");
+                openUrl(youTube);
             }
         });
     }
@@ -183,25 +193,25 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         secondCopyCouponDialogBinding.fb2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.facebook.com/goldencouponzz/");
+                openUrl(facebook);
             }
         });
         secondCopyCouponDialogBinding.snap2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.snapchat.com/add/goldencouponz?share_id=9XqCMUv88XE&locale=ar-EG*/");
+                openUrl(snapChat);
             }
         });
         secondCopyCouponDialogBinding.instagram2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.instagram.com/golden.couponz/");
+                openUrl(instagram);
             }
         });
         secondCopyCouponDialogBinding.youtube2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://m.youtube.com/channel/UCBGqENRX6vzULXYfan-1hgw");
+                openUrl(youTube);
             }
         });
 
@@ -211,52 +221,81 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         productDetailsDialogBinding.fb2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.facebook.com/goldencouponzz/");
+                openUrl(facebook);
             }
         });
         productDetailsDialogBinding.snap2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.snapchat.com/add/goldencouponz?share_id=9XqCMUv88XE&locale=ar-EG*/");
+                openUrl(snapChat);
             }
         });
         productDetailsDialogBinding.instagram2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.instagram.com/golden.couponz/");
+                openUrl(instagram);
             }
         });
         productDetailsDialogBinding.youtube2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://m.youtube.com/channel/UCBGqENRX6vzULXYfan-1hgw");
+                openUrl(youTube);
             }
         });
 
     }
+
+    private void social5() {
+        noCouponProductDetailsDialogBinding.fb2Id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUrl(facebook);
+            }
+        });
+        noCouponProductDetailsDialogBinding.snap2Id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUrl(snapChat);
+            }
+        });
+        noCouponProductDetailsDialogBinding.instagram2Id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUrl(instagram);
+            }
+        });
+        noCouponProductDetailsDialogBinding.youtube2Id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUrl(youTube);
+            }
+        });
+
+    }
+
     private void social4() {
         secondProductDetailsDialogBinding.fb2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.facebook.com/goldencouponzz/");
+                openUrl(facebook);
             }
         });
         secondProductDetailsDialogBinding.snap2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.snapchat.com/add/goldencouponz?share_id=9XqCMUv88XE&locale=ar-EG*/");
+                openUrl(snapChat);
             }
         });
         secondProductDetailsDialogBinding.instagram2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://www.instagram.com/golden.couponz/");
+                openUrl(instagram);
             }
         });
         secondProductDetailsDialogBinding.youtube2Id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUrl("https://m.youtube.com/channel/UCBGqENRX6vzULXYfan-1hgw");
+                openUrl(youTube);
             }
         });
 
@@ -372,6 +411,52 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                             CopounzAdapter categoriesAdapter = new CopounzAdapter(context, listener);
                             categoriesAdapter.setStores(response.body().getStore().getStore_coupons());
                             storeDetailsFragmentBinding.recyclerId.setAdapter(categoriesAdapter);
+                        }
+                        if (!response.body().getStore().getStoreCategories().isEmpty()) {
+                            ProductsCategoriesAdapter categoriesAdapter = new ProductsCategoriesAdapter(context);
+                            storeDetailsFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
+                            categoriesAdapter.setCategories(response.body().getStore().getStoreCategories());
+                            categoriesAdapter.setOnItemClickListener(new ProductsCategoriesAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View viewItem, int position, int categoryId) {
+                                    subCategory(categoryId, GoldenNoLoginSharedPreference.getUserLanguage(context));
+                                }
+                            });
+
+
+                        }
+                    } else {
+                        storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
+                        Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.i("onFailure", t.toString());
+                storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
+                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void getSingleCoupons(String token,int position){
+        showCopyCouponDialog();
+        String lang = GoldenNoLoginSharedPreference.getUserLanguage(context);
+        String fcmToken = "";
+        int countryId = GoldenNoLoginSharedPreference.getUserCountryId(context);
+        int id = storeId;
+        Log.i("COUNTRYID", countryId + "?");
+        apiInterface.getSingleStore(token, lang, fcmToken, countryId, String.valueOf(id)).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.code() == 200 && response.body() != null) {
+                        if (!response.body().getStore().getStore_coupons().isEmpty()) {
+                            CopounzAdapter categoriesAdapter = new CopounzAdapter(context, listener);
+                            categoriesAdapter.setStores(response.body().getStore().getStore_coupons());
+                            storeDetailsFragmentBinding.recyclerId.setAdapter(categoriesAdapter);
                             //coupon click
                             Picasso.get().load(response.body().getStore().getFile()).into(copyCouponDialogBinding.copyCouponImgId);
                             Picasso.get().load(response.body().getStore().getFile()).into(secondCopyCouponDialogBinding.copyCouponImg2Id);
@@ -409,34 +494,15 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                                 }
                             });
                         }
-                        secondCopyCouponDialogBinding.noActiveId.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                openUrl(response.body().getStore().getStore_coupons().get(position).getVideoFile());
-
-                            }
-                        });
-
-                        if (!response.body().getStore().getStoreCategories().isEmpty()) {
-                            ProductsCategoriesAdapter categoriesAdapter = new ProductsCategoriesAdapter(context);
-                            storeDetailsFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
-                            categoriesAdapter.setCategories(response.body().getStore().getStoreCategories());
-                            categoriesAdapter.setOnItemClickListener(new ProductsCategoriesAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View viewItem, int position, int categoryId) {
-                                    subCategory(categoryId, GoldenNoLoginSharedPreference.getUserLanguage(context));
-                                }
-                            });
-
-
-                        }
-                    } else {
-                        storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
-                        Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
 
                     }
+                } else {
+                    storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
+                    Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+
                 }
             }
+
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
@@ -445,6 +511,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                 Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     private void subCategory(int parentId, String lang) {
@@ -465,7 +532,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                                 @Override
                                 public void onItemClick(View viewItem, int position, int categoryId, int subCatId) {
                                     Log.i("CATEGORYIDDD", storeId + "?" + categoryId + "?" + subCatId);
-                                    getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), storeId, String.valueOf(categoryId), String.valueOf(subCatId));
+                                    getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), String.valueOf(categoryId), String.valueOf(subCatId));
                                 }
                             });
                         } else {
@@ -485,7 +552,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
 
     }
 
-    private void getProducts(String deviceToken, int country, String lang, int storeId, String catId, String subCatId) {
+    private void getProducts(String deviceToken, int country, String lang, String storeId, String catId, String subCatId) {
         storeDetailsFragmentBinding.progress.setVisibility(View.VISIBLE);
         apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId).enqueue(new Callback<ApiResponse>() {
             @Override
@@ -494,7 +561,41 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                     if (response.code() == 200 && response.body() != null) {
                         storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
                         if (!response.body().getProducts().getData().isEmpty()) {
-                            ProductAdapter storeProduct = new ProductAdapter(context, listener);
+                            ProductStoreAdapter storeProduct = new ProductStoreAdapter(context, listener);
+                            storeProduct.setStores(response.body().getProducts().getData());
+                            storeDetailsFragmentBinding.idRVUsers.setAdapter(storeProduct);
+                            storeDetailsFragmentBinding.idRVUsers.setVisibility(View.VISIBLE);
+                            ////////////////
+                        } else {
+                            storeDetailsFragmentBinding.idRVUsers.setVisibility(View.GONE);
+                            storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
+                        }
+                    } else {
+                        Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                        storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.i("onFailure", t.toString());
+                storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
+                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+    private void getSingleProduct(String deviceToken, int country, String lang, String storeId, String catId, String subCatId,int productPosition) {
+        storeDetailsFragmentBinding.progress.setVisibility(View.VISIBLE);
+        apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.code() == 200 && response.body() != null) {
+                        storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
+                        if (!response.body().getProducts().getData().isEmpty()) {
+                            ProductStoreAdapter storeProduct = new ProductStoreAdapter(context, listener);
                             storeProduct.setStores(response.body().getProducts().getData());
                             storeDetailsFragmentBinding.idRVUsers.setAdapter(storeProduct);
                             storeDetailsFragmentBinding.idRVUsers.setVisibility(View.VISIBLE);
@@ -522,7 +623,31 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                                     showSecondProductDetailsDialog();
                                 }
                             });
-
+//nocoupon//
+                            noCouponProductDetailsDialogBinding.newPriceId.setText(Utility.fixNullString(response.body().getProducts().getData().get(productPosition).getProductCountry().getDiscountPrice()));
+                            noCouponProductDetailsDialogBinding.currentPriceId.setPaintFlags(productDetailsDialogBinding.currentPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            noCouponProductDetailsDialogBinding.discountId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(productPosition).getProductCountry().getDiscount())));
+                            noCouponProductDetailsDialogBinding.currentPriceId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(productPosition).getProductCountry().getPrice())));
+                            noCouponProductDetailsDialogBinding.detailsId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(productPosition).getDetails())));
+                            Picasso.get().load(response.body().getProducts().getData().get(productPosition).getFile()).into(noCouponProductDetailsDialogBinding.productId);
+                            noCouponProductDetailsDialogBinding.currencyNewId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
+                            noCouponProductDetailsDialogBinding.currencyCurrentId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
+                            Picasso.get().load(response.body().getProducts().getData().get(productPosition).getStore().getFile()).into(noCouponProductDetailsDialogBinding.storeImgId);
+                            noCouponProductDetailsDialogBinding.shareId.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    shareOfferVia(response.body().getProducts().getData().get(productPosition).getStore().getTitle()
+                                            , response.body().getProducts().getData().get(productPosition).getStore().getStoreLink());
+                                }
+                            });
+                            noCouponProductDetailsDialogBinding.couponValue2Id.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    openUrl(response.body().getProducts().getData().get(productPosition).getProductLink());
+                                    noCouponProductDetailsDialogBinding.recomendId.setVisibility(View.VISIBLE);
+                                }
+                            });
+                            ////
                             secondProductDetailsDialogBinding.newPriceId.setText(Utility.fixNullString(response.body().getProducts().getData().get(productPosition).getProductCountry().getDiscountPrice()));
                             secondProductDetailsDialogBinding.currentPriceId.setPaintFlags(productDetailsDialogBinding.currentPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             secondProductDetailsDialogBinding.discountId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(productPosition).getProductCountry().getDiscount())));
@@ -549,7 +674,13 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                             secondProductDetailsDialogBinding.copy2Id.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    copyFun(response.body().getProducts().getData().get(productPosition).getStore().getId(), response.body().getProducts().getData().get(productPosition).getProductLink());
+                                    Toast.makeText(context, R.string.code_copy, Toast.LENGTH_SHORT).show();
+                                    myClipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+                                    String text;
+                                    text = secondProductDetailsDialogBinding.couponValueId.getText().toString();
+                                    myClip = ClipData.newPlainText("text", text);
+                                    myClipboard.setPrimaryClip(myClip);
+                                    openUrl(response.body().getProducts().getData().get(productPosition).getProductLink());
                                 }
                             });
                             secondProductDetailsDialogBinding.goToYoutube2Id.setOnClickListener(new View.OnClickListener() {
@@ -631,9 +762,17 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
     };
 
     private void openUrl(String url) {
+        Log.i("URL","?"+url);
+        if (url!=null){
+        if (url.contains("http://")||url.contains("https://")){
         Uri uri = Uri.parse(url); // missing 'http://' will cause crashed
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        context.startActivity(intent);
+        context.startActivity(intent);}
+        else {
+            Toast.makeText(context,"Wrong Url", Toast.LENGTH_SHORT).show();
+        }}else {
+            Toast.makeText(context,"Missing Url", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void tabLayout() {
@@ -664,6 +803,16 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
 
             }
         });
+    }
+
+    private void shareOfferVia(String store, String url) {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = store
+                + " " + url;
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.share_via)));
     }
 
     private void shareVia(String coupon, String store, String url) {
@@ -737,19 +886,21 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
 
 
     public interface Listener {
-        void click(int click, int position);
+        void click(int click, int position, String coupon);
 
         void clickShare(String coupon, String store, String url);
     }
 
     Listener listener = new Listener() {
         @Override
-        public void click(int click, int position) {
+        public void click(int click, int position, String coupon) {
             click = click;
             position = position;
+            getSingleProduct("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "",position);
+
             if (click == 1) {
                 //open copyCouponLinear
-                showCopyCouponDialog();
+                getSingleCoupons("",position);
                 social();
             }
             if (click == 3) {
@@ -762,17 +913,26 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
             }
             if (click == 4) {
                 //openProductDialog
-                showProductDetailsDialog();
+                //check coupon
+//                Log.i("COO",coupon+"?");
+                if (coupon == null || coupon.equals("null") || coupon.isEmpty()) {
+                    showNoCouponProductDetailsDialog();
+                } else {
+                    showProductDetailsDialog();
+                }
             }
             if (click == 5) {
-                productPosition = position;
                 loginCheckDialog();
             }
         }
 
         //String coupon, String store, String url
         public void clickShare(String coupon, String store, String url) {
-            shareVia(coupon, store, url);
+            if (coupon.equals("no")) {
+                shareOfferVia(store, url);
+            } else {
+                shareVia(coupon, store, url);
+            }
         }
 
     };
@@ -791,6 +951,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         social3();
 
     }
+
     private void showSecondProductDetailsDialog() {
         final View view5 = secondProductDetailsDialogBinding.getRoot();
         secondShowProductDetailsDialog.setContentView(view5);
@@ -805,6 +966,26 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         social4();
         secondProductDetailsDialogBinding.yesActiveId.setOnClickListener(v7 -> rateDialog());
 
+    }
+
+    private void showNoCouponProductDetailsDialog() {
+        final View view5 = noCouponProductDetailsDialogBinding.getRoot();
+        showNoCouponDialog.setContentView(view5);
+        showNoCouponDialog.setCancelable(true);
+        showNoCouponDialog.show();
+        noCouponProductDetailsDialogBinding.cancelLogId.setOnClickListener(v8 -> showSecondCopyCouponDialog.cancel());
+        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+            noCouponProductDetailsDialogBinding.discountId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        } else {
+            noCouponProductDetailsDialogBinding.discountId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
+        social5();
+        noCouponProductDetailsDialogBinding.rateNwId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                supportUs();
+            }
+        });
     }
 
     private void showSecondCopyCouponDialog() {
