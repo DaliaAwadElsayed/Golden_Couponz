@@ -2,18 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_marginBottom="@dimen/_10sdp"
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:id="@+id/copyCouponLinear2Id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_10sdp"
             android:animateLayoutChanges="true"
             android:background="@drawable/bk_layout"
-            android:orientation="vertical"
-           >
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/slideDownCopyCoupon2Id"
@@ -56,6 +57,21 @@
                 android:layout_marginEnd="@dimen/_20sdp"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/shareId"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:background="@drawable/bk_notification_layout"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_share"
+                    app:tint="#1A2421" />
+
+                <LinearLayout
+                    android:layout_width="@dimen/_10sdp"
+                    android:layout_height="match_parent" />
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -63,6 +79,17 @@
                     android:layout_weight="5"
                     android:background="@drawable/dash_rec"
                     android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/copy2Id"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/bk_category"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:src="@drawable/ic_baseline_content_copy_24"
+                        app:tint="#1A2421" />
 
                     <TextView
                         android:id="@+id/couponValue2Id"
@@ -81,32 +108,8 @@
                         android:textSize="21sp"
                         tools:text="NADNNS" />
 
-                    <ImageView
-                        android:id="@+id/copy2Id"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/bk_category"
-                        android:paddingTop="@dimen/_10sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:src="@drawable/ic_baseline_content_copy_24"
-                        app:tint="#1A2421" />
+
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="@dimen/_10sdp"
-                    android:layout_height="match_parent" />
-
-                <ImageView
-                    android:id="@+id/shareId"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:background="@drawable/bk_notification_layout"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_share"
-                    app:tint="#1A2421" />
             </LinearLayout>
 
             <LinearLayout
@@ -208,8 +211,6 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:paddingBottom="@dimen/_10sdp"
-                    android:paddingTop="@dimen/_10sdp"
                     android:id="@+id/noActiveId"
                     style="@style/ButtonStyle"
                     android:layout_width="0dp"
@@ -218,6 +219,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/bk_notification_layout"
                     android:gravity="center"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
                     android:text="@string/didnt_work"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
@@ -297,5 +300,5 @@
 
             </LinearLayout>
         </LinearLayout>
-</ScrollView>
+    </ScrollView>
 </layout>

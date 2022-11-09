@@ -208,5 +208,9 @@
         android:id="@+id/productsFragment"
         android:name="com.goldencouponz.fragments.home.ProductsFragment"
         android:label="ProductsFragment" />
+    <fragment
+        android:id="@+id/whatsAppFragment"
+        android:name="com.goldencouponz.fragments.aboutgolden.WhatsAppFragment"
+        android:label="WhatsAppFragment" />
 
 </navigation>

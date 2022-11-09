@@ -50,7 +50,7 @@ public class ProductsViewModel extends ViewModel {
     BottomSheetDialog showNoCouponDialog;
     String youTube = "https://www.youtube.com/@goldencouponz";
     String snapChat = "https://www.snapchat.com/add/goldencouponz?share_id=9XqCMUv88XE&locale=ar-EG*/";
-    String instagram = "https://www.instagram.com/golden.couponz/";
+    String instagram = "https://www.insshowNoCouponProductDetailsDialogtagram.com/golden.couponz/";
     String facebook = "https://www.facebook.com/goldencouponzz/";
     ProductCatAdapter categoriesAdapter;
     NoCouponProductDetailsDialogBinding noCouponProductDetailsDialogBinding;

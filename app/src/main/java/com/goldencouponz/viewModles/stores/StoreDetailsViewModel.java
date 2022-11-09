@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,8 @@ import com.e.goldencouponz.databinding.ProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.SecondCopyCouponDialogBinding;
 import com.e.goldencouponz.databinding.SecondProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.StoreDetailsFragmentBinding;
-import com.goldencouponz.adapters.home.SlidersAdapter;
 import com.goldencouponz.adapters.stores.CopounzAdapter;
+import com.goldencouponz.adapters.stores.ProductSlidersAdapter;
 import com.goldencouponz.adapters.stores.ProductStoreAdapter;
 import com.goldencouponz.adapters.stores.ProductsCategoriesAdapter;
 import com.goldencouponz.adapters.stores.ProductsSubCategoriesAdapter;
@@ -62,7 +63,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
     Context context;
     int storeId, position;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
-    SlidersAdapter addsBannerAdapter;
+    ProductSlidersAdapter addsBannerAdapter;
     int interfaceSize;
     Timer timer;
     int currentPage = 0;
@@ -135,7 +136,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         });
 
         tabLayout();
-        addsBannerAdapter = new SlidersAdapter(sliderSize, context);
+        addsBannerAdapter = new ProductSlidersAdapter(sliderSize, context);
         final Handler handler = new Handler();
         final Runnable Update = () -> {
             if (currentPage < interfaceSize) {
@@ -406,6 +407,12 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                         storeDetailsFragmentBinding.storeCatId.setText(br.toString());
                         if (!response.body().getStore().getStoreSliders().isEmpty()) {
                             addsBannerAdapter.setSliders(response.body().getStore().getStoreSliders());
+                            addsBannerAdapter.setOnItemClickListener(new ProductSlidersAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View viewItem, int position, int storeId) {
+                                    //    getSingleCoupons();
+                                }
+                            });
                         }
                         if (!response.body().getStore().getStore_coupons().isEmpty()) {
                             CopounzAdapter categoriesAdapter = new CopounzAdapter(context, listener);
@@ -441,7 +448,8 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
             }
         });
     }
-    private void getSingleCoupons(String token,int position){
+
+    private void getSingleCoupons(String token, int position) {
         showCopyCouponDialog();
         String lang = GoldenNoLoginSharedPreference.getUserLanguage(context);
         String fcmToken = "";
@@ -586,7 +594,8 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         });
 
     }
-    private void getSingleProduct(String deviceToken, int country, String lang, String storeId, String catId, String subCatId,int productPosition) {
+
+    private void getSingleProduct(String deviceToken, int country, String lang, String storeId, String catId, String subCatId, int productPosition) {
         storeDetailsFragmentBinding.progress.setVisibility(View.VISIBLE);
         apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId).enqueue(new Callback<ApiResponse>() {
             @Override
@@ -674,7 +683,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                             secondProductDetailsDialogBinding.copy2Id.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Toast.makeText(context, R.string.code_copy, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, Html.fromHtml("<font><b>" + context.getResources().getString(R.string.code_copy) + "</b></font>"), Toast.LENGTH_SHORT).show();
                                     myClipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
                                     String text;
                                     text = secondProductDetailsDialogBinding.couponValueId.getText().toString();
@@ -692,8 +701,17 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                             secondProductDetailsDialogBinding.noActiveId.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    openUrl(response.body().getProducts().getData().get(productPosition).getVideoLink());
-
+                                    sendNoActive(secondProductDetailsDialogBinding.couponValueId.getText().toString(),
+                                            response.body().getProducts().getData().get(productPosition).getStore().getTitle(), response.body().getProducts().getData().get(productPosition).getStore().getWhatsapp()
+                                    );
+                                }
+                            });
+                            secondCopyCouponDialogBinding.noActiveId.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    sendNoActive(secondCopyCouponDialogBinding.couponValue2Id.getText().toString(),
+                                            response.body().getProducts().getData().get(productPosition).getStore().getTitle(),response.body().getProducts().getData().get(productPosition).getStore().getWhatsapp()
+                                    );
                                 }
                             });
                             ////////////////
@@ -729,7 +747,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                         text = secondCopyCouponDialogBinding.couponValue2Id.getText().toString();
                         myClip = ClipData.newPlainText("text", text);
                         myClipboard.setPrimaryClip(myClip);
-                        Toast.makeText(context, R.string.code_copy, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, Html.fromHtml("<font><b>" + context.getResources().getString(R.string.code_copy) + "</b></font>"), Toast.LENGTH_SHORT).show();
                         openUrl(url);
                     }
                 }
@@ -762,16 +780,17 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
     };
 
     private void openUrl(String url) {
-        Log.i("URL","?"+url);
-        if (url!=null){
-        if (url.contains("http://")||url.contains("https://")){
-        Uri uri = Uri.parse(url); // missing 'http://' will cause crashed
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        context.startActivity(intent);}
-        else {
-            Toast.makeText(context,"Wrong Url", Toast.LENGTH_SHORT).show();
-        }}else {
-            Toast.makeText(context,"Missing Url", Toast.LENGTH_SHORT).show();
+        Log.i("URL", "?" + url);
+        if (url != null) {
+            if (url.contains("http://") || url.contains("https://")) {
+                Uri uri = Uri.parse(url); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                context.startActivity(intent);
+            } else {
+                Toast.makeText(context, "Wrong Url", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(context, "Missing Url", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -805,8 +824,27 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         });
     }
 
+    private void sendNoActive(String code, String store,String phone) {
+        try {
+            Intent sendIntent = new Intent("android.intent.action.MAIN");
+            sendIntent.setAction(Intent.ACTION_VIEW);
+            sendIntent.setPackage("com.whatsapp");
+            String url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + context.getResources().getString(R.string.this_coupon) + " (" + code + ") " +
+                    context.getResources().getString(R.string.not_vaild) + " (" + store + "). ";
+            sendIntent.setData(Uri.parse(url));
+            context.startActivity(sendIntent);
+
+        } catch (Exception e) {
+            Log.i("EXCEPTIONn", e.toString());
+            Toast.makeText(context, "WhatsApp Not Install", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
     private void shareOfferVia(String store, String url) {
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        Intent sharingIntent = new Intent(Intent.ACTION_SENDTO);
         sharingIntent.setType("text/plain");
         String shareBody = store
                 + " " + url;
@@ -896,11 +934,11 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         public void click(int click, int position, String coupon) {
             click = click;
             position = position;
-            getSingleProduct("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "",position);
+            getSingleProduct("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "", position);
 
             if (click == 1) {
                 //open copyCouponLinear
-                getSingleCoupons("",position);
+                getSingleCoupons("", position);
                 social();
             }
             if (click == 3) {
@@ -942,7 +980,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         showProductDetailsDialog.setContentView(view4);
         showProductDetailsDialog.setCancelable(true);
         showProductDetailsDialog.show();
-        productDetailsDialogBinding.cancelLogId.setOnClickListener(v1 -> showSecondCopyCouponDialog.cancel());
+        productDetailsDialogBinding.cancelLogId.setOnClickListener(v1 -> showProductDetailsDialog.cancel());
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             productDetailsDialogBinding.discountId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
         } else {
@@ -957,7 +995,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         secondShowProductDetailsDialog.setContentView(view5);
         secondShowProductDetailsDialog.setCancelable(true);
         secondShowProductDetailsDialog.show();
-        secondProductDetailsDialogBinding.cancelLogId.setOnClickListener(v8 -> showSecondCopyCouponDialog.cancel());
+        secondProductDetailsDialogBinding.cancelLogId.setOnClickListener(v8 -> secondShowProductDetailsDialog.cancel());
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             secondProductDetailsDialogBinding.discountId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
         } else {
@@ -973,7 +1011,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         showNoCouponDialog.setContentView(view5);
         showNoCouponDialog.setCancelable(true);
         showNoCouponDialog.show();
-        noCouponProductDetailsDialogBinding.cancelLogId.setOnClickListener(v8 -> showSecondCopyCouponDialog.cancel());
+        noCouponProductDetailsDialogBinding.cancelLogId.setOnClickListener(v8 -> showNoCouponDialog.cancel());
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
             noCouponProductDetailsDialogBinding.discountId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
         } else {
@@ -986,6 +1024,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                 supportUs();
             }
         });
+
     }
 
     private void showSecondCopyCouponDialog() {

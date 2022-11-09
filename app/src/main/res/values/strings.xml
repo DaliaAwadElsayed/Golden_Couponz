@@ -115,7 +115,7 @@
     <string name="recommend_up">Recommend us to others by rating us on the App Store</string>
     <string name="rate_us">Rate us now</string>
     <string name="no_thank_you">No thank you</string>
-    <string name="code_copy">Code Copied</string>
+    <string name="code_copy">Code Copied Successfully</string>
     <string name="share_msg_part1">Get a big discount using the discount code</string>
     <string name="share_msg_part2">when ordering from</string>
     <string name="share_via">Share Via</string>
@@ -123,6 +123,7 @@
     <string name="sure_log_out">Are you sure you want to log out of the application?</string>
     <string name="cancel_label">Cancel</string>
     <string name="must_be_sing_in">You must be sign in</string>
+    <string name="nothing_coupons_added">Nothing has been added to your favourites yet Choose your favorite coupons to find them in one place</string>
     <string name="nothing_offers_added">Nothing has been added to your favourites yet Choose your favorite stores to find them in one place</string>
     <string name="create_account_active_list">Create your account to activate the list of your favorite stores to be able to receive special notifications</string>
     <string name="current_price">Current price</string>
@@ -136,5 +137,10 @@
     <string name="update_now">Update now</string>
     <string name="your_favorite_store">Your favorite stores</string>
     <string name="choose_favorite_store">Choose your favorite stores to be aware of their discount codes first</string>
+    <string name="this_coupon">This Coupon</string>
+    <string name="not_vaild">is not valid for the store</string>
+    <string name="whatsapp_connect">WhatsApp contact</string>
+    <string name="notification_label">Notifications</string>
+    <string name="no_notifications">No notifications received yet!!</string>
 
 </resources>

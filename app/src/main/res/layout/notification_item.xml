@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+android:background="@drawable/bk_rate_layout"
+        android:id="@+id/rewardLinearId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_6sdp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/showId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_8sdp"
+            android:src="@drawable/ic_active_circle"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/storeImgId"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginEnd="@dimen/_4sdp"
+                    app:civ_border_color="@color/grey"
+                    app:civ_border_width="0.5dp"
+                    tools:src="@drawable/ic_no_notification" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginEnd="@dimen/_4sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/storeNameId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        android:layout_weight="500"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium_text_size"
+                        android:textStyle="bold"
+                        tools:text="EGYPT" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        android:layout_weight="500"
+                        android:text="@string/coupons_for_count_label"
+                        android:textColor="#7A7A7A"
+                        android:textSize="@dimen/small_text_size" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/small_margin"
+                android:layout_marginEnd="@dimen/_4sdp"
+                android:background="@drawable/bk_notification_layout"
+                android:orientation="horizontal"
+                android:padding="@dimen/_2sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableStart="@drawable/ic_history"
+                    android:drawablePadding="@dimen/_2sdp"
+                    android:gravity="center"
+                    android:text="@string/last_used_from"
+                    android:textColor="#7a7a7a"
+                    android:textSize="6sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/hoursId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginEnd="@dimen/_4sdp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="6sp"
+                    android:textStyle="bold"
+                    tools:text="11 hours" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:background="#E5E5E5"
+            android:outlineSpotShadowColor="#EFEFEF" />
+    </LinearLayout>
+</layout>

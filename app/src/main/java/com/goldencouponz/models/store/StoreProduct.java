@@ -11,6 +11,9 @@ public class StoreProduct {
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("whatsapp")
+    @Expose
+    private String whatsapp;
     @SerializedName("store_id")
     @Expose
     private Integer storeId;
@@ -70,6 +73,14 @@ public class StoreProduct {
     private List<StoreProduct> data = null;
     public Integer getId() {
         return id;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
     }
 
     public Store getStore() {

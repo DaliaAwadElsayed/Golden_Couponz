@@ -75,13 +75,29 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle extras = getIntent().getExtras();
+         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String value = extras.getString("language");
             String country = GoldenNoLoginSharedPreference.getUserCountryName(MainActivity.this);
             String currency = GoldenNoLoginSharedPreference.getUserCurrency(MainActivity.this);
             int id = GoldenNoLoginSharedPreference.getUserCountryId(MainActivity.this);
+            Log.i("VALUE?", value+"//" +currency+"/"+country+ "?");
             Log.i("COUNTRY", currency + "");
+            GoldenNoLoginSharedPreference.saveUserCountry(MainActivity.this, 0, id, country,currency);
+            Local.Companion.updateResources(this);
+            LocaleHelper.setLocale(this, value);
+            if (value.equals("ar") || GoldenNoLoginSharedPreference.getUserLanguage(this).equals("ar")) {
+                getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            } else if (value.equals("en") || GoldenNoLoginSharedPreference.getUserLanguage(this).equals("en")) {
+                getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
+        }
+        else {
+            String value =  GoldenNoLoginSharedPreference.getSelectedLanguageValue(MainActivity.this);
+            String country = GoldenNoLoginSharedPreference.getUserCountryName(MainActivity.this);
+            String currency = GoldenNoLoginSharedPreference.getUserCurrency(MainActivity.this);
+            int id = GoldenNoLoginSharedPreference.getUserCountryId(MainActivity.this);
+            Log.i("VALUE??", value+"//" +currency+"/"+country+ "?");
             GoldenNoLoginSharedPreference.saveUserCountry(MainActivity.this, 0, id, country,currency);
             Local.Companion.updateResources(this);
             LocaleHelper.setLocale(this, value);
@@ -94,8 +110,15 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         navController = Navigation.findNavController(this, R.id.home_nav_fragment);
         bottomClickListener();
+        activityMainBinding.relativBottomId.getActionView().findViewById(R.id.button_add).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.whatsAppFragment);
+            }
+        });
         GoldenSharedPreference.setActivity(getApplication());
         GoldenNoLoginSharedPreference.setActivity(getApplication());
+
     }
 
 

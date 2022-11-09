@@ -14,6 +14,9 @@ public class  StoreCoupons {
     @SerializedName("title")
     @Expose
     private String title;
+    @SerializedName("whatsapp")
+    @Expose
+    private String whatsapp;
     @SerializedName("details")
     @Expose
     private String details;
@@ -49,6 +52,14 @@ public class  StoreCoupons {
     private Store store;
     public Integer getId() {
         return id;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
     }
 
     public Store getStore() {

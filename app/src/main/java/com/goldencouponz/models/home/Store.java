@@ -51,6 +51,9 @@ public class Store {
     @SerializedName("store_products")
     @Expose
     private List<StoreProduct> store_products = null;
+    @SerializedName("whatsapp")
+    @Expose
+    private String whatsapp;
     @SerializedName("ids")
     @Expose
     private List<Integer> ids = null;
@@ -116,6 +119,14 @@ public class Store {
 
     public String getCover() {
         return cover;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
     }
 
     public void setCover(String cover) {

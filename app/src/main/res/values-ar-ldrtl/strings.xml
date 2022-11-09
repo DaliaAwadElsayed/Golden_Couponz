@@ -116,7 +116,7 @@
     <string name="recommend_up">أوصي بنا للآخرين من خلال تقييمنا على متجر التطبيقات</string>
     <string name="rate_us">قيمنا الآن</string>
     <string name="no_thank_you">لا شكرا</string>
-    <string name="code_copy">تم نسخ الكود</string>
+    <string name="code_copy">تم نسخ الكود بنجاح</string>
     <string name="share_msg_part1">احصل على خصم كبير بستخدام كود الخصم</string>
     <string name="share_msg_part2">"عند طلب الشراء من "</string>
     <string name="share_via">المشاركة عبر</string>
@@ -126,6 +126,7 @@
     <string name="must_be_sing_in">يجب تسجيل الدخول</string>
     <string name="create_account_active_list">"قم بإنشاء حسابك لتفعيل قائمة المتاجر المفضلة لديك لتكون قادر علي استقبال اشعارات خاصة بها "</string>
     <string name="nothing_offers_added">لم يتم اضافة أي شئ للمفضلة بعد قم بإختيار متاجرك المفضلة لتجدها بمكان واحد</string>
+    <string name="nothing_coupons_added">لم يتم اضافة أي شئ للمفضلة بعد قم بإختيار كوبوناتك المفضلة لتجدها بمكان واحد</string>
     <string name="current_price">السعر الحالي</string>
     <string name="price_after">السعر بعد استخدام الكوبون</string>
     <string name="copy_code_go_to_store">انسخ الكود واذهب للمتجر وأضف المنتج للسلة وادخل الكود للحصول علي الخصم</string>
@@ -137,7 +138,11 @@
     <string name="update_now">التحديث الآن</string>
     <string name="your_favorite_store">متاجرك المفضلة</string>
     <string name="choose_favorite_store">إختر متاجرك المفضلة لتكون علي دراية بأكواد الخصم الخاصة بها أول بأول</string>
-
+    <string name="this_coupon">هذا الكود</string>
+    <string name="not_vaild">غير فعال الخاص بالمتجر</string>
+    <string name="whatsapp_connect">تواصل واتساب</string>
+    <string name="notification_label">الاٍشعارات</string>
+    <string name="no_notifications">لم يتم استقبال أي تنبيهات بعد!!</string>
 
 
 </resources>

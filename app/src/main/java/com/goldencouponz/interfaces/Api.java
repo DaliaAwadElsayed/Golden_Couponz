@@ -5,6 +5,7 @@ import com.goldencouponz.models.home.Store;
 import com.goldencouponz.models.user.ChangePassword;
 import com.goldencouponz.models.user.UserRegisteration;
 import com.goldencouponz.models.wrapper.ApiResponse;
+import com.goldencouponz.models.wrapper.WhatsApp;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -101,5 +102,11 @@ public interface Api {
 
     //api/fav-stores
     @POST("api/fav-stores")
-    Call<ApiResponse> favMultiStore(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage,@Body Store userRegisteration);
+    Call<ApiResponse> favMultiStore(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Body Store userRegisteration);
+
+    //{{baseUrl}}/api/whatsapp-messages
+    @GET("api/whatsapp-messages")
+    Call<WhatsApp> getWhatsApp(@Header("Accept-Language") String AcceptLanguage);
+
 }
+

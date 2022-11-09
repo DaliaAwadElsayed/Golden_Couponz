@@ -23,6 +23,7 @@ import com.e.goldencouponz.databinding.ProfileFragmentBinding;
 import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.adapters.countries.CountriesAdapter;
 import com.goldencouponz.interfaces.Api;
+import com.goldencouponz.models.appsetting.Country;
 import com.goldencouponz.models.user.UserRegisteration;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
@@ -31,6 +32,8 @@ import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,7 +75,11 @@ public class ProfileViewModel extends ViewModel {
         Log.i("countryChangeName", GoldenNoLoginSharedPreference.getUserCountryName(context) + "??");
         Log.i("countryChangeId", GoldenNoLoginSharedPreference.getUserCountryId(context) + "??");
         Log.i("currencyChangeId", GoldenNoLoginSharedPreference.getUserCurrency(context) + "??");
-
+        if (GoldenNoLoginSharedPreference.getSelectedLanguageValue(context).equals("en")) {
+            getCountryAndCurrencyWithId("en");
+        } else {
+            getCountryAndCurrencyWithId("ar");
+        }
         profileFragmentBinding.countryChangeId.setText(GoldenNoLoginSharedPreference.getUserCountryName(context));
         profileFragmentBinding.countryNumId.setText("" + GoldenNoLoginSharedPreference.getUserCountryId(context));
         profileFragmentBinding.currencyNumId.setText("" + GoldenNoLoginSharedPreference.getUserCurrency(context));
@@ -104,6 +111,53 @@ public class ProfileViewModel extends ViewModel {
         showLogOutDialog.show();
 
         logOut();
+    }
+
+    public Country findMemberByName(int id, List<Country> countries) {
+        // go through list of members and compare name with given name
+
+        for (Country member : countries) {
+            if (member.getId().equals(id)) {
+                Log.i("MEMBER", member.getTitle() + "?");
+                profileFragmentBinding.countryChangeId.setText(member.getTitle());
+                profileFragmentBinding.currencyNumId.setText(member.getCurrency());
+                return member; // return member when name found
+            }
+        }
+        return null; // return null when no member with given name could be found
+    }
+
+    private void getCountryAndCurrencyWithId(String lang) {
+        int countryId = GoldenNoLoginSharedPreference.getUserCountryId(context);
+        countriesAdapter = new CountriesAdapter(context);
+        apiInterface.getCountries(lang).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getSuccess() && response.body() != null) {
+                        profileFragmentBinding.progress.setVisibility(View.GONE);
+                        if (!response.body().getCountries().isEmpty()) {
+                            countriesAdapter.setCountries(response.body().getCountries());
+                            findMemberByName(countryId, response.body().getCountries());
+
+                            countriesAdapter.setOnItemClickListener(new CountriesAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View viewItem, int position, int id, String code, String currency) {
+
+                                }
+                            });
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+            }
+        });
+
     }
 
     private void showProfileCountryDialog() {
@@ -168,7 +222,6 @@ public class ProfileViewModel extends ViewModel {
                             profileCountriesDialogBinding.homeRecyclerView.setVisibility(View.VISIBLE);
                             countriesAdapter.setCountries(response.body().getCountries());
                             profileCountriesDialogBinding.homeRecyclerView.setAdapter(countriesAdapter);
-
                             countriesAdapter.setOnItemClickListener(new CountriesAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View viewItem, int position, int id, String code, String currency) {
@@ -333,14 +386,14 @@ public class ProfileViewModel extends ViewModel {
             langDialogBinding.checkArabicId.setVisibility(View.VISIBLE);
         }
         langDialogBinding.englishRelativeId.setOnClickListener(view -> {
-            Log.i("clickss","SAVED");
+            Log.i("clickss", "SAVED");
             GoldenNoLoginSharedPreference.saveUserLang(context, "en");
             LocaleHelper.setLocale(context, "en");
             Local.Companion.updateResources(context);
             resetApplication();
         });
         langDialogBinding.arabicRelativeId.setOnClickListener(view -> {
-            Log.i("clickss","SAVEDDD");
+            Log.i("clickss", "SAVEDDD");
             GoldenNoLoginSharedPreference.saveUserLang(context, "ar");
             LocaleHelper.setLocale(context, "ar");
             Local.Companion.updateResources(context);

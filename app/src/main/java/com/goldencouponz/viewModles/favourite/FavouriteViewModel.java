@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ public class FavouriteViewModel extends ViewModel {
     String facebook = "https://www.facebook.com/goldencouponzz/";
     private ClipboardManager myClipboard;
     private ClipData myClip;
+
     public void init(FragmentFavouriteBinding fragmentFavouriteBinding, CopyCouponDialogBinding copyCouponDialogBinding,
                      SecondCopyCouponDialogBinding secondCopyCouponDialogBinding, Context context) {
         this.context = context;
@@ -128,7 +130,7 @@ public class FavouriteViewModel extends ViewModel {
             // 5 for copy coupon
             if (click == 5) {
                 getSingleCoupon("Bearer" + GoldenSharedPreference.getToken(context),
-                        GoldenNoLoginSharedPreference.getUserLanguage(context),position);
+                        GoldenNoLoginSharedPreference.getUserLanguage(context), position);
             }
 
 
@@ -148,6 +150,7 @@ public class FavouriteViewModel extends ViewModel {
 
         }
     };
+
     private void shareOfferVia(String store, String url) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
@@ -157,6 +160,7 @@ public class FavouriteViewModel extends ViewModel {
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.share_via)));
     }
+
     public interface Listener {
         void click(int click, int position);
 
@@ -165,7 +169,7 @@ public class FavouriteViewModel extends ViewModel {
         void click(int i);
     }
 
-    private void getSingleCoupon(String token, String lang,int position) {
+    private void getSingleCoupon(String token, String lang, int position) {
         showCopyCouponDialog();
         apiInterface.getFavouriteCopounz(token, lang).enqueue(new Callback<ApiResponse>() {
             @Override
@@ -201,11 +205,13 @@ public class FavouriteViewModel extends ViewModel {
                                     openUrl(response.body().getCoupons().get(position).getVideoFile());
                                 }
                             });
+
                             secondCopyCouponDialogBinding.noActiveId.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    openUrl(response.body().getCoupons().get(position).getVideoFile());
-
+                                    sendNoActive(secondCopyCouponDialogBinding.couponValue2Id.getText().toString(),
+                                            response.body().getProducts().getData().get(position).getStore().getTitle(),response.body().getProducts().getData().get(position).getStore().getWhatsapp()
+                                    );
                                 }
                             });
                             secondCopyCouponDialogBinding.shareId.setOnClickListener(new View.OnClickListener() {
@@ -231,6 +237,23 @@ public class FavouriteViewModel extends ViewModel {
         });
 
     }
+
+    private void sendNoActive(String code, String store,String phone) {
+        try {
+            Intent sendIntent = new Intent("android.intent.action.MAIN");
+            sendIntent.setAction(Intent.ACTION_VIEW);
+            sendIntent.setPackage("com.whatsapp");
+            String url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + context.getResources().getString(R.string.this_coupon) + " (" + code + ") " +
+                    context.getResources().getString(R.string.not_vaild) + " (" + store + "). ";
+            sendIntent.setData(Uri.parse(url));
+            context.startActivity(sendIntent);
+
+        } catch (Exception e) {
+            Log.i("EXCEPTIONn", e.toString());
+            Toast.makeText(context, "WhatsApp Not Install", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void shareVia(String coupon, String store, String url) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
@@ -253,7 +276,7 @@ public class FavouriteViewModel extends ViewModel {
                         text = secondCopyCouponDialogBinding.couponValue2Id.getText().toString();
                         myClip = ClipData.newPlainText("text", text);
                         myClipboard.setPrimaryClip(myClip);
-                        Toast.makeText(context, R.string.code_copy, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, Html.fromHtml("<font><b>" + context.getResources().getString(R.string.code_copy) + "</b></font>"), Toast.LENGTH_SHORT).show();
                         openUrl(url);
                     }
                 }
@@ -281,7 +304,7 @@ public class FavouriteViewModel extends ViewModel {
                             copounzFavAdapter.setCoupons(response.body().getCoupons());
                             fragmentFavouriteBinding.couponzRecyclerId.setAdapter(copounzFavAdapter);
                         } else {
-                            noFavCopounzYet();
+                            noFavCopounzYet(context.getResources().getString(R.string.nothing_coupons_added));
                             fragmentFavouriteBinding.progress.setVisibility(View.GONE);
                         }
                     }
@@ -312,7 +335,7 @@ public class FavouriteViewModel extends ViewModel {
                             storesFavAdapter.setStores(response.body().getStores());
                             fragmentFavouriteBinding.storesRecyclerId.setAdapter(storesFavAdapter);
                         } else {
-                            noFavCopounzYet();
+                            noFavCopounzYet(context.getResources().getString(R.string.nothing_offers_added));
                             fragmentFavouriteBinding.progress.setVisibility(View.GONE);
                         }
                     }
@@ -443,11 +466,12 @@ public class FavouriteViewModel extends ViewModel {
         }
     }
 
-    private void noFavCopounzYet() {
+    private void noFavCopounzYet(String text) {
         fragmentFavouriteBinding.noLoginLinearId.setVisibility(View.GONE);
         fragmentFavouriteBinding.storesLinearId.setVisibility(View.GONE);
         fragmentFavouriteBinding.couponzLinearId.setVisibility(View.GONE);
         fragmentFavouriteBinding.noCopounzLinearId.setVisibility(View.VISIBLE);
+        fragmentFavouriteBinding.couponOrStore.setText(text);
     }
 
     private void pleaseLogin() {

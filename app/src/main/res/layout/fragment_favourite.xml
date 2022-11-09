@@ -183,10 +183,10 @@
                     android:src="@drawable/ic_no_fav_copounz" />
 
                 <TextView
+                    android:id="@+id/couponOrStore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_180sdp"
-                    android:text="@string/nothing_offers_added"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textFontWeight="600"
