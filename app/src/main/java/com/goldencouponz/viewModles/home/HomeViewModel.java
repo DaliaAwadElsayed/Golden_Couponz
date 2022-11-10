@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -24,6 +26,7 @@ import com.goldencouponz.adapters.home.SeeAllAdapter;
 import com.goldencouponz.adapters.home.SlidersAdapter;
 import com.goldencouponz.adapters.home.StoresGridAdapter;
 import com.goldencouponz.adapters.home.StoresListAdapter;
+import com.goldencouponz.adapters.notification.NotificationAdapter;
 import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
@@ -61,6 +64,8 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
     BottomSheetDialog seeAllDialog;
     LoginCheckDialogBinding loginCheckDialogBinding;
     SeeAllDialogBinding seeAllDialogBinding;
+    Animation shake;
+    NotificationAdapter notificationAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -70,6 +75,47 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
             homeFragmentBinding.viewPager.setCurrentItem(0, true);
         }
 
+    }
+
+    private void notification() {
+        apiInterface.userGetNotification("Bearer" + GoldenSharedPreference.getToken(context)).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.code() == 200 && response.body() != null) {
+                        if (!response.body().getNotifications().isEmpty()) {
+                            notificationAdapter = new NotificationAdapter(context);
+                            notificationAdapter.setStores(response.body().getNotifications());
+                            int size = response.body().getNotifications().size();
+                            int count = 0;
+                            if (size > 0) {
+                                for (int i = 0; i < size; i++) {
+                                    if (response.body().getNotifications().get(i).getReadAt() == null) {
+                                        count++;
+                                        homeFragmentBinding.notificationBadge.setText(""+count);
+                                        homeFragmentBinding.notificationBadge.setVisibility(View.VISIBLE);
+                                        shake = AnimationUtils.loadAnimation(context, R.anim.shake);
+                                        homeFragmentBinding.notificationId.startAnimation(shake);
+                                    }
+                                }
+                                homeFragmentBinding.notificationBadge.setVisibility(View.GONE);
+
+                            }
+
+                        } else {
+                            homeFragmentBinding.notificationBadge.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.i("onFailure", t.toString());
+                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     private void addsSlider() {
@@ -136,6 +182,13 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         this.homeFragmentBinding = homeFragmentBinding;
         loginCheckDialog = new BottomSheetDialog(context);
         seeAllDialog = new BottomSheetDialog(context);
+
+        notification();
+        if (GoldenSharedPreference.isLoggedIn(context)) {
+            homeFragmentBinding.notificationLayoutId.setVisibility(View.VISIBLE);
+        } else {
+            homeFragmentBinding.notificationLayoutId.setVisibility(View.GONE);
+        }
         homeFragmentBinding.seeAllId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,6 +226,12 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         homeFragmentBinding.viewPager.addOnPageChangeListener(this);
         homeFragmentBinding.pageIndicatorView.setAnimationType(AnimationType.SWAP);
         addsSlider();
+        homeFragmentBinding.notificationId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.notificationFragment);
+            }
+        });
         homeFragmentBinding.appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @SuppressLint("RestrictedApi")
             @Override
@@ -480,9 +539,9 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
             click = click;
             if (click == 1) {
                 if (GoldenSharedPreference.isLoggedIn(context)) {
-                    storesList("Bearer" + GoldenSharedPreference.getToken(context), GoldenNoLoginSharedPreference.getSelectedLanguageValue(context), 0);
+                    storesList("Bearer" + GoldenSharedPreference.getToken(context), GoldenNoLoginSharedPreference.getUserLanguage(context), 0);
                 } else {
-                    storesList("", GoldenNoLoginSharedPreference.getSelectedLanguageValue(context), 0);
+                    storesList("", GoldenNoLoginSharedPreference.getUserLanguage(context), 0);
 
                 }
             }

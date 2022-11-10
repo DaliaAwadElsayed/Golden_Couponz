@@ -5,6 +5,7 @@
     tools:context="com.goldencouponz.fragments.authentication.RegisterationFragment">
 
     <LinearLayout
+        android:backgroundTint="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -35,12 +36,20 @@
                 android:src="@drawable/ic_baseline_keyboard_backspace_24" />
 
         </androidx.appcompat.widget.Toolbar>
+
         <LinearLayout
             android:id="@+id/storesLinearId"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:visibility="gone" />
 
 
             <androidx.core.widget.NestedScrollView
@@ -56,8 +65,8 @@
                         android:id="@+id/storesRecyclerId"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"
                         android:layout_marginTop="@dimen/_4sdp"
+                        android:layout_weight="1"
                         android:nestedScrollingEnabled="false"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         tools:listitem="@layout/notification_item" />
@@ -68,15 +77,16 @@
 
             </androidx.core.widget.NestedScrollView>
         </LinearLayout>
+
         <RelativeLayout
-            android:visibility="gone"
             android:id="@+id/noNotificationId"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_20sdp"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/notiIconId"

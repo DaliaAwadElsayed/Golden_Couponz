@@ -11,7 +11,7 @@ import java.util.*
 class Local {
     companion object {
         fun updateResources(context: Context) {
-            val language: String? = GoldenNoLoginSharedPreference.getSelectedLanguageValue(context)
+            val language: String? = GoldenNoLoginSharedPreference.getUserLanguage(context)
             val locale = Locale(language!!)
             Locale.setDefault(locale)
             val res: Resources = context.resources

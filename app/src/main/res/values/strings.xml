@@ -142,5 +142,11 @@
     <string name="whatsapp_connect">WhatsApp contact</string>
     <string name="notification_label">Notifications</string>
     <string name="no_notifications">No notifications received yet!!</string>
+    <string name="previous_research">Previous research</string>
+    <string name="delete_all">Delete all</string>
+    <string name="delete_acc">Delete Account</string>
+    <string name="delte_acc_details">This Will permanently erase your account details.</string>
+    <string name="delete_my_acc">Delete My Account</string>
+    <string name="account_deleted">Account deleted.</string>
 
 </resources>

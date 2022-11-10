@@ -383,8 +383,9 @@ public class ProductsViewModel extends ViewModel {
                             secondProductDetailsDialogBinding.noActiveId.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    openUrl(response.body().getProducts().getData().get(position).getVideoLink());
-
+                                    sendNoActive(secondProductDetailsDialogBinding.couponValueId.getText().toString(),
+                                            response.body().getProducts().getData().get(position).getStore().getTitle(), response.body().getProducts().getData().get(position).getWhatsapp()
+                                    );
                                 }
                             });
                             ////////////////
@@ -412,14 +413,27 @@ public class ProductsViewModel extends ViewModel {
     private void shareVia(String coupon, String store, String url) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = context.getResources().getString(R.string.share_msg_part1) + "(" + coupon + ")" +
-                context.getResources().getString(R.string.share_msg_part2) + "(" + store +
-                ")" + context.getResources().getString(R.string.click_link) + " " + url;
+        String shareBody = context.getResources().getString(R.string.share_msg_part1) +  "\"" + coupon +  "\"" +
+                context.getResources().getString(R.string.share_msg_part2) +  "\"" + store +
+                "\"" + context.getResources().getString(R.string.click_link) + " " + url;
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.share_via)));
     }
+    private void sendNoActive(String code, String store,String phone) {
+        try {
+            Intent sendIntent = new Intent("android.intent.action.MAIN");
+            sendIntent.setAction(Intent.ACTION_VIEW);
+            sendIntent.setPackage("com.whatsapp");
+            String url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + context.getResources().getString(R.string.this_coupon) +  "\"" + code +  "\"" +
+                    context.getResources().getString(R.string.not_vaild) +  "\"" + store +  "\"";
+            sendIntent.setData(Uri.parse(url));
+            context.startActivity(sendIntent);
 
+        } catch (Exception e) {
+            Log.i("EXCEPTIONn", e.toString());
+            Toast.makeText(context, "WhatsApp Not Install", Toast.LENGTH_SHORT).show();
+        }}
     private void categories(String lang) {
         productsFragmentBinding.progress.setVisibility(View.VISIBLE);
         apiInterface.getCategories(lang, "deviceToken", 0).enqueue(new Callback<ApiResponse>() {
@@ -437,7 +451,7 @@ public class ProductsViewModel extends ViewModel {
                                 public void onItemClick(View viewItem, int position, int categoryId) {
                                     productsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
 //                                    homeFragmentBinding.allId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
-                                    subCategory(categoryId, GoldenNoLoginSharedPreference.getSelectedLanguageValue(context));
+                                    subCategory(categoryId, GoldenNoLoginSharedPreference.getUserLanguage(context));
                                     getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
                                             "", String.valueOf(categoryId), "");
 

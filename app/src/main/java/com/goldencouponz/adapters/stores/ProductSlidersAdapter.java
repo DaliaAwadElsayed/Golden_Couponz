@@ -24,7 +24,7 @@ public class ProductSlidersAdapter extends PagerAdapter {
     Context context;
     ProductSlidersAdapter.OnItemClickListener listener;
     public interface OnItemClickListener {
-        void onItemClick(View viewItem, int position, int storeId);
+        void onItemClick(View viewItem, int position);
     }
 
     public void setOnItemClickListener(ProductSlidersAdapter.OnItemClickListener listener) {
@@ -69,7 +69,7 @@ public class ProductSlidersAdapter extends PagerAdapter {
         layoutBinding.viewPagerItemImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(layoutBinding.getRoot(),position,sliders.get(position).getStoreCoupons().get(position).getId());
+                listener.onItemClick(layoutBinding.getRoot(),position);
             }
         });
 

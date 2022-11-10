@@ -9,6 +9,7 @@ import com.goldencouponz.models.wrapper.WhatsApp;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -107,6 +108,22 @@ public interface Api {
     //{{baseUrl}}/api/whatsapp-messages
     @GET("api/whatsapp-messages")
     Call<WhatsApp> getWhatsApp(@Header("Accept-Language") String AcceptLanguage);
+
+    //api/delete-account
+    @DELETE("api/delete-account")
+    Call<ApiResponse> deleteAccount(@Header("Authorization") String authHeader);
+
+    //api/notifications
+    @GET("api/notifications")
+    Call<ApiResponse> userGetNotification(@Header("Authorization") String authHeader);
+
+    //api/read-single-notifications/68b45b1d-d42c-4506-9414-89906f991f24
+    @GET("api/read-single-notifications/{id}")
+    Call<ApiResponse> readNotification(@Header("Authorization") String authHeader, @Path("id") String id);
+
+    //{{baseUrl}}/api/delete-single-notifications/ab7e7483-df27-4e87-8ca8-e5518cd24c76
+    @GET("api/delete-single-notifications/{id}")
+    Call<ApiResponse> deleteNotification(@Header("Authorization") String authHeader, @Path("id") String id);
 
 }
 

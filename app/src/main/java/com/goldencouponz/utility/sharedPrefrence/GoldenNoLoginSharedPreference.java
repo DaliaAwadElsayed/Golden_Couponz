@@ -78,9 +78,7 @@ public class GoldenNoLoginSharedPreference {
                 .getString(LANG_KEY, "");
     }
 
-    public static String getSelectedLanguageValue(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(LANG_KEY, "ar");
-    }
+
 
 
 }

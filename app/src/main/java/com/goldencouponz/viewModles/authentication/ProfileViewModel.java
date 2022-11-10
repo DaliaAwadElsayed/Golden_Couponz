@@ -75,7 +75,7 @@ public class ProfileViewModel extends ViewModel {
         Log.i("countryChangeName", GoldenNoLoginSharedPreference.getUserCountryName(context) + "??");
         Log.i("countryChangeId", GoldenNoLoginSharedPreference.getUserCountryId(context) + "??");
         Log.i("currencyChangeId", GoldenNoLoginSharedPreference.getUserCurrency(context) + "??");
-        if (GoldenNoLoginSharedPreference.getSelectedLanguageValue(context).equals("en")) {
+        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
             getCountryAndCurrencyWithId("en");
         } else {
             getCountryAndCurrencyWithId("ar");
@@ -118,9 +118,10 @@ public class ProfileViewModel extends ViewModel {
 
         for (Country member : countries) {
             if (member.getId().equals(id)) {
-                Log.i("MEMBER", member.getTitle() + "?");
+                Log.i("MEMBER", member.getTitle() + "//" + member.getCurrency() + "?");
                 profileFragmentBinding.countryChangeId.setText(member.getTitle());
                 profileFragmentBinding.currencyNumId.setText(member.getCurrency());
+                GoldenNoLoginSharedPreference.saveUserCountry(context, 0, id, profileFragmentBinding.countryChangeId.getText().toString(), profileFragmentBinding.currencyNumId.getText().toString());
                 return member; // return member when name found
             }
         }
@@ -196,6 +197,13 @@ public class ProfileViewModel extends ViewModel {
             @Override
             public void onClick(View v) {
                 showEditProfileDialog.dismiss();
+            }
+        });
+        editProfileDialogBinding.deleteAccountId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditProfileDialog.dismiss();
+                Navigation.findNavController(profileFragmentBinding.getRoot()).navigate(R.id.deleteAccountFragment);
             }
         });
     }

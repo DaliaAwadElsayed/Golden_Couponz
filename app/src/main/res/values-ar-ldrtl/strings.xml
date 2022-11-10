@@ -143,6 +143,12 @@
     <string name="whatsapp_connect">تواصل واتساب</string>
     <string name="notification_label">الاٍشعارات</string>
     <string name="no_notifications">لم يتم استقبال أي تنبيهات بعد!!</string>
+    <string name="previous_research">بحوث سابقة</string>
+    <string name="delete_all">حذف الكل</string>
+    <string name="delete_acc">حذف الحساب</string>
+    <string name="delete_my_acc">حذف حسابي</string>
+    <string name="delte_acc_details">"سيؤدي هذا إلى مسح تفاصيل حسابك بشكل دائم. "</string>
+    <string name="account_deleted">تم حذف الحساب.</string>
 
 
 </resources>

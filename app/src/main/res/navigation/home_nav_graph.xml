@@ -65,6 +65,13 @@
         android:label="home_fragment"
         tools:layout="@layout/home_fragment">
         <action
+            android:id="@+id/notificationFragment"
+            app:destination="@id/notificationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
             android:id="@+id/storeDetailsFragment"
             app:destination="@id/storeDetailsFragment"
             app:enterAnim="@anim/slide_in_right"
@@ -123,6 +130,13 @@
         android:name="com.goldencouponz.fragments.authentication.ProfileFragment"
         android:label="profile_fragment"
         tools:layout="@layout/profile_fragment">
+        <action
+            android:id="@+id/deleteAccountFragment"
+            app:destination="@id/deleteAccountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/aboutFragment"
             app:destination="@id/aboutFragment"
@@ -207,10 +221,56 @@
     <fragment
         android:id="@+id/productsFragment"
         android:name="com.goldencouponz.fragments.home.ProductsFragment"
-        android:label="ProductsFragment" />
+        android:label="ProductsFragment">
+        <action
+            android:id="@+id/homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
     <fragment
         android:id="@+id/whatsAppFragment"
         android:name="com.goldencouponz.fragments.aboutgolden.WhatsAppFragment"
         android:label="WhatsAppFragment" />
+
+    <fragment
+        android:id="@+id/deleteAccountFragment"
+        android:name="com.goldencouponz.fragments.aboutgolden.DeleteAccountFragment"
+        android:label="DeleteAccountFragment">
+        <action
+            android:id="@+id/profileFragment"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.goldencouponz.fragments.aboutgolden.NotificationFragment"
+        android:label="NotificationFragment">
+        <action
+            android:id="@+id/homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.goldencouponz.fragments.aboutgolden.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/search_fragment">
+        <action
+            android:id="@+id/homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
 </navigation>

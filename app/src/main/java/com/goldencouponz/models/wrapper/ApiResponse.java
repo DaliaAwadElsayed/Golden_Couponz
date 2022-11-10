@@ -2,6 +2,7 @@ package com.goldencouponz.models.wrapper;
 
 
 import com.goldencouponz.models.appsetting.Country;
+import com.goldencouponz.models.appsetting.Notification;
 import com.goldencouponz.models.home.Category;
 import com.goldencouponz.models.home.Slider;
 import com.goldencouponz.models.home.Store;
@@ -58,7 +59,18 @@ public class ApiResponse {
     @SerializedName("coupons")
     @Expose
     private List<StoreCoupons> coupons = null;
+    @SerializedName("notifications")
+    @Expose
+    private List<Notification> notifications = null;
     public ApiResponse() {
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     public List<StoreCoupons> getCoupons() {

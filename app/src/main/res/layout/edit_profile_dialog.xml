@@ -115,6 +115,33 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:background="#E5E5E5"
+            android:outlineSpotShadowColor="#EFEFEF" />
+
+        <TextView
+            android:id="@+id/deleteAccountId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_right_24"
+            android:drawablePadding="@dimen/_4sdp"
+            android:gravity="start"
+            android:paddingStart="@dimen/_4sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:text="@string/delete_acc"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </LinearLayout></ScrollView></layout>
