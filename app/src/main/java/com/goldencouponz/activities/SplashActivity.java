@@ -100,6 +100,8 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
+
+
     private void splashScreen() {
         final Handler handler = new Handler();
         new Thread(() -> {
@@ -120,7 +122,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void animation() {
         splashFragmentBinding.langLinearId.setVisibility(View.VISIBLE);
-        Animation animation = AnimationUtils.loadAnimation(this.getApplicationContext(), R.anim.slide_in_left);
+        Animation animation = AnimationUtils.loadAnimation(this.getApplicationContext(), R.anim.slide_up);
         splashFragmentBinding.langLinearId.startAnimation(animation);
         splashFragmentBinding.logoId.startAnimation(animation);
     }

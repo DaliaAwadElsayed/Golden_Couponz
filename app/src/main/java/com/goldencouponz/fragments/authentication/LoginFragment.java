@@ -35,7 +35,20 @@ public class LoginFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         ((MainActivity) getActivity()).hideBottomMenu();
-        mViewModel.init(loginFragmentBinding, getContext());
-    }
+        mViewModel.init(loginFragmentBinding, getContext(), getActivity());
+        loginFragmentBinding.googleId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).signIn();
 
+            }
+        });
+        loginFragmentBinding.faceBookId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).faceBookLogin();
+
+            }
+        });
+    }
 }

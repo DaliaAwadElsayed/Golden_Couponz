@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
 
-import com.com.dtag.livia.utility.Local;
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.EditProfileDialogBinding;
 import com.e.goldencouponz.databinding.LangDialogBinding;
@@ -27,6 +26,7 @@ import com.goldencouponz.models.appsetting.Country;
 import com.goldencouponz.models.user.UserRegisteration;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
+import com.goldencouponz.utility.Local;
 import com.goldencouponz.utility.LocaleHelper;
 import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
@@ -69,12 +69,12 @@ public class ProfileViewModel extends ViewModel {
         showEditProfileDialog = new BottomSheetDialog(context);
         showLogOutDialog = new BottomSheetDialog(context);
         showLangDialog = new BottomSheetDialog(context);
-
         this.activity = (FragmentActivity) context;
         Log.i("langChangeId", GoldenNoLoginSharedPreference.getUserLanguage(context) + "??");
         Log.i("countryChangeName", GoldenNoLoginSharedPreference.getUserCountryName(context) + "??");
         Log.i("countryChangeId", GoldenNoLoginSharedPreference.getUserCountryId(context) + "??");
         Log.i("currencyChangeId", GoldenNoLoginSharedPreference.getUserCurrency(context) + "??");
+        Log.i("GETUSERLANGWHENOPEN", GoldenNoLoginSharedPreference.getUserLanguage(context));
         if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
             getCountryAndCurrencyWithId("en");
         } else {
@@ -358,11 +358,6 @@ public class ProfileViewModel extends ViewModel {
             bundle.putString("type", "about");
             Navigation.findNavController(view).navigate(R.id.aboutFragment, bundle);
         });
-        profileFragmentBinding.privacyId.setOnClickListener(view -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("type", "privacy");
-            Navigation.findNavController(view).navigate(R.id.aboutFragment, bundle);
-        });
         profileFragmentBinding.termsId.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
             bundle.putString("type", "terms");
@@ -394,14 +389,12 @@ public class ProfileViewModel extends ViewModel {
             langDialogBinding.checkArabicId.setVisibility(View.VISIBLE);
         }
         langDialogBinding.englishRelativeId.setOnClickListener(view -> {
-            Log.i("clickss", "SAVED");
             GoldenNoLoginSharedPreference.saveUserLang(context, "en");
             LocaleHelper.setLocale(context, "en");
             Local.Companion.updateResources(context);
             resetApplication();
         });
         langDialogBinding.arabicRelativeId.setOnClickListener(view -> {
-            Log.i("clickss", "SAVEDDD");
             GoldenNoLoginSharedPreference.saveUserLang(context, "ar");
             LocaleHelper.setLocale(context, "ar");
             Local.Companion.updateResources(context);

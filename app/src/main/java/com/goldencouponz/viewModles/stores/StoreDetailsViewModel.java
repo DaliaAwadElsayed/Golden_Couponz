@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
@@ -47,8 +48,11 @@ import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 import com.goldencouponz.viewModles.home.HomeViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import java.util.Timer;
@@ -72,6 +76,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
     private ClipboardManager myClipboard;
     private ClipData myClip;
     int all = 0;
+    int productPosition;
     CopyCouponDialogBinding copyCouponDialogBinding;
     SecondCopyCouponDialogBinding secondCopyCouponDialogBinding;
     SecondProductDetailsDialogBinding secondProductDetailsDialogBinding;
@@ -117,9 +122,36 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         storeDetailsFragmentBinding.allId.setBackgroundTintList(null);
         getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "");
         if (GoldenSharedPreference.isLoggedIn(context)) {
-            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+                            // Get new FCM registration token
+                            String token = task.getResult();
+                            Log.w("TAG", token + "?");
+                            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context), token);
+
+                        }
+                    });
         } else {
-            getStoreDetails("");
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+                            // Get new FCM registration token
+                            String token = task.getResult();
+                            Log.w("TAG", token + "?");
+                            getStoreDetails("", token);
+                        }
+                    });
         }
         storeDetailsFragmentBinding.backId.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.homeFragment));
         storeDetailsFragmentBinding.appbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
@@ -156,9 +188,36 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         storeDetailsFragmentBinding.sliderId.setAdapter(addsBannerAdapter);
         storeDetailsFragmentBinding.sliderId.addOnPageChangeListener(this);
         if (GoldenSharedPreference.isLoggedIn(context)) {
-            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+                            // Get new FCM registration token
+                            String token = task.getResult();
+                            Log.w("TAG", token + "?");
+                            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context), token);
+                        }
+                    });
         } else {
-            getStoreDetails("");
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+                            // Get new FCM registration token
+                            String token = task.getResult();
+                            Log.w("TAG", token + "?");
+
+                            getStoreDetails("", token);
+                        }
+                    });
         }
 
     }
@@ -342,7 +401,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
     }
 
 
-    private void getStoreDetails(String token) {
+    private void getStoreDetails(String token, String fcmToken) {
         storeDetailsFragmentBinding.progress.setVisibility(View.VISIBLE);
         storeDetailsFragmentBinding.allId.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -352,16 +411,43 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                 storeDetailsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
                 storeDetailsFragmentBinding.allId.setBackgroundTintList(null);
                 if (GoldenSharedPreference.isLoggedIn(context)) {
-                    getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
+                    FirebaseMessaging.getInstance().getToken()
+                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                        return;
+                                    }
+                                    // Get new FCM registration token
+                                    String token = task.getResult();
+                                    Log.w("TAG", token + "?");
+
+                                    getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context), token);
+                                }
+                            });
                 } else {
-                    getStoreDetails("");
+                    FirebaseMessaging.getInstance().getToken()
+                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                        return;
+                                    }
+                                    // Get new FCM registration token
+                                    String token = task.getResult();
+                                    Log.w("TAG", token + "?");
+
+                                    getStoreDetails("", token);
+                                }
+                            });
                 }
 
             }
 
         });
         String lang = GoldenNoLoginSharedPreference.getUserLanguage(context);
-        String fcmToken = "";
         int countryId = GoldenNoLoginSharedPreference.getUserCountryId(context);
         int id = storeId;
         Log.i("COUNTRYID", countryId + "?");
@@ -410,7 +496,25 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                             addsBannerAdapter.setOnItemClickListener(new ProductSlidersAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View viewItem, int position) {
-                                    getSingleSliderCoupons("Bearer"+GoldenSharedPreference.getToken(context),0);
+                                    FirebaseMessaging.getInstance().getToken()
+                                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<String> task) {
+                                                    if (!task.isSuccessful()) {
+                                                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                                        return;
+                                                    }
+                                                    // Get new FCM registration token
+                                                    String token = task.getResult();
+                                                    Log.w("TAG", token + "?");
+                                                    if (GoldenSharedPreference.isLoggedIn(context)) {
+                                                        getSingleCoupons("Bearer" + GoldenSharedPreference.getToken(context), 0);
+                                                    } else {
+                                                        getSingleCoupons("", 0);
+                                                    }
+//                                                    getSingleSliderCoupons("Bearer" + GoldenSharedPreference.getToken(context), 0, token);
+                                                }
+                                            });
                                 }
                             });
                         }
@@ -447,75 +551,9 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                 Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-    private void getSingleSliderCoupons(String token, int position) {
-        showSecondCopyCouponDialog();
-        String lang = GoldenNoLoginSharedPreference.getUserLanguage(context);
-        String fcmToken = "";
-        int countryId = GoldenNoLoginSharedPreference.getUserCountryId(context);
-        int id = storeId;
-        Log.i("COUNTRYID", countryId + "?");
-        apiInterface.getSingleStore(token, lang, fcmToken, countryId, String.valueOf(id)).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {
-                    if (response.code() == 200 && response.body() != null) {
-                        if (!response.body().getStore().getStore_coupons().isEmpty()) {
-                            CopounzAdapter categoriesAdapter = new CopounzAdapter(context, listener);
-                            categoriesAdapter.setStores(response.body().getStore().getStore_coupons());
-                            storeDetailsFragmentBinding.recyclerId.setAdapter(categoriesAdapter);
-                            //coupon click
-                            Picasso.get().load(response.body().getStore().getFile()).into(secondCopyCouponDialogBinding.copyCouponImg2Id);
-                            secondCopyCouponDialogBinding.couponValue2Id.setText(response.body().getStore().getStore_coupons().get(position).getCoupon());
-                            secondCopyCouponDialogBinding.copy2Id.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    copyFun(response.body().getStore().getStore_coupons().get(position).getId(), response.body().getStore().getStore_coupons().get(position).getCouponLink());
-                                }
-                            });
-
-                            secondCopyCouponDialogBinding.goToYoutube2Id.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    openUrl(response.body().getStore().getStore_coupons().get(position).getVideoFile());
-                                }
-                            });
-                            secondCopyCouponDialogBinding.noActiveId.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    sendNoActive(secondCopyCouponDialogBinding.couponValue2Id.getText().toString(),
-                                            response.body().getStore().getTitle(),response.body().getStore().getStore_coupons().get(position).getWhatsapp()
-                                    );
-                                }
-                            });
-                            secondCopyCouponDialogBinding.shareId.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    shareVia(response.body().getStore().getStore_coupons().get(position).getCoupon(),
-                                            response.body().getStore().getTitle(), response.body().getStore().getStore_coupons().get(position).getCouponLink());
-                                }
-                            });
-
-                        }
-
-                    }
-                } else {
-                    storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
-                    Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.i("onFailuree", t.toString());
-                storeDetailsFragmentBinding.progress.setVisibility(View.GONE);
-                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
+
 
     private void getSingleCoupons(String token, int position) {
         showCopyCouponDialog();
@@ -547,9 +585,17 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                             secondCopyCouponDialogBinding.copy2Id.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    copyFun(response.body().getStore().getStore_coupons().get(position).getId(), response.body().getStore().getStore_coupons().get(position).getCouponLink());
+                                    copyFun(response.body().getStore().getStore_coupons().get(position).getId(), response.body().getStore().getStoreLink());
                                 }
                             });
+                            if (response.body().getStore().getStore_coupons().get(position).getVideoFile() == null) {
+                                secondCopyCouponDialogBinding.goToYoutube2Id.setVisibility(View.GONE);
+                                copyCouponDialogBinding.goToYoutubeId.setVisibility(View.GONE);
+
+                            } else {
+                                copyCouponDialogBinding.goToYoutubeId.setVisibility(View.VISIBLE);
+                                secondCopyCouponDialogBinding.goToYoutube2Id.setVisibility(View.VISIBLE);
+                            }
                             copyCouponDialogBinding.goToYoutubeId.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -566,7 +612,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                                 @Override
                                 public void onClick(View v) {
                                     sendNoActive(secondCopyCouponDialogBinding.couponValue2Id.getText().toString(),
-                                            response.body().getStore().getTitle(),response.body().getStore().getStore_coupons().get(position).getWhatsapp()
+                                            response.body().getStore().getTitle(), response.body().getStore().getStore_coupons().get(position).getWhatsapp()
                                     );
                                 }
                             });
@@ -598,6 +644,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         });
 
     }
+
     private void getSingleProduct(String deviceToken, int country, String lang, String storeId, String catId, String subCatId, int productPosition) {
         storeDetailsFragmentBinding.progress.setVisibility(View.VISIBLE);
         apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId).enqueue(new Callback<ApiResponse>() {
@@ -705,6 +752,14 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                                     openUrl(response.body().getProducts().getData().get(productPosition).getProductLink());
                                 }
                             });
+                            if (response.body().getProducts().getData().get(productPosition).getVideoLink() == null) {
+                                secondProductDetailsDialogBinding.goToYoutube2Id.setVisibility(View.GONE);
+                                productDetailsDialogBinding.goToYoutube2Id.setVisibility(View.GONE);
+
+                            } else {
+                                productDetailsDialogBinding.goToYoutube2Id.setVisibility(View.VISIBLE);
+                                secondProductDetailsDialogBinding.goToYoutube2Id.setVisibility(View.VISIBLE);
+                            }
                             secondProductDetailsDialogBinding.goToYoutube2Id.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -896,13 +951,13 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         });
     }
 
-    private void sendNoActive(String code, String store,String phone) {
+    private void sendNoActive(String code, String store, String phone) {
         try {
             Intent sendIntent = new Intent("android.intent.action.MAIN");
             sendIntent.setAction(Intent.ACTION_VIEW);
             sendIntent.setPackage("com.whatsapp");
-            String url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + context.getResources().getString(R.string.this_coupon) +  "\"" + code +  "\"" +
-                    context.getResources().getString(R.string.not_vaild) +  "\"" + store +  "\"";
+            String url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + context.getResources().getString(R.string.this_coupon) + "\"" + code + "\"" +
+                    context.getResources().getString(R.string.not_vaild) + "\"" + store + "\"";
             sendIntent.setData(Uri.parse(url));
             context.startActivity(sendIntent);
 
@@ -928,8 +983,8 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
     private void shareVia(String coupon, String store, String url) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = context.getResources().getString(R.string.share_msg_part1) +  "\"" + coupon +  "\"" +
-                context.getResources().getString(R.string.share_msg_part2) +  "\"" + store +
+        String shareBody = context.getResources().getString(R.string.share_msg_part1) + "\"" + coupon + "\"" +
+                context.getResources().getString(R.string.share_msg_part2) + "\"" + store +
                 "\"" + context.getResources().getString(R.string.click_link) + " " + url;
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
@@ -947,9 +1002,37 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                         storeDetailsFragmentBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_fav));
                         storeDetailsFragmentBinding.favId.setImageTintList(null);
                         if (GoldenSharedPreference.isLoggedIn(context)) {
-                            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
+                            FirebaseMessaging.getInstance().getToken()
+                                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<String> task) {
+                                            if (!task.isSuccessful()) {
+                                                Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                                return;
+                                            }
+                                            // Get new FCM registration token
+                                            String token = task.getResult();
+                                            Log.w("TAG", token + "?");
+
+                                            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context), token);
+                                        }
+                                    });
                         } else {
-                            getStoreDetails("");
+                            FirebaseMessaging.getInstance().getToken()
+                                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<String> task) {
+                                            if (!task.isSuccessful()) {
+                                                Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                                return;
+                                            }
+                                            // Get new FCM registration token
+                                            String token = task.getResult();
+                                            Log.w("TAG", token + "?");
+
+                                            getStoreDetails("", token);
+                                        }
+                                    });
                         }
                     }
                 }
@@ -976,9 +1059,37 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                         storeDetailsFragmentBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_fav));
                         storeDetailsFragmentBinding.favId.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.black)));
                         if (GoldenSharedPreference.isLoggedIn(context)) {
-                            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
+                            FirebaseMessaging.getInstance().getToken()
+                                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<String> task) {
+                                            if (!task.isSuccessful()) {
+                                                Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                                return;
+                                            }
+                                            // Get new FCM registration token
+                                            String token = task.getResult();
+                                            Log.w("TAG", token + "?");
+
+                                            getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context), token);
+                                        }
+                                    });
                         } else {
-                            getStoreDetails("");
+                            FirebaseMessaging.getInstance().getToken()
+                                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<String> task) {
+                                            if (!task.isSuccessful()) {
+                                                Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                                return;
+                                            }
+                                            // Get new FCM registration token
+                                            String token = task.getResult();
+                                            Log.w("TAG", token + "?");
+
+                                            getStoreDetails("", token);
+                                        }
+                                    });
                         }
                     }
                 }
@@ -996,7 +1107,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
 
 
     public interface Listener {
-        void click(int click, int position, String coupon);
+        void click(int click, int positionshowNoCouponProductDetailsDialog, String coupon);
 
         void clickShare(String coupon, String store, String url);
     }
@@ -1006,30 +1117,71 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         public void click(int click, int position, String coupon) {
             click = click;
             position = position;
-            getSingleProduct("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "", position);
-
             if (click == 1) {
                 //open copyCouponLinear
-                getSingleCoupons("", position);
+                if (GoldenSharedPreference.isLoggedIn(context)) {
+                    getSingleCoupons("Bearer" + GoldenSharedPreference.getToken(context), position);
+                } else {
+                    getSingleCoupons("", position);
+                }
                 social();
             }
             if (click == 3) {
                 //Fav
                 if (GoldenSharedPreference.isLoggedIn(context)) {
-                    getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context));
+                    FirebaseMessaging.getInstance().getToken()
+                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                        return;
+                                    }
+                                    // Get new FCM registration token
+                                    String token = task.getResult();
+                                    Log.w("TAG", token + "?");
+
+                                    getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context), token);
+                                }
+                            });
                 } else {
-                    getStoreDetails("");
+                    FirebaseMessaging.getInstance().getToken()
+                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                        return;
+                                    }
+                                    // Get new FCM registration token
+                                    String token = task.getResult();
+                                    Log.w("TAG", token + "?");
+
+                                    getStoreDetails("", token);
+                                }
+                            });
                 }
             }
             if (click == 4) {
-                //openProductDialog
-                //check coupon
-//                Log.i("COO",coupon+"?");
-                if (coupon == null || coupon.equals("null") || coupon.isEmpty()) {
-                    showNoCouponProductDetailsDialog();
-                } else {
-                    showProductDetailsDialog();
-                }
+                int finalPosition = position;
+                FirebaseMessaging.getInstance().getToken()
+                        .addOnCompleteListener(new OnCompleteListener<String>() {
+                            @Override
+                            public void onComplete(@NonNull Task<String> task) {
+                                if (!task.isSuccessful()) {
+                                    Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                    return;
+                                }
+                                // Get new FCM registration token
+                                String deviceToken = task.getResult();
+                                getSingleProduct(deviceToken, GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "", finalPosition);
+                                if (coupon == null || coupon.equals("null") || coupon.isEmpty()) {
+                                    showNoCouponProductDetailsDialog();
+                                } else {
+                                    showProductDetailsDialog();
+                                }
+                            }
+                        });
             }
             if (click == 5) {
                 loginCheckDialog();

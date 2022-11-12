@@ -1,5 +1,6 @@
 package com.goldencouponz.viewModles.authentication;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -23,9 +24,11 @@ public class LoginViewModel extends ViewModel {
     LoginFragmentBinding loginFragmentBinding;
     Context context;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
+    Activity activity;
 
-    public void init(LoginFragmentBinding loginFragmentBinding, Context context) {
+    public void init(LoginFragmentBinding loginFragmentBinding, Context context, Activity activity) {
         this.context = context;
+        this.activity = activity;
         this.loginFragmentBinding = loginFragmentBinding;
         loginFragmentBinding.toolBarId.setClickable(true);
         loginFragmentBinding.signUpId.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.registerationFragment));
@@ -42,12 +45,15 @@ public class LoginViewModel extends ViewModel {
                 }
             }
         });
+
         loginFragmentBinding.closeId.setOnClickListener(view -> {
             GoldenSharedPreference.saveUserCloseLogIn(context, "close");
             Navigation.findNavController(view).navigate(R.id.homeFragment);
         });
 
     }
+
+
 
     private void login(String email, String password) {
         loginFragmentBinding.progress.setVisibility(View.VISIBLE);

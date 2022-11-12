@@ -13,12 +13,16 @@ public class GoldenNoLoginSharedPreference {
     private static final String COUNTRY_CURRENCY = "chosen_currency";
     private static final String COUNTRY_ID = "chosen_country_id";
     private static final String POSITION = "position";
+    private static final String DEVICETOKEN = "devicetoken";
+
     private static Application application;
     SharedPreferences sharedPref = application.getApplicationContext().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
     public SharedPreferences.Editor editor = sharedPref.edit();
+
     public GoldenNoLoginSharedPreference() {
 
     }
+
     public static void saveUserLang(Context context, String lang) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
@@ -26,7 +30,7 @@ public class GoldenNoLoginSharedPreference {
                 .apply();
     }
 
-    public static void saveUserCountry(Context context, int position,int countryId, String country,String currency) {
+    public static void saveUserCountry(Context context, int position, int countryId, String country, String currency) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(COUNTRY_NAME, country)
@@ -35,12 +39,15 @@ public class GoldenNoLoginSharedPreference {
                 .putInt(POSITION, position)
                 .apply();
     }
+
+
     /**
      * get Activity
      */
     public static void setActivity(Application activity) {
         application = activity;
     }
+
     /**
      * @return the user country name choice
      */
@@ -48,6 +55,7 @@ public class GoldenNoLoginSharedPreference {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(COUNTRY_NAME, "");
     }
+
     /**
      * @return the user currency name choice
      */
@@ -63,6 +71,7 @@ public class GoldenNoLoginSharedPreference {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getInt(COUNTRY_ID, 0);
     }
+
     /**
      * @return the user country id choice
      */
@@ -70,6 +79,7 @@ public class GoldenNoLoginSharedPreference {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getInt(POSITION, 0);
     }
+
     /**
      * @return the user language choice
      */
@@ -77,8 +87,6 @@ public class GoldenNoLoginSharedPreference {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(LANG_KEY, "");
     }
-
-
 
 
 }

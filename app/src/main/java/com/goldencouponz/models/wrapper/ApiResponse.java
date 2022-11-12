@@ -56,9 +56,15 @@ public class ApiResponse {
     @SerializedName("products")
     @Expose
     private StoreProduct products;
+    @SerializedName("product")
+    @Expose
+    private StoreProduct singleProduct;
     @SerializedName("coupons")
     @Expose
     private List<StoreCoupons> coupons = null;
+    @SerializedName("coupon")
+    @Expose
+    private StoreCoupons coupon = null;
     @SerializedName("notifications")
     @Expose
     private List<Notification> notifications = null;
@@ -67,6 +73,14 @@ public class ApiResponse {
 
     public List<Notification> getNotifications() {
         return notifications;
+    }
+
+    public StoreProduct getSingleProduct() {
+        return singleProduct;
+    }
+
+    public void setSingleProduct(StoreProduct singleProduct) {
+        this.singleProduct = singleProduct;
     }
 
     public void setNotifications(List<Notification> notifications) {
@@ -131,6 +145,14 @@ public class ApiResponse {
 
     public Integer getId() {
         return id;
+    }
+
+    public StoreCoupons getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(StoreCoupons coupon) {
+        this.coupon = coupon;
     }
 
     public void setId(Integer id) {

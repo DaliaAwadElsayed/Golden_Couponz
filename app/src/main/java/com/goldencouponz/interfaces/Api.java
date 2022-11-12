@@ -58,7 +58,7 @@ public interface Api {
 
     //api/sliders
     @GET("api/sliders")
-    Call<ApiResponse> addSlider();
+    Call<ApiResponse> addSlider(@Header("Accept-Language") String AcceptLanguage);
 
     //api/stores
     @GET("api/stores")
@@ -84,6 +84,14 @@ public interface Api {
     //api/fav-store-coupons/2
     @GET("api/fav-store-coupons/{id}")
     Call<ApiResponse> userMakeFavCoupons(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Path("id") String id);
+
+    //{{baseUrl}}/api/coupons/2
+    @GET("api/coupons/{id}")
+    Call<ApiResponse> userGetCoupon(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Path("id") String id);
+
+    //api/products?store_id=35
+    @GET("api/products/{id}")
+    Call<ApiResponse> userGetSingleProduct(@Header("fcm-token") String fcmToken, @Header("country") int country, @Header("Accept-Language") String AcceptLanguage, @Path("id") String id);
 
     //api/remove-fav-store-coupons/2
     @GET("api/remove-fav-store-coupons/{id}")
@@ -124,6 +132,10 @@ public interface Api {
     //{{baseUrl}}/api/delete-single-notifications/ab7e7483-df27-4e87-8ca8-e5518cd24c76
     @GET("api/delete-single-notifications/{id}")
     Call<ApiResponse> deleteNotification(@Header("Authorization") String authHeader, @Path("id") String id);
+
+    //{{baseUrl}}/api/oauth
+    @POST("/api/oauth")
+    Call<ApiResponse> socialLogin(@Header("access_token") String access_token, @Header("driver") String driver);
 
 }
 

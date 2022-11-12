@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "893608938454-o5jelh16mf6tuhtn7b702f3vkqrvjnna.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.e.goldencouponz",
+            "certificate_hash": "1de13e0d4fe72e1086a582a7d81e13b915f82a5b"
+          }
+        },
+        {
           "client_id": "893608938454-55qcuh6iniqm2ll8r9ft0bk41aierv9e.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "893608938454-55qcuh6iniqm2ll8r9ft0bk41aierv9e.apps.googleusercontent.com",
+              "client_id": "893608938454-09j32o2ga3uvjoimmndh5scu0a8tlacd.apps.googleusercontent.com",
               "client_type": 3
             },
             {

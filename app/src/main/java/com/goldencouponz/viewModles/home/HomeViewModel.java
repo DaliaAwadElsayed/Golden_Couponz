@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
@@ -32,6 +33,8 @@ import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -59,7 +62,6 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
     final long DELAY_MS = 500;//delay in milliseconds before task is to be executed
     final long PERIOD_MS = 3000; // time in milliseconds between successive task executions.
     Activity activity;
-    String deviceToken;
     BottomSheetDialog loginCheckDialog;
     BottomSheetDialog seeAllDialog;
     LoginCheckDialogBinding loginCheckDialogBinding;
@@ -92,7 +94,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                                 for (int i = 0; i < size; i++) {
                                     if (response.body().getNotifications().get(i).getReadAt() == null) {
                                         count++;
-                                        homeFragmentBinding.notificationBadge.setText(""+count);
+                                        homeFragmentBinding.notificationBadge.setText("" + count);
                                         homeFragmentBinding.notificationBadge.setVisibility(View.VISIBLE);
                                         shake = AnimationUtils.loadAnimation(context, R.anim.shake);
                                         homeFragmentBinding.notificationId.startAnimation(shake);
@@ -119,7 +121,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
     }
 
     private void addsSlider() {
-        apiInterface.addSlider().enqueue(new Callback<ApiResponse>() {
+        apiInterface.addSlider(GoldenNoLoginSharedPreference.getUserLanguage(context)).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
@@ -182,9 +184,8 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         this.homeFragmentBinding = homeFragmentBinding;
         loginCheckDialog = new BottomSheetDialog(context);
         seeAllDialog = new BottomSheetDialog(context);
-
-        notification();
         if (GoldenSharedPreference.isLoggedIn(context)) {
+            notification();
             homeFragmentBinding.notificationLayoutId.setVisibility(View.VISIBLE);
         } else {
             homeFragmentBinding.notificationLayoutId.setVisibility(View.GONE);
@@ -195,8 +196,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                 seeAllDialog();
             }
         });
-//        getUserDeviceToken();
-//        Log.d("deviceTokenOut", deviceToken);
+
         changeLayout();
         if (!GoldenSharedPreference.isLoggedIn(context) && !GoldenSharedPreference.getUserShowLogin(context).equals("close")) {
             Navigation.findNavController(homeFragmentBinding.getRoot()).navigate(R.id.loginFragment);
@@ -377,133 +377,175 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
 
     private void categories(String lang) {
         homeFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getCategories(lang, "deviceToken", 0).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {
-                    if (response.code() == 200 && response.body() != null) {
-                        if (!response.body().getCategories().isEmpty()) {
-                            internet();
-                            categoriesAdapter = new CategoriesAdapter(context);
-                            homeFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
-                            categoriesAdapter.setCategories(response.body().getCategories());
-                            categoriesAdapter.setOnItemClickListener(new CategoriesAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View viewItem, int position, int categoryId) {
-                                    homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        Log.w("TAG", token + "?");
+                        apiInterface.getCategories(lang, token, 0).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.code() == 200 && response.body() != null) {
+                                        if (!response.body().getCategories().isEmpty()) {
+                                            internet();
+                                            categoriesAdapter = new CategoriesAdapter(context);
+                                            homeFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
+                                            categoriesAdapter.setCategories(response.body().getCategories());
+                                            categoriesAdapter.setOnItemClickListener(new CategoriesAdapter.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(View viewItem, int position, int categoryId) {
+                                                    homeFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
 //                                    homeFragmentBinding.allId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
-                                    if (homeFragmentBinding.listId.getVisibility() == View.VISIBLE) {
-                                        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
-                                            if (GoldenSharedPreference.isLoggedIn(context)) {
-                                                stores("Bearer" + GoldenSharedPreference.getToken(context), "en", categoryId);
-                                            } else {
-                                                stores("", "en", categoryId);
+                                                    if (homeFragmentBinding.listId.getVisibility() == View.VISIBLE) {
+                                                        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+                                                            if (GoldenSharedPreference.isLoggedIn(context)) {
+                                                                stores("Bearer" + GoldenSharedPreference.getToken(context), "en", categoryId);
+                                                            } else {
+                                                                stores("", "en", categoryId);
 
-                                            }
-                                        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
-                                            if (GoldenSharedPreference.isLoggedIn(context)) {
-                                                stores("Bearer" + GoldenSharedPreference.getToken(context), "ar", categoryId);
-                                            } else {
-                                                stores("", "ar", categoryId);
+                                                            }
+                                                        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+                                                            if (GoldenSharedPreference.isLoggedIn(context)) {
+                                                                stores("Bearer" + GoldenSharedPreference.getToken(context), "ar", categoryId);
+                                                            } else {
+                                                                stores("", "ar", categoryId);
 
-                                            }
-                                        }
-                                    } else if (homeFragmentBinding.gridId.getVisibility() == View.VISIBLE) {
-                                        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
-                                            if (GoldenSharedPreference.isLoggedIn(context)) {
-                                                storesList("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
-                                            } else {
-                                                storesList("", "en", categoryId);
+                                                            }
+                                                        }
+                                                    } else if (homeFragmentBinding.gridId.getVisibility() == View.VISIBLE) {
+                                                        if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("en")) {
+                                                            if (GoldenSharedPreference.isLoggedIn(context)) {
+                                                                storesList("Bearer" + GoldenSharedPreference.getToken(context), "en", 0);
+                                                            } else {
+                                                                storesList("", "en", categoryId);
 
-                                            }
-                                        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
-                                            if (GoldenSharedPreference.isLoggedIn(context)) {
-                                                storesList("Bearer" + GoldenSharedPreference.getToken(context), "ar", 0);
-                                            } else {
-                                                storesList("", "ar", categoryId);
+                                                            }
+                                                        } else if (GoldenNoLoginSharedPreference.getUserLanguage(context).equals("ar")) {
+                                                            if (GoldenSharedPreference.isLoggedIn(context)) {
+                                                                storesList("Bearer" + GoldenSharedPreference.getToken(context), "ar", 0);
+                                                            } else {
+                                                                storesList("", "ar", categoryId);
 
-                                            }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+
+
+                                        } else {
+                                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                                            homeFragmentBinding.progress.setVisibility(View.GONE);
                                         }
                                     }
                                 }
-                            });
+                            }
 
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.i("onFailure", t.toString());
+                                noInternet();
+                            }
+                        });
 
-                        } else {
-                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                            homeFragmentBinding.progress.setVisibility(View.GONE);
-                        }
                     }
-                }
-            }
+                });
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.i("onFailure", t.toString());
-                noInternet();
-            }
-        });
     }
 
     private void storesList(String token, String lang, int categoryId) {
         homeFragmentBinding.homeListRecyclerView.setVisibility(View.VISIBLE);
         homeFragmentBinding.homeGrideRecyclerView.setVisibility(View.GONE);
         homeFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStore(token, lang, "deviceToken", categoryId).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {
-                    if (response.code() == 200 && response.body() != null) {
-                        if (!response.body().getStores().isEmpty()) {
-                            internet();
-                            storesListAdapter = new StoresListAdapter(context, listener);
-                            storesListAdapter.setStores(response.body().getStores());
-                            homeFragmentBinding.homeListRecyclerView.setAdapter(storesListAdapter);
-                        } else {
-                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                            homeFragmentBinding.progress.setVisibility(View.GONE);
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
                         }
-                    }
-                }
-            }
+                        // Get new FCM registration token
+                        String device = task.getResult();
+                        Log.w("TAG", token + "?");
+                        apiInterface.getStore(token, lang, device, categoryId).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.code() == 200 && response.body() != null) {
+                                        if (!response.body().getStores().isEmpty()) {
+                                            internet();
+                                            storesListAdapter = new StoresListAdapter(context, listener);
+                                            storesListAdapter.setStores(response.body().getStores());
+                                            homeFragmentBinding.homeListRecyclerView.setAdapter(storesListAdapter);
+                                        } else {
+                                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                                            homeFragmentBinding.progress.setVisibility(View.GONE);
+                                        }
+                                    }
+                                }
+                            }
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.i("onFailure", t.toString());
-                noInternet();
-            }
-        });
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.i("onFailure", t.toString());
+                                noInternet();
+                            }
+                        });
+                    }
+                });
     }
 
     private void stores(String token, String lang, int categoryId) {
         homeFragmentBinding.homeListRecyclerView.setVisibility(View.GONE);
         homeFragmentBinding.homeGrideRecyclerView.setVisibility(View.VISIBLE);
         homeFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStore(token, lang, "deviceToken", categoryId).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {
-                    if (response.code() == 200 && response.body() != null) {
-                        if (!response.body().getStores().isEmpty()) {
-                            internet();
-                            storesGrideAdapter = new StoresGridAdapter(context);
-                            storesGrideAdapter.setStores(response.body().getStores());
-                            homeFragmentBinding.homeGrideRecyclerView.setAdapter(storesGrideAdapter);
-
-                        } else {
-                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                            homeFragmentBinding.progress.setVisibility(View.GONE);
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
                         }
-                    }
-                }
-            }
+                        // Get new FCM registration token
+                        String device = task.getResult();
+                        Log.w("TAG", token + "?");
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.i("onFailure", t.toString());
-                noInternet();
-            }
-        });
+                        apiInterface.getStore(token, lang, device, categoryId).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.code() == 200 && response.body() != null) {
+                                        if (!response.body().getStores().isEmpty()) {
+                                            internet();
+                                            storesGrideAdapter = new StoresGridAdapter(context);
+                                            storesGrideAdapter.setStores(response.body().getStores());
+                                            homeFragmentBinding.homeGrideRecyclerView.setAdapter(storesGrideAdapter);
+
+                                        } else {
+                                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                                            homeFragmentBinding.progress.setVisibility(View.GONE);
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.i("onFailure", t.toString());
+                                noInternet();
+                            }
+                        });
+                    }
+                });
     }
 
     private void noInternet() {
@@ -520,18 +562,6 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
 
     }
 
-    private void getUserDeviceToken() {
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
-                    // Get new FCM registration token
-                    deviceToken = task.getResult();
-                    Log.d("deviceTokenIn", deviceToken);
-                });
-    }
 
     HomeViewModel.Listener listener = new HomeViewModel.Listener() {
         @Override

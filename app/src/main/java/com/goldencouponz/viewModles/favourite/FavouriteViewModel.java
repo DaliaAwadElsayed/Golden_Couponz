@@ -190,9 +190,19 @@ public class FavouriteViewModel extends ViewModel {
                             secondCopyCouponDialogBinding.copy2Id.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    copyFun(response.body().getCoupons().get(position).getId(), response.body().getCoupons().get(position).getCouponLink());
+                                    copyFun(response.body().getCoupons().get(position).getId(), response.body().getCoupons().get(position).getStore().getStoreLink());
                                 }
                             });
+                            if (response.body().getCoupons().get(position).getVideoFile() == null)
+                            {
+                                copyCouponDialogBinding.goToYoutubeId.setVisibility(View.GONE);
+                                secondCopyCouponDialogBinding.goToYoutube2Id.setVisibility(View.GONE);
+
+                            }
+                            else {
+                                copyCouponDialogBinding.goToYoutubeId.setVisibility(View.VISIBLE);
+                                secondCopyCouponDialogBinding.goToYoutube2Id.setVisibility(View.VISIBLE);
+                            }
                             copyCouponDialogBinding.goToYoutubeId.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -209,9 +219,9 @@ public class FavouriteViewModel extends ViewModel {
                             secondCopyCouponDialogBinding.noActiveId.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Log.i("WHATSAPP","?"+response.body().getCoupons().get(position).getWhatsapp());
+                                    Log.i("WHATSAPP", "?" + response.body().getCoupons().get(position).getWhatsapp());
                                     sendNoActive(secondCopyCouponDialogBinding.couponValue2Id.getText().toString(),
-                                            response.body().getCoupons().get(position).getStore().getTitle(),response.body().getCoupons().get(position).getWhatsapp()
+                                            response.body().getCoupons().get(position).getStore().getTitle(), response.body().getCoupons().get(position).getWhatsapp()
                                     );
                                 }
                             });
@@ -239,13 +249,13 @@ public class FavouriteViewModel extends ViewModel {
 
     }
 
-    private void sendNoActive(String code, String store,String phone) {
+    private void sendNoActive(String code, String store, String phone) {
         try {
             Intent sendIntent = new Intent("android.intent.action.MAIN");
             sendIntent.setAction(Intent.ACTION_VIEW);
             sendIntent.setPackage("com.whatsapp");
-            String url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + context.getResources().getString(R.string.this_coupon) +  "\"" + code + "\"" +
-                    context.getResources().getString(R.string.not_vaild) +  "\"" + store +  "\"";
+            String url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + context.getResources().getString(R.string.this_coupon) + "\"" + code + "\"" +
+                    context.getResources().getString(R.string.not_vaild) + "\"" + store + "\"";
             sendIntent.setData(Uri.parse(url));
             context.startActivity(sendIntent);
 
@@ -259,7 +269,7 @@ public class FavouriteViewModel extends ViewModel {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         String shareBody = context.getResources().getString(R.string.share_msg_part1) + "\"" + coupon + "\"" +
-                context.getResources().getString(R.string.share_msg_part2) +  "\"" + store +
+                context.getResources().getString(R.string.share_msg_part2) + "\"" + store +
                 "\"" + context.getResources().getString(R.string.click_link) + " " + url;
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);

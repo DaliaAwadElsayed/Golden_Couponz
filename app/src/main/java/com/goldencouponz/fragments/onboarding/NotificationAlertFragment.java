@@ -22,6 +22,7 @@ public class NotificationAlertFragment extends Fragment {
 
     private NotificationAlertViewModel mViewModel;
     NotificationAlertFragmentBinding notificationAlertFragmentBinding;
+    Boolean state = true;
 
     public static NotificationAlertFragment newInstance() {
         return new NotificationAlertFragment();
@@ -53,6 +54,35 @@ public class NotificationAlertFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!state) {
+            moveToNewActivity();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        state=false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        state = false;
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!state) {
+            moveToNewActivity();
+        }
     }
 
     private void moveToNewActivity() {

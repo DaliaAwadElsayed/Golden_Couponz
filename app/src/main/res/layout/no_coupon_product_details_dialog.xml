@@ -57,9 +57,11 @@
                         android:textColor="@color/white" />
 
                     <ImageView
+                        android:scaleType="centerInside"
                         android:id="@+id/productId"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_150sdp"
+                        android:layout_height="@dimen/_130sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
                         tools:src="@drawable/ic_second_skip" />
 
                     <de.hdodenhof.circleimageview.CircleImageView

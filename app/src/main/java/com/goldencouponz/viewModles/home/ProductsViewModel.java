@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.e.goldencouponz.R;
@@ -33,7 +34,10 @@ import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
@@ -91,6 +95,7 @@ public class ProductsViewModel extends ViewModel {
             }
         });
     }
+
     private void social3() {
         secondProductDetailsDialogBinding.fb2Id.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +122,7 @@ public class ProductsViewModel extends ViewModel {
             }
         });
     }
+
     private void social2() {
         productDetailsDialogBinding.fb2Id.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,7 +194,7 @@ public class ProductsViewModel extends ViewModel {
         productsFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
         productsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
         productsFragmentBinding.allId.setBackgroundTintList(null);
-        getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), "", "", "");
+        getProducts(GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), "", "", "");
         categories(GoldenNoLoginSharedPreference.getUserLanguage(context));
         productsFragmentBinding.allId.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +202,7 @@ public class ProductsViewModel extends ViewModel {
                 productsFragmentBinding.subCategoryRecyclerView.setVisibility(View.GONE);
                 productsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
                 productsFragmentBinding.allId.setBackgroundTintList(null);
-                getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), "", "", "");
+                getProducts(GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), "", "", "");
                 categories(GoldenNoLoginSharedPreference.getUserLanguage(context));
 
             }
@@ -209,271 +215,338 @@ public class ProductsViewModel extends ViewModel {
         productsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
         productsFragmentBinding.subCategoryRecyclerView.setVisibility(View.VISIBLE);
         productsFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getCategories(lang, "deviceToken", parentId).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {
-                    if (response.code() == 200 && response.body() != null) {
-                        if (!response.body().getCategories().isEmpty()) {
-                            productsFragmentBinding.progress.setVisibility(View.GONE);
-                            ProductsSubCategoriesAdapter categoriesAdapter = new ProductsSubCategoriesAdapter(context);
-                            productsFragmentBinding.subCategoryRecyclerView.setAdapter(categoriesAdapter);
-                            categoriesAdapter.setCategories(response.body().getCategories());
-                            categoriesAdapter.setOnItemClickListener(new ProductsSubCategoriesAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View viewItem, int position, int categoryId, int subCatId) {
-                                    getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
-                                            "", String.valueOf(categoryId), String.valueOf(subCatId));
-                                }
-                            });
-                        } else {
-                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                            productsFragmentBinding.progress.setVisibility(View.GONE);
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
                         }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        Log.w("TAG", token + "?");
+
+                        apiInterface.getCategories(lang, token, parentId).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.code() == 200 && response.body() != null) {
+                                        if (!response.body().getCategories().isEmpty()) {
+                                            productsFragmentBinding.progress.setVisibility(View.GONE);
+                                            ProductsSubCategoriesAdapter categoriesAdapter = new ProductsSubCategoriesAdapter(context);
+                                            productsFragmentBinding.subCategoryRecyclerView.setAdapter(categoriesAdapter);
+                                            categoriesAdapter.setCategories(response.body().getCategories());
+                                            categoriesAdapter.setOnItemClickListener(new ProductsSubCategoriesAdapter.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(View viewItem, int position, int categoryId, int subCatId) {
+                                                    getProducts(GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
+                                                            "", String.valueOf(categoryId), String.valueOf(subCatId));
+                                                }
+                                            });
+                                        } else {
+                                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                                            productsFragmentBinding.progress.setVisibility(View.GONE);
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                productsFragmentBinding.progress.setVisibility(View.GONE);
+
+                            }
+                        });
                     }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                productsFragmentBinding.progress.setVisibility(View.GONE);
-
-            }
-        });
-
+                });
     }
 
-    private void getProducts(String deviceToken, int country, String lang, String storeId, String catId, String subCatId) {
-        Log.i("POSITIONOUT",position+"?");
-        productsFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {
-                    if (response.code() == 200 && response.body() != null) {
-                        productsFragmentBinding.progress.setVisibility(View.GONE);
-                        if (!response.body().getProducts().getData().isEmpty()) {
-                            ProductAdapter storeProduct = new ProductAdapter(context, listener);
-                            storeProduct.setStores(response.body().getProducts().getData());
-                            productsFragmentBinding.idRVUsers.setAdapter(storeProduct);
-                            productsFragmentBinding.idRVUsers.setVisibility(View.VISIBLE);
-
-                        } else {
-                            productsFragmentBinding.idRVUsers.setVisibility(View.GONE);
-                            productsFragmentBinding.progress.setVisibility(View.GONE);
+    private void getProducts(int country, String lang, String storeId, String catId, String subCatId) {
+        Log.i("POSITIONOUT", position + "?");
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
                         }
-                    } else {
-                        Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                        productsFragmentBinding.progress.setVisibility(View.GONE);
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        Log.w("TAG", token + "?");
+
+                        productsFragmentBinding.progress.setVisibility(View.VISIBLE);
+                        apiInterface.getStoreProducts(token, country, lang, storeId, catId, subCatId).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.code() == 200 && response.body() != null) {
+                                        productsFragmentBinding.progress.setVisibility(View.GONE);
+                                        if (!response.body().getProducts().getData().isEmpty()) {
+                                            ProductAdapter storeProduct = new ProductAdapter(context, listener);
+                                            storeProduct.setStores(response.body().getProducts().getData());
+                                            productsFragmentBinding.idRVUsers.setAdapter(storeProduct);
+                                            productsFragmentBinding.idRVUsers.setVisibility(View.VISIBLE);
+
+                                        } else {
+                                            productsFragmentBinding.idRVUsers.setVisibility(View.GONE);
+                                            productsFragmentBinding.progress.setVisibility(View.GONE);
+                                        }
+                                    } else {
+                                        Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                                        productsFragmentBinding.progress.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.i("onFailure", t.toString());
+                                productsFragmentBinding.progress.setVisibility(View.GONE);
+                                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.i("onFailure", t.toString());
-                productsFragmentBinding.progress.setVisibility(View.GONE);
-                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
-            }
-        });
-
+                });
     }
-    private void getSingleProducts(String deviceToken, int country, String lang, String storeId, String catId, String subCatId,int position) {
-        Log.i("POSITIONOUT",position+"?");
-        productsFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {
-                    if (response.code() == 200 && response.body() != null) {
-                        productsFragmentBinding.progress.setVisibility(View.GONE);
-                        if (!response.body().getProducts().getData().isEmpty()) {
-                            //product dialog
-                            productDetailsDialogBinding.newPriceId.setText(Utility.fixNullString(response.body().getProducts().getData().get(position).getProductCountry().getDiscountPrice()));
-                            productDetailsDialogBinding.currentPriceId.setPaintFlags(productDetailsDialogBinding.currentPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            productDetailsDialogBinding.discountId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getDiscount())));
-                            productDetailsDialogBinding.currentPriceId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getPrice())));
-                            productDetailsDialogBinding.detailsId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getDetails())));
-                            Picasso.get().load(response.body().getProducts().getData().get(position).getFile()).into(productDetailsDialogBinding.productId);
-                            productDetailsDialogBinding.currencyNewId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
-                            productDetailsDialogBinding.currencyCurrentId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
-                            Picasso.get().load(response.body().getProducts().getData().get(position).getStore().getFile()).into(productDetailsDialogBinding.storeImgId);
-                            productDetailsDialogBinding.couponValueId.setText(Utility.fixNullString(response.body().getProducts().getData().get(position).getCoupon()));
-                            productDetailsDialogBinding.shareId.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    shareVia(response.body().getProducts().getData().get(position).getCoupon(), response.body().getProducts().getData().get(position).getStore().getTitle()
-                                            , response.body().getProducts().getData().get(position).getStore().getStoreLink());
-                                }
-                            });
 
-                            //nocoupon//
-                            noCouponProductDetailsDialogBinding.newPriceId.setText(Utility.fixNullString(response.body().getProducts().getData().get(position).getProductCountry().getDiscountPrice()));
-                            noCouponProductDetailsDialogBinding.currentPriceId.setPaintFlags(productDetailsDialogBinding.currentPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            noCouponProductDetailsDialogBinding.discountId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getDiscount())));
-                            noCouponProductDetailsDialogBinding.currentPriceId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getPrice())));
-                            noCouponProductDetailsDialogBinding.detailsId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getDetails())));
-                            Picasso.get().load(response.body().getProducts().getData().get(position).getFile()).into(noCouponProductDetailsDialogBinding.productId);
-                            noCouponProductDetailsDialogBinding.currencyNewId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
-                            noCouponProductDetailsDialogBinding.currencyCurrentId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
-                            Picasso.get().load(response.body().getProducts().getData().get(position).getStore().getFile()).into(noCouponProductDetailsDialogBinding.storeImgId);
-                            noCouponProductDetailsDialogBinding.shareId.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    shareOfferVia(response.body().getProducts().getData().get(position).getStore().getTitle()
-                                            , response.body().getProducts().getData().get(position).getStore().getStoreLink());
-                                }
-                            });
-                            noCouponProductDetailsDialogBinding.couponValue2Id.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    openUrl(response.body().getProducts().getData().get(position).getProductLink());
-                                    noCouponProductDetailsDialogBinding.recomendId.setVisibility(View.VISIBLE);
-                                }
-                            });
-
-
-                            secondProductDetailsDialogBinding.newPriceId.setText(Utility.fixNullString(response.body().getProducts().getData().get(position).getProductCountry().getDiscountPrice()));
-                            secondProductDetailsDialogBinding.currentPriceId.setPaintFlags(productDetailsDialogBinding.currentPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            secondProductDetailsDialogBinding.discountId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getDiscount())));
-                            secondProductDetailsDialogBinding.currentPriceId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getPrice())));
-                            secondProductDetailsDialogBinding.detailsId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getDetails())));
-                            Picasso.get().load(response.body().getProducts().getData().get(position).getFile()).into(secondProductDetailsDialogBinding.productId);
-                            secondProductDetailsDialogBinding.currencyNewId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
-                            secondProductDetailsDialogBinding.currencyCurrentId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
-                            Picasso.get().load(response.body().getProducts().getData().get(position).getStore().getFile()).into(secondProductDetailsDialogBinding.storeImgId);
-                            secondProductDetailsDialogBinding.couponValueId.setText(Utility.fixNullString(response.body().getProducts().getData().get(position).getCoupon()));
-                            secondProductDetailsDialogBinding.shareId.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    shareVia(response.body().getProducts().getData().get(position).getCoupon(), response.body().getProducts().getData().get(position).getStore().getTitle()
-                                            , response.body().getProducts().getData().get(position).getStore().getStoreLink());
-                                }
-                            });
-                            productDetailsDialogBinding.couponValue2Id.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    showSecondProductDetailsDialog();
-                                }
-                            });
-                            secondProductDetailsDialogBinding.copy2Id.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(context, R.string.code_copy, Toast.LENGTH_SHORT).show();
-                                    myClipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
-                                    String text;
-                                    text = secondProductDetailsDialogBinding.couponValueId.getText().toString();
-                                    myClip = ClipData.newPlainText("text", text);
-                                    myClipboard.setPrimaryClip(myClip);
-                                    openUrl(response.body().getProducts().getData().get(position).getProductLink());
-                                }
-                            });
-                            productDetailsDialogBinding.goToYoutube2Id.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    openUrl(response.body().getProducts().getData().get(position).getVideoLink());
-                                }
-                            });
-                            secondProductDetailsDialogBinding.goToYoutube2Id.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    openUrl(response.body().getProducts().getData().get(position).getVideoLink());
-                                }
-                            });
-                            secondProductDetailsDialogBinding.noActiveId.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    sendNoActive(secondProductDetailsDialogBinding.couponValueId.getText().toString(),
-                                            response.body().getProducts().getData().get(position).getStore().getTitle(), response.body().getProducts().getData().get(position).getWhatsapp()
-                                    );
-                                }
-                            });
-                            ////////////////
-                        } else {
-                            productsFragmentBinding.idRVUsers.setVisibility(View.GONE);
-                            productsFragmentBinding.progress.setVisibility(View.GONE);
+    private void getSingleProducts(int country, String lang, String storeId, String catId, String subCatId, int position) {
+        Log.i("POSITIONOUT", position + "?");
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
                         }
-                    } else {
-                        Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                        productsFragmentBinding.progress.setVisibility(View.GONE);
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        Log.w("TAG", token + "?");
+
+                        productsFragmentBinding.progress.setVisibility(View.VISIBLE);
+                        apiInterface.getStoreProducts(token, country, lang, storeId, catId, subCatId).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.code() == 200 && response.body() != null) {
+                                        productsFragmentBinding.progress.setVisibility(View.GONE);
+                                        if (!response.body().getProducts().getData().isEmpty()) {
+                                            //product dialog
+                                            productDetailsDialogBinding.newPriceId.setText(Utility.fixNullString(response.body().getProducts().getData().get(position).getProductCountry().getDiscountPrice()));
+                                            productDetailsDialogBinding.currentPriceId.setPaintFlags(productDetailsDialogBinding.currentPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                            productDetailsDialogBinding.discountId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getDiscount())));
+                                            productDetailsDialogBinding.currentPriceId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getPrice())));
+                                            productDetailsDialogBinding.detailsId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getDetails())));
+                                            Picasso.get().load(response.body().getProducts().getData().get(position).getFile()).into(productDetailsDialogBinding.productId);
+                                            productDetailsDialogBinding.currencyNewId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
+                                            productDetailsDialogBinding.currencyCurrentId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
+                                            Picasso.get().load(response.body().getProducts().getData().get(position).getStore().getFile()).into(productDetailsDialogBinding.storeImgId);
+                                            productDetailsDialogBinding.couponValueId.setText(Utility.fixNullString(response.body().getProducts().getData().get(position).getCoupon()));
+                                            productDetailsDialogBinding.shareId.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    shareVia(response.body().getProducts().getData().get(position).getCoupon(), response.body().getProducts().getData().get(position).getStore().getTitle()
+                                                            , response.body().getProducts().getData().get(position).getStore().getStoreLink());
+                                                }
+                                            });
+
+                                            //nocoupon//
+                                            noCouponProductDetailsDialogBinding.newPriceId.setText(Utility.fixNullString(response.body().getProducts().getData().get(position).getProductCountry().getDiscountPrice()));
+                                            noCouponProductDetailsDialogBinding.currentPriceId.setPaintFlags(productDetailsDialogBinding.currentPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                            noCouponProductDetailsDialogBinding.discountId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getDiscount())));
+                                            noCouponProductDetailsDialogBinding.currentPriceId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getPrice())));
+                                            noCouponProductDetailsDialogBinding.detailsId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getDetails())));
+                                            Picasso.get().load(response.body().getProducts().getData().get(position).getFile()).into(noCouponProductDetailsDialogBinding.productId);
+                                            noCouponProductDetailsDialogBinding.currencyNewId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
+                                            noCouponProductDetailsDialogBinding.currencyCurrentId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
+                                            Picasso.get().load(response.body().getProducts().getData().get(position).getStore().getFile()).into(noCouponProductDetailsDialogBinding.storeImgId);
+                                            noCouponProductDetailsDialogBinding.shareId.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    shareOfferVia(response.body().getProducts().getData().get(position).getStore().getTitle()
+                                                            , response.body().getProducts().getData().get(position).getStore().getStoreLink());
+                                                }
+                                            });
+                                            noCouponProductDetailsDialogBinding.couponValue2Id.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    openUrl(response.body().getProducts().getData().get(position).getProductLink());
+                                                    noCouponProductDetailsDialogBinding.recomendId.setVisibility(View.VISIBLE);
+                                                }
+                                            });
+
+
+                                            secondProductDetailsDialogBinding.newPriceId.setText(Utility.fixNullString(response.body().getProducts().getData().get(position).getProductCountry().getDiscountPrice()));
+                                            secondProductDetailsDialogBinding.currentPriceId.setPaintFlags(productDetailsDialogBinding.currentPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                            secondProductDetailsDialogBinding.discountId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getDiscount())));
+                                            secondProductDetailsDialogBinding.currentPriceId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getProductCountry().getPrice())));
+                                            secondProductDetailsDialogBinding.detailsId.setText(Utility.fixNullString(String.valueOf(response.body().getProducts().getData().get(position).getDetails())));
+                                            Picasso.get().load(response.body().getProducts().getData().get(position).getFile()).into(secondProductDetailsDialogBinding.productId);
+                                            secondProductDetailsDialogBinding.currencyNewId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
+                                            secondProductDetailsDialogBinding.currencyCurrentId.setText(Utility.fixNullString(GoldenNoLoginSharedPreference.getUserCurrency(context)));
+                                            Picasso.get().load(response.body().getProducts().getData().get(position).getStore().getFile()).into(secondProductDetailsDialogBinding.storeImgId);
+                                            secondProductDetailsDialogBinding.couponValueId.setText(Utility.fixNullString(response.body().getProducts().getData().get(position).getCoupon()));
+                                            secondProductDetailsDialogBinding.shareId.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    shareVia(response.body().getProducts().getData().get(position).getCoupon(), response.body().getProducts().getData().get(position).getStore().getTitle()
+                                                            , response.body().getProducts().getData().get(position).getStore().getStoreLink());
+                                                }
+                                            });
+                                            productDetailsDialogBinding.couponValue2Id.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    showSecondProductDetailsDialog();
+                                                }
+                                            });
+                                            secondProductDetailsDialogBinding.copy2Id.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    Toast.makeText(context, R.string.code_copy, Toast.LENGTH_SHORT).show();
+                                                    myClipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+                                                    String text;
+                                                    text = secondProductDetailsDialogBinding.couponValueId.getText().toString();
+                                                    myClip = ClipData.newPlainText("text", text);
+                                                    myClipboard.setPrimaryClip(myClip);
+                                                    openUrl(response.body().getProducts().getData().get(position).getProductLink());
+                                                }
+                                            });
+                                            if (response.body().getProducts().getData().get(position).getVideoLink()== null) {
+                                                productDetailsDialogBinding.goToYoutube2Id.setVisibility(View.GONE);
+                                                secondProductDetailsDialogBinding.goToYoutube2Id.setVisibility(View.GONE);
+
+                                            } else {
+                                                secondProductDetailsDialogBinding.goToYoutube2Id.setVisibility(View.VISIBLE);
+                                                productDetailsDialogBinding.goToYoutube2Id.setVisibility(View.VISIBLE);
+                                            }
+                                            productDetailsDialogBinding.goToYoutube2Id.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    openUrl(response.body().getProducts().getData().get(position).getVideoLink());
+                                                }
+                                            });
+                                            secondProductDetailsDialogBinding.goToYoutube2Id.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    openUrl(response.body().getProducts().getData().get(position).getVideoLink());
+                                                }
+                                            });
+                                            secondProductDetailsDialogBinding.noActiveId.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    sendNoActive(secondProductDetailsDialogBinding.couponValueId.getText().toString(),
+                                                            response.body().getProducts().getData().get(position).getStore().getTitle(), response.body().getProducts().getData().get(position).getWhatsapp()
+                                                    );
+                                                }
+                                            });
+                                            ////////////////
+                                        } else {
+                                            productsFragmentBinding.idRVUsers.setVisibility(View.GONE);
+                                            productsFragmentBinding.progress.setVisibility(View.GONE);
+                                        }
+                                    } else {
+                                        Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                                        productsFragmentBinding.progress.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.i("onFailure", t.toString());
+                                productsFragmentBinding.progress.setVisibility(View.GONE);
+                                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.i("onFailure", t.toString());
-                productsFragmentBinding.progress.setVisibility(View.GONE);
-                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
-            }
-        });
-
+                });
     }
 
     private void shareVia(String coupon, String store, String url) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = context.getResources().getString(R.string.share_msg_part1) +  "\"" + coupon +  "\"" +
-                context.getResources().getString(R.string.share_msg_part2) +  "\"" + store +
+        String shareBody = context.getResources().getString(R.string.share_msg_part1) + "\"" + coupon + "\"" +
+                context.getResources().getString(R.string.share_msg_part2) + "\"" + store +
                 "\"" + context.getResources().getString(R.string.click_link) + " " + url;
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.share_via)));
     }
-    private void sendNoActive(String code, String store,String phone) {
+
+    private void sendNoActive(String code, String store, String phone) {
         try {
             Intent sendIntent = new Intent("android.intent.action.MAIN");
             sendIntent.setAction(Intent.ACTION_VIEW);
             sendIntent.setPackage("com.whatsapp");
-            String url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + context.getResources().getString(R.string.this_coupon) +  "\"" + code +  "\"" +
-                    context.getResources().getString(R.string.not_vaild) +  "\"" + store +  "\"";
+            String url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + context.getResources().getString(R.string.this_coupon) + "\"" + code + "\"" +
+                    context.getResources().getString(R.string.not_vaild) + "\"" + store + "\"";
             sendIntent.setData(Uri.parse(url));
             context.startActivity(sendIntent);
 
         } catch (Exception e) {
             Log.i("EXCEPTIONn", e.toString());
             Toast.makeText(context, "WhatsApp Not Install", Toast.LENGTH_SHORT).show();
-        }}
-    private void categories(String lang) {
-        productsFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getCategories(lang, "deviceToken", 0).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {
-                    if (response.code() == 200 && response.body() != null) {
-                        if (!response.body().getCategories().isEmpty()) {
-                            productsFragmentBinding.progress.setVisibility(View.GONE);
-                            categoriesAdapter = new ProductCatAdapter(context);
-                            productsFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
-                            categoriesAdapter.setCategories(response.body().getCategories());
-                            categoriesAdapter.setOnItemClickListener(new ProductCatAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View viewItem, int position, int categoryId) {
-                                    productsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
-//                                    homeFragmentBinding.allId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
-                                    subCategory(categoryId, GoldenNoLoginSharedPreference.getUserLanguage(context));
-                                    getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
-                                            "", String.valueOf(categoryId), "");
-
-                                }
-                            });
-
-                        } else {
-                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
-                            productsFragmentBinding.progress.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.i("onFailure", t.toString());
-                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
-                productsFragmentBinding.progress.setVisibility(View.GONE);
-            }
-        });
+        }
     }
+
+    private void categories(String lang) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        Log.w("TAG", token + "?");
+
+                        productsFragmentBinding.progress.setVisibility(View.VISIBLE);
+                        apiInterface.getCategories(lang, token, 0).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.code() == 200 && response.body() != null) {
+                                        if (!response.body().getCategories().isEmpty()) {
+                                            productsFragmentBinding.progress.setVisibility(View.GONE);
+                                            categoriesAdapter = new ProductCatAdapter(context);
+                                            productsFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
+                                            categoriesAdapter.setCategories(response.body().getCategories());
+                                            categoriesAdapter.setOnItemClickListener(new ProductCatAdapter.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(View viewItem, int position, int categoryId) {
+                                                    productsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
+//                                    homeFragmentBinding.allId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
+                                                    subCategory(categoryId, GoldenNoLoginSharedPreference.getUserLanguage(context));
+                                                    getProducts(GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
+                                                            "", String.valueOf(categoryId), "");
+
+                                                }
+                                            });
+
+                                        } else {
+                                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                                            productsFragmentBinding.progress.setVisibility(View.GONE);
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.i("onFailure", t.toString());
+                                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+                                productsFragmentBinding.progress.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+
+                });
+    }
+
     private void showNoCouponProductDetailsDialog() {
         final View view5 = noCouponProductDetailsDialogBinding.getRoot();
         showNoCouponDialog.setContentView(view5);
@@ -503,15 +576,15 @@ public class ProductsViewModel extends ViewModel {
     ProductsViewModel.Listener listener = new ProductsViewModel.Listener() {
         @Override
         public void click(int click, int p, String coupon) {
-            Log.i("POSITIONIN",p+"?");
-            position=p;
-            getSingleProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
-                    "", "", "",position);
+            Log.i("POSITIONIN", p + "?");
+            position = p;
+            getSingleProducts(GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
+                    "", "", "", position);
 
             if (click == 4) {
                 //openProductDialog
                 //check coupon
-                Log.i("COO",coupon+"?");
+                Log.i("COO", coupon + "?");
                 if (coupon == null || coupon.equals("null") || coupon.isEmpty()) {
                     showNoCouponProductDetailsDialog();
                 } else {
@@ -520,7 +593,6 @@ public class ProductsViewModel extends ViewModel {
             }
 
         }
-
 
 
         //String coupon, String store, String url
@@ -544,6 +616,7 @@ public class ProductsViewModel extends ViewModel {
         social2();
 
     }
+
     private void showSecondProductDetailsDialog() {
         final View view5 = secondProductDetailsDialogBinding.getRoot();
         secondShowProductDetailsDialog.setContentView(view5);
@@ -559,6 +632,7 @@ public class ProductsViewModel extends ViewModel {
         secondProductDetailsDialogBinding.yesActiveId.setOnClickListener(v7 -> rateDialog());
 
     }
+
     private void shareOfferVia(String store, String url) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");

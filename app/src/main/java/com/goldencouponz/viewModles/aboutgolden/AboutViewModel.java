@@ -43,8 +43,6 @@ public class AboutViewModel extends ViewModel {
     private void title() {
         if (type.equals("about")) {
             aboutFragmentBinding.titleId.setText(R.string.who_we_are);
-        } else if (type.equals("privacy")) {
-            aboutFragmentBinding.titleId.setText(R.string.privacy_policy);
         } else if (type.equals("terms")) {
             aboutFragmentBinding.titleId.setText(R.string.terms_conditions);
         }
@@ -63,9 +61,6 @@ public class AboutViewModel extends ViewModel {
                     if (lang.equals("en")) {
                         if (type.equals("about")) {
                             aboutFragmentBinding.logoId.setVisibility(View.VISIBLE);
-                            aboutFragmentBinding.detailsId.setText(Html.fromHtml(response.body().getTopics().get(2).getDetailsEn()));
-                        } else if (type.equals("privacy")) {
-                            aboutFragmentBinding.logoId.setVisibility(View.GONE);
                             aboutFragmentBinding.detailsId.setText(Html.fromHtml(response.body().getTopics().get(1).getDetailsEn()));
                         } else if (type.equals("terms")) {
                             aboutFragmentBinding.logoId.setVisibility(View.GONE);
@@ -74,9 +69,6 @@ public class AboutViewModel extends ViewModel {
                     } else {
                         if (type.equals("about")) {
                             aboutFragmentBinding.logoId.setVisibility(View.VISIBLE);
-                            aboutFragmentBinding.detailsId.setText(Html.fromHtml(response.body().getTopics().get(2).getDetailsAr()));
-                        } else if (type.equals("privacy")) {
-                            aboutFragmentBinding.logoId.setVisibility(View.GONE);
                             aboutFragmentBinding.detailsId.setText(Html.fromHtml(response.body().getTopics().get(1).getDetailsAr()));
                         } else if (type.equals("terms")) {
                             aboutFragmentBinding.logoId.setVisibility(View.GONE);

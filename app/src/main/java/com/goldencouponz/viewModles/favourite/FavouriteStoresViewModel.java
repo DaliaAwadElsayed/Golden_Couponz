@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
 
@@ -17,6 +18,9 @@ import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
@@ -49,8 +53,20 @@ public class FavouriteStoresViewModel extends ViewModel {
     }
 
     private void stores(String token, String lang, int categoryId) {
-        favouriteStoresFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStore(token, lang, "deviceToken", categoryId).enqueue(new Callback<ApiResponse>() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String device = task.getResult();
+                        Log.w("TAG", token + "?");
+
+                        favouriteStoresFragmentBinding.progress.setVisibility(View.VISIBLE);
+        apiInterface.getStore(token, lang, device, categoryId).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
@@ -83,7 +99,7 @@ public class FavouriteStoresViewModel extends ViewModel {
                 favouriteStoresFragmentBinding.progress.setVisibility(View.GONE);
             }
         });
-    }
+    }});}
 
     private void favInterestedStores() {
         apiInterface.favMultiStore("Bearer" + GoldenSharedPreference.getToken(context), GoldenNoLoginSharedPreference.getUserLanguage(context), store).enqueue(new Callback<ApiResponse>() {

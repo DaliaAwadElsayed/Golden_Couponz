@@ -1,4 +1,4 @@
-package com.com.dtag.livia.utility
+package com.goldencouponz.utility
 
 import android.content.Context
 import android.content.res.Configuration
@@ -17,7 +17,7 @@ class Local {
             val res: Resources = context.resources
             val config = Configuration(res.configuration)
             config.setLocale(locale)
-//            context.createConfigurationContext(config)
+            context.createConfigurationContext(config)
          res.updateConfiguration(config, res.displayMetrics)
         }
     }

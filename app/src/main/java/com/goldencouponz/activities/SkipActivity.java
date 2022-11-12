@@ -1,5 +1,6 @@
 package com.goldencouponz.activities;
 
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -14,16 +15,18 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat.Builder;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 
-import com.com.dtag.livia.utility.Local;
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.ActivitySkipBinding;
+import com.goldencouponz.utility.Local;
 import com.goldencouponz.utility.LocaleHelper;
 
 import org.jetbrains.annotations.NotNull;
@@ -101,6 +104,12 @@ public class SkipActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
     public final void openAppNotificationSettings(@NotNull Context context) {
         Intrinsics.checkNotNullParameter(context, "context");
         Intent var3 = new Intent();
@@ -170,5 +179,6 @@ public void notification(){
     } else {
        access$getRequestPermissionLauncher$p(SkipActivity.this).launch("android.permission.POST_NOTIFICATIONS");
     }
+
 }
 }

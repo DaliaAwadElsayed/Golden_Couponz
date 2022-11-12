@@ -280,7 +280,6 @@
                                 android:paddingBottom="@dimen/_4sdp">
 
                                 <TextView
-                                    android:id="@+id/countryId"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -382,31 +381,7 @@
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
 
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_8sdp"
-                                android:layout_marginBottom="@dimen/_8sdp"
-                                android:background="@color/grey" />
 
-                            <TextView
-                                android:id="@+id/privacyId"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:drawableStart="@drawable/ic_privacy"
-                                android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_right_24"
-                                android:drawablePadding="@dimen/_4sdp"
-                                android:gravity="start"
-                                android:paddingStart="@dimen/_4sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingEnd="@dimen/_4sdp"
-                                android:paddingBottom="@dimen/_8sdp"
-                                android:text="@string/privacy_policy"
-                                android:textAllCaps="false"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
 
                             <View
                                 android:layout_width="match_parent"
@@ -416,6 +391,7 @@
                                 android:background="@color/grey" />
 
                             <TextView
+                                android:drawableTint="#7A7A7A"
                                 android:id="@+id/termsId"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
