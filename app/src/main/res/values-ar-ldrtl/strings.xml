@@ -152,4 +152,10 @@
     <string name="server_client_id">893608938454-09j32o2ga3uvjoimmndh5scu0a8tlacd.apps.googleusercontent.com</string>
     <string name="facebook_app_id">793586418366637</string>
     <string name="fb_login_protocol_scheme">fb793586418366637</string>
+    <string name="most_common">الأكثر شيوعا</string>
+    <string name="most_disconted">الأكثر خصما</string>
+    <string name="sort_by">ترتيب حسب</string>
+    <string name="price_heighst">السعر من الاعلي الي الاقل</string>
+    <string name="price_lowest">السعر من الاقل الي الاعلي</string>
+    <string name="back_twice">"الرجاء النقر  \"رجوع\" مرة أخرى للخروج "</string>
 </resources>

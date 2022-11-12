@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.e.goldencouponz.R;
+import com.e.goldencouponz.databinding.ArrangeDialogBinding;
 import com.e.goldencouponz.databinding.NoCouponProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.ProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.ProductsFragmentBinding;
@@ -49,9 +50,12 @@ public class ProductsViewModel extends ViewModel {
     Context context;
     BottomSheetDialog showProductDetailsDialog;
     BottomSheetDialog secondShowProductDetailsDialog;
-    ProductDetailsDialogBinding productDetailsDialogBinding;
-    SecondProductDetailsDialogBinding secondProductDetailsDialogBinding;
     BottomSheetDialog showNoCouponDialog;
+    BottomSheetDialog arrangeDialog;
+
+    ProductDetailsDialogBinding productDetailsDialogBinding;
+    ArrangeDialogBinding arrangeDialogBinding;
+    SecondProductDetailsDialogBinding secondProductDetailsDialogBinding;
     String youTube = "https://www.youtube.com/@goldencouponz";
     String snapChat = "https://www.snapchat.com/add/goldencouponz?share_id=9XqCMUv88XE&locale=ar-EG*/";
     String instagram = "https://www.insshowNoCouponProductDetailsDialogtagram.com/golden.couponz/";

@@ -3,10 +3,12 @@ package com.goldencouponz.fragments.onboarding;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,6 +46,7 @@ public class NotificationAlertFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("CLICCCCK", "yes");
+
                 ((SkipActivity) getActivity()).notification();
             }
         });
@@ -56,19 +59,19 @@ public class NotificationAlertFragment extends Fragment {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!state) {
-            moveToNewActivity();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        state=false;
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (!state) {
+//            moveToNewActivity();
+//        }
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        state=false;
+//    }
 
     @Override
     public void onStop() {

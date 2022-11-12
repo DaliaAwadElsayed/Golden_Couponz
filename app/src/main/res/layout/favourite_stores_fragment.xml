@@ -37,25 +37,27 @@
             android:textColor="#7A7A7A"
             android:textFontWeight="400"
             android:textSize="15sp" />
+
         <ScrollView
-            android:layout_below="@+id/chooseYourFavStore_tv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/home_gride_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/chooseYourFavStore_tv"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:scrollbars="vertical"
-            android:layout_marginBottom="@dimen/_30sdp"
-            android:nestedScrollingEnabled="false"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
-            tools:listitem="@layout/fav_store_gride_item" />
+            android:layout_below="@+id/chooseYourFavStore_tv">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/home_gride_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/chooseYourFavStore_tv"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_30sdp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                tools:listitem="@layout/fav_store_gride_item" />
 
         </ScrollView>
         <TextView

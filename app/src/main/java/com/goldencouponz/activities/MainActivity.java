@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     private Api apiInterface = RetrofitClient.getInstance().getApi();
     private CallbackManager callbackManager;
     private LoginManager loginManager;
-///EAALRwzyQuK0BANH5WwoeFzr8c1hg12F2JQEQ14lVXUzjPXXlwVARZBI2CEqmHfFKJl3MIMSVk1kVnzzb7iLZCmlFR3ArvlV4N10qh9oZAzXfZBXDBszfvsy0EbRzdHSBJeax2APxCvncH0xNase0OC2XzYMvIOcGNgpByga2U2kZCyFm1lmhPTitrNn8EI3941xMcA1PSa5f5h9mo5XlJaKD6Q2VULmEZD
 
     @Override
     public boolean onSupportNavigateUp() {
