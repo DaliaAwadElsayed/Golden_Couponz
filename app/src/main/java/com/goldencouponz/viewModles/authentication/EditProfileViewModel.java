@@ -53,6 +53,7 @@ public class EditProfileViewModel extends ViewModel {
                 if (response.code() == 200) {
                     if (response.body() != null) {
                         editProfileFragmentBinding.progress.setVisibility(View.GONE);
+
                         editProfileFragmentBinding.phoneId.setText(Utility.fixNullString(response.body().getUser().getPhone()));
                         editProfileFragmentBinding.confirmEmailId.setText(Utility.fixNullString(response.body().getUser().getEmail()));
                         editProfileFragmentBinding.emailId.setText(Utility.fixNullString(response.body().getUser().getEmail()));
@@ -89,10 +90,13 @@ public class EditProfileViewModel extends ViewModel {
     private void userEditProfile() {
         editProfileFragmentBinding.progress.setVisibility(View.VISIBLE);
         userRegisteration.setName(Utility.fixNullString(editProfileFragmentBinding.nameId.getText().toString()));
-        userRegisteration.setPhone(Utility.fixNullString(editProfileFragmentBinding.phoneId.getText().toString()));
+        if (editProfileFragmentBinding.phoneId.getText().toString().isEmpty()) {
+            userRegisteration.setPhone("null");
+        } else {
+            userRegisteration.setPhone(Utility.fixNullString(editProfileFragmentBinding.phoneId.getText().toString()));
+        }
         userRegisteration.setEmail(Utility.fixNullString(editProfileFragmentBinding.emailId.getText().toString()));
         userRegisteration.setEmail_confirmation(Utility.fixNullString(editProfileFragmentBinding.confirmEmailId.getText().toString()));
-
         apiInterface.userEditProfile("Bearer" + GoldenSharedPreference.getToken(context), userRegisteration).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -117,7 +121,7 @@ public class EditProfileViewModel extends ViewModel {
     }
 
     private boolean inputValid() {
-        return nameValid() && phoneValid() && emailValid() && emailsIsValid();
+        return nameValid()  && emailValid() && emailsIsValid();
     }
 
     private boolean nameValid() {
@@ -153,7 +157,6 @@ public class EditProfileViewModel extends ViewModel {
             return false;
         }
     }
-
 
 
     private boolean emailValid() {

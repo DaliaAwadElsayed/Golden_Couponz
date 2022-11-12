@@ -8,7 +8,6 @@ import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
@@ -87,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     }
 
 
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -122,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
             }
         }
     }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
@@ -168,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         for (Country member : countries) {
             if (member.getId().equals(id)) {
                 Log.i("MEMBER", member.getTitle() + "//" + member.getCurrency() + "?");
-                 GoldenNoLoginSharedPreference.saveUserCountry(this, 0, id, member.getTitle(),member.getCurrency() );
+                GoldenNoLoginSharedPreference.saveUserCountry(this, 0, id, member.getTitle(), member.getCurrency());
                 return member; // return member when name found
             }
         }
@@ -177,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
 
     private void getCountryAndCurrencyWithId(String lang) {
         int countryId = GoldenNoLoginSharedPreference.getUserCountryId(this);
-       CountriesAdapter countriesAdapter = new CountriesAdapter(this);
+        CountriesAdapter countriesAdapter = new CountriesAdapter(this);
         apiInterface.getCountries(lang).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -206,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         });
 
     }
+
     private void languageData() {
         if (GoldenNoLoginSharedPreference.getUserLanguage(this).equals("en")) {
             getCountryAndCurrencyWithId("en");
@@ -261,28 +261,23 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
                             @Override
                             public void onSuccess(LoginResult loginResult) {
                                 GraphRequest request = GraphRequest.newMeRequest(
-
-                                        loginResult.getAccessToken(),
-
-                                        new GraphRequest.GraphJSONObjectCallback() {
-
+                                        loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                                             @Override
                                             public void onCompleted(JSONObject object,
                                                                     GraphResponse response) {
-
                                                 if (object != null) {
                                                     try {
                                                         String name = object.getString("name");
                                                         String email = object.getString("email");
                                                         String fbUserID = object.getString("id");
                                                         disconnectFromFacebook();
-                                                        Log.i("FACEBOOK DATA", name + "//" + email + "//" + fbUserID);
-
+                                                        Log.i("FACEBOOKDATA", name + "//" + email + "//" + fbUserID);
+                                                        loginWithGoogleApi(loginResult.getAccessToken().getToken(), "facebook");
                                                         // do action after Facebook login success
                                                         // or call your API
                                                     } catch (NullPointerException | JSONException e) {
                                                         e.printStackTrace();
-                                                        Log.i("FACEBOOKEXCEPTION",e.toString());
+                                                        Log.i("FACEBOOKEXCEPTION", e.toString());
                                                     }
                                                 }
                                             }
@@ -352,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
                 MessageDigest md
                         = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Log.d("KeyHash:",
+                Log.d("KeyHash",
                         Base64.encodeToString(
                                 md.digest(),
                                 Base64.DEFAULT));
@@ -369,6 +364,8 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.code() == 200) {
                     navController.navigate(R.id.homeFragment);
+                    GoldenSharedPreference.saveUser(MainActivity.this, response.body(), response.body().getId());
+
                 }
             }
 
@@ -400,17 +397,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-
-            if (acct != null) {
-                String personName = acct.getDisplayName();
-                String personGivenName = acct.getGivenName();
-                String personFamilyName = acct.getFamilyName();
-                String personEmail = acct.getEmail();
-                String personId = acct.getId();
-                Uri personPhoto = acct.getPhotoUrl();
-                Log.i("DATAGOOGLE", personEmail + "//" + account.getIdToken());
-            }
-            loginWithGoogleApi(acct.getIdToken(), "google");
+            loginWithGoogleApi(account.getIdToken(), "apple");
             // Signed in successfully, show authenticated UI.
 
         } catch (ApiException e) {

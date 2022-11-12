@@ -134,8 +134,9 @@ public interface Api {
     Call<ApiResponse> deleteNotification(@Header("Authorization") String authHeader, @Path("id") String id);
 
     //{{baseUrl}}/api/oauth
+    @FormUrlEncoded
     @POST("/api/oauth")
-    Call<ApiResponse> socialLogin(@Header("access_token") String access_token, @Header("driver") String driver);
+    Call<ApiResponse> socialLogin(@Field("access_token") String access_token, @Field("driver") String driver);
 
 }
 

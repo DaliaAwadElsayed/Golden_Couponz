@@ -508,9 +508,9 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                                                     String token = task.getResult();
                                                     Log.w("TAG", token + "?");
                                                     if (GoldenSharedPreference.isLoggedIn(context)) {
-                                                        getSingleCoupons("Bearer" + GoldenSharedPreference.getToken(context), 0);
+                                                        getSingleCoupons("Bearer" + GoldenSharedPreference.getToken(context), 0,"slider");
                                                     } else {
-                                                        getSingleCoupons("", 0);
+                                                        getSingleCoupons("", 0,"slider");
                                                     }
 //                                                    getSingleSliderCoupons("Bearer" + GoldenSharedPreference.getToken(context), 0, token);
                                                 }
@@ -555,8 +555,13 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
     }
 
 
-    private void getSingleCoupons(String token, int position) {
-        showCopyCouponDialog();
+    private void getSingleCoupons(String token, int position,String clickType) {
+        if (clickType.equals("slider")){
+            showSecondCopyCouponDialog();
+        }else {
+            showCopyCouponDialog();
+
+        }
         String lang = GoldenNoLoginSharedPreference.getUserLanguage(context);
         String fcmToken = "";
         int countryId = GoldenNoLoginSharedPreference.getUserCountryId(context);
@@ -1120,9 +1125,9 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
             if (click == 1) {
                 //open copyCouponLinear
                 if (GoldenSharedPreference.isLoggedIn(context)) {
-                    getSingleCoupons("Bearer" + GoldenSharedPreference.getToken(context), position);
+                    getSingleCoupons("Bearer" + GoldenSharedPreference.getToken(context), position,"coupon");
                 } else {
-                    getSingleCoupons("", position);
+                    getSingleCoupons("", position,"coupon");
                 }
                 social();
             }

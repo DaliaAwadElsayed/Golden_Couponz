@@ -204,6 +204,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/forgetPassId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

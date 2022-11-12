@@ -79,6 +79,6 @@ dependencies {
     //google
     implementation 'com.google.android.gms:play-services-auth:20.3.0'
 //facebook
-    implementation 'com.facebook.android:facebook-android-sdk:5.0.0'
+    implementation 'com.facebook.android:facebook-android-sdk:12.1.0'
 
 }

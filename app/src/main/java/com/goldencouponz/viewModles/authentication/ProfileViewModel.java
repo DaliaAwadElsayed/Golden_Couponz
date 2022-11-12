@@ -415,6 +415,11 @@ public class ProfileViewModel extends ViewModel {
             public void onResponse(Call<UserRegisteration> call, Response<UserRegisteration> response) {
                 if (response.code() == 200) {
                     if (response.body() != null) {
+                        if (response.body().getUser().getPhone()==null||response.body().getUser().getPhone().equals("null")){
+                            profileFragmentBinding.phoneId.setVisibility(View.GONE);
+                        }else {
+                            profileFragmentBinding.phoneId.setVisibility(View.VISIBLE);
+                        }
                         profileFragmentBinding.progress.setVisibility(View.GONE);
                         profileFragmentBinding.phoneId.setText(Utility.fixNullString(response.body().getUser().getPhone()));
                         profileFragmentBinding.emailId.setText(Utility.fixNullString(response.body().getUser().getEmail()));

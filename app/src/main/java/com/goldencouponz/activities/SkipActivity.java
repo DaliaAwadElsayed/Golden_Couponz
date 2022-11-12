@@ -87,8 +87,10 @@ public class SkipActivity extends AppCompatActivity {
                 }));
         Intrinsics.checkNotNullExpressionValue(var10001, "registerForActivityResul…)\n            }\n        }");
         this.requestPermissionLauncher = var10001;
-        this.createNotificationChannel();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            this.createNotificationChannel();
+        }
         Bundle extras = getIntent().getExtras();
         Log.i("LANGUAGESKIP",extras.getString("language"));
         if (extras != null) {
