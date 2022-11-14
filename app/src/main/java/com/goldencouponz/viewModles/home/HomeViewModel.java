@@ -100,7 +100,6 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                                         homeFragmentBinding.notificationId.startAnimation(shake);
                                     }
                                 }
-                                homeFragmentBinding.notificationBadge.setVisibility(View.GONE);
 
                             }
 

@@ -6,6 +6,7 @@ import com.goldencouponz.models.appsetting.Notification;
 import com.goldencouponz.models.home.Category;
 import com.goldencouponz.models.home.Slider;
 import com.goldencouponz.models.home.Store;
+import com.goldencouponz.models.store.Brand;
 import com.goldencouponz.models.store.StoreCoupons;
 import com.goldencouponz.models.store.StoreProduct;
 import com.google.gson.annotations.Expose;
@@ -68,7 +69,19 @@ public class ApiResponse {
     @SerializedName("notifications")
     @Expose
     private List<Notification> notifications = null;
+    @SerializedName("brands")
+    @Expose
+    private List<Brand> brands = null;
+
     public ApiResponse() {
+    }
+
+    public List<Brand> getBrands() {
+        return brands;
+    }
+
+    public void setBrands(List<Brand> brands) {
+        this.brands = brands;
     }
 
     public List<Notification> getNotifications() {

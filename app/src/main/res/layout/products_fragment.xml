@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/productLinearId"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-      >
+        android:orientation="vertical">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBarId"
-            android:background="@color/basic_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/basic_color"
             android:elevation="4dp"
             android:minHeight="?attr/actionBarSize"
             app:titleTextColor="@color/black">
@@ -22,15 +22,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:padding="@dimen/_8sdp"
-               android:layout_margin="@dimen/_4sdp"
+                android:layout_margin="@dimen/_4sdp"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/_8sdp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                     android:layout_weight="5"
+                    android:layout_weight="5"
                     android:background="@drawable/bk_notification_layout"
                     android:backgroundTint="#fff"
                     android:drawableStart="@drawable/ic_search"
@@ -43,7 +43,7 @@
 
 
                 <ImageView
-                    android:id="@+id/listId"
+                    android:id="@+id/arrangeId"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -53,7 +53,7 @@
                     android:src="@drawable/ic_arrange" />
 
                 <ImageView
-                    android:id="@+id/gridId"
+                    android:id="@+id/filtterId"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -63,11 +63,12 @@
 
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
+
         <HorizontalScrollView
-            android:layout_marginTop="@dimen/_4sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_4sdp"
             android:layout_marginEnd="@dimen/_12sdp"
             android:fillViewport="true">
 
@@ -81,25 +82,24 @@
 
                 <LinearLayout
                     android:id="@+id/allId"
-                    android:layout_marginStart="@dimen/_4sdp"
-                    android:layout_marginEnd="@dimen/_4sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginEnd="@dimen/_4sdp"
                     android:background="@drawable/bk_category_uncheck"
-                    android:gravity="center"
-                    >
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/textId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:paddingEnd="@dimen/_6sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingBottom="@dimen/_2sdp"
-                        android:paddingStart="@dimen/_6sdp"
                         android:layout_weight="500"
                         android:gravity="center"
+                        android:paddingStart="@dimen/_6sdp"
+                        android:paddingTop="@dimen/_2sdp"
+                        android:paddingEnd="@dimen/_6sdp"
+                        android:paddingBottom="@dimen/_2sdp"
                         android:text="@string/all_label"
                         android:textColor="@color/black"
                         android:textSize="14sp"
@@ -121,8 +121,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/sub_category_recycler_view"
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/_4sdp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
             android:nestedScrollingEnabled="false"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
@@ -130,14 +130,15 @@
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/idNesteddSV"
-            android:layout_marginTop="@dimen/_4sdp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <ProgressBar
                     android:id="@+id/progress"
                     android:layout_width="wrap_content"
@@ -145,6 +146,7 @@
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     android:visibility="gone" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/idRVUsers"
                     android:layout_width="match_parent"

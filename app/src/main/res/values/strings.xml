@@ -157,4 +157,9 @@
     <string name="price_heighst">Price from high to low</string>
     <string name="price_lowest">Price from lowest to highest</string>
     <string name="back_twice">Please click BACK again to exit</string>
+    <string name="rest_label">Reset</string>
+    <string name="filter_by">Filter by</string>
+    <string name="store_label">Store</string>
+    <string name="trade_mark">Trade mark</string>
+    <string name="perform_label">Perform</string>
 </resources>

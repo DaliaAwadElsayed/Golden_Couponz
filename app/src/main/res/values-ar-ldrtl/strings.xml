@@ -158,4 +158,9 @@
     <string name="price_heighst">السعر من الاعلي الي الاقل</string>
     <string name="price_lowest">السعر من الاقل الي الاعلي</string>
     <string name="back_twice">"الرجاء النقر  \"رجوع\" مرة أخرى للخروج "</string>
+    <string name="rest_label">إعادة تعيين</string>
+    <string name="filter_by">تصفية حسب</string>
+    <string name="store_label">المتجر</string>
+    <string name="trade_mark">العلامة التجارية</string>
+    <string name="perform_label">تطبيق</string>
 </resources>

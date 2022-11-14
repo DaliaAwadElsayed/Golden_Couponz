@@ -652,7 +652,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
 
     private void getSingleProduct(String deviceToken, int country, String lang, String storeId, String catId, String subCatId, int productPosition) {
         storeDetailsFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId).enqueue(new Callback<ApiResponse>() {
+        apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId,"","").enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
@@ -834,7 +834,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
 
     private void getProducts(String deviceToken, int country, String lang, String storeId, String catId, String subCatId) {
         storeDetailsFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId).enqueue(new Callback<ApiResponse>() {
+        apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId,"","").enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {

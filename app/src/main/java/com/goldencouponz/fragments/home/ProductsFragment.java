@@ -10,10 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.e.goldencouponz.databinding.ArrangeDialogBinding;
+import com.e.goldencouponz.databinding.BrandListDialogBinding;
+import com.e.goldencouponz.databinding.FiltterDialogBinding;
 import com.e.goldencouponz.databinding.NoCouponProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.ProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.ProductsFragmentBinding;
 import com.e.goldencouponz.databinding.SecondProductDetailsDialogBinding;
+import com.e.goldencouponz.databinding.StoreListDialogBinding;
 import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.home.ProductsViewModel;
 
@@ -24,7 +28,10 @@ public class ProductsFragment extends Fragment {
     ProductDetailsDialogBinding productDetailsDialogBinding;
     SecondProductDetailsDialogBinding secondProductDetailsDialogBinding;
     NoCouponProductDetailsDialogBinding noCouponProductDetailsDialogBinding;
-
+    ArrangeDialogBinding arrangeDialogBinding;
+    BrandListDialogBinding brandListDialogBinding;
+    FiltterDialogBinding filtterDialogBinding;
+    StoreListDialogBinding storeListDialogBinding;
     public static ProductsFragment newInstance() {
         return new ProductsFragment();
     }
@@ -36,6 +43,10 @@ public class ProductsFragment extends Fragment {
         productDetailsDialogBinding = ProductDetailsDialogBinding.inflate(inflater, container, false);
         secondProductDetailsDialogBinding = SecondProductDetailsDialogBinding.inflate(inflater, container, false);
         noCouponProductDetailsDialogBinding = NoCouponProductDetailsDialogBinding.inflate(inflater, container, false);
+        arrangeDialogBinding = ArrangeDialogBinding.inflate(inflater, container, false);
+        brandListDialogBinding = BrandListDialogBinding.inflate(inflater, container, false);
+        filtterDialogBinding = FiltterDialogBinding.inflate(inflater, container, false);
+        storeListDialogBinding = StoreListDialogBinding.inflate(inflater, container, false);
         return productsFragmentBinding.getRoot();
     }
 
@@ -44,7 +55,9 @@ public class ProductsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProductsViewModel.class);
         ((MainActivity) getActivity()).showBottomMenu();
-        mViewModel.init(productsFragmentBinding, productDetailsDialogBinding, secondProductDetailsDialogBinding, noCouponProductDetailsDialogBinding, getContext());
+        mViewModel.init(productsFragmentBinding, productDetailsDialogBinding,
+                secondProductDetailsDialogBinding, noCouponProductDetailsDialogBinding,
+                arrangeDialogBinding,brandListDialogBinding,filtterDialogBinding,storeListDialogBinding, getContext());
     }
 
 }

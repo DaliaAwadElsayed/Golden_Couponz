@@ -148,6 +148,7 @@
                                 android:src="@drawable/ic_baseline_notifications_none_24" />
 
                             <TextView
+                                android:visibility="gone"
                                 android:id="@+id/notification_badge"
                                 style="@style/TextViewBold"
                                 android:layout_width="13dp"

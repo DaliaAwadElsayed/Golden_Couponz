@@ -99,7 +99,7 @@ public interface Api {
 
     //api/products?store_id=35
     @GET("api/products")
-    Call<ApiResponse> getStoreProducts(@Header("fcm-token") String fcmToken, @Header("country") int country, @Header("Accept-Language") String AcceptLanguage, @Query("store_id") String store_id, @Query("category_id") String category_id, @Query("subcategory_id") String subcategory_id);
+    Call<ApiResponse> getStoreProducts(@Header("fcm-token") String fcmToken, @Header("country") int country, @Header("Accept-Language") String AcceptLanguage, @Query("store_id") String store_id, @Query("category_id") String category_id, @Query("subcategory_id") String subcategory_id, @Query("price_asc") String price_asc, @Query("price_desc") String price_desc);
 
     //api/user-fav-store-coupons
     @GET("api/user-fav-store-coupons")
@@ -129,14 +129,14 @@ public interface Api {
     @GET("api/read-single-notifications/{id}")
     Call<ApiResponse> readNotification(@Header("Authorization") String authHeader, @Path("id") String id);
 
-    //{{baseUrl}}/api/delete-single-notifications/ab7e7483-df27-4e87-8ca8-e5518cd24c76
-    @GET("api/delete-single-notifications/{id}")
-    Call<ApiResponse> deleteNotification(@Header("Authorization") String authHeader, @Path("id") String id);
-
     //{{baseUrl}}/api/oauth
     @FormUrlEncoded
     @POST("/api/oauth")
     Call<ApiResponse> socialLogin(@Field("access_token") String access_token, @Field("driver") String driver);
+
+    //{{baseUrl}}/api/brands/
+    @GET("/api/brands")
+    Call<ApiResponse> getBrands(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Header("country") int country);
 
 }
 
