@@ -120,7 +120,6 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
         showProductDetailsDialog = new BottomSheetDialog(context);
         storeDetailsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
         storeDetailsFragmentBinding.allId.setBackgroundTintList(null);
-        getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "");
         if (GoldenSharedPreference.isLoggedIn(context)) {
             FirebaseMessaging.getInstance().getToken()
                     .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -134,10 +133,12 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                             String token = task.getResult();
                             Log.w("TAG", token + "?");
                             getStoreDetails("Bearer" + GoldenSharedPreference.getToken(context), token);
+                            getProducts("",token, GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "");
 
                         }
                     });
-        } else {
+        }
+        else {
             FirebaseMessaging.getInstance().getToken()
                     .addOnCompleteListener(new OnCompleteListener<String>() {
                         @Override
@@ -150,6 +151,8 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                             String token = task.getResult();
                             Log.w("TAG", token + "?");
                             getStoreDetails("", token);
+                            getProducts("",token, GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "");
+
                         }
                     });
         }
@@ -480,17 +483,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                         Picasso.get().load(response.body().getStore().getFile()).into(storeDetailsFragmentBinding.storeImgId);
                         Picasso.get().load(response.body().getStore().getCover()).into(storeDetailsFragmentBinding.coverId);
                         storeDetailsFragmentBinding.storeNameId.setText(response.body().getStore().getTitle());
-                        int size = response.body().getStore().getStoreCategories().size();
-                        StringBuffer br = new StringBuffer();
-                        for (int i = 0; i < size; i++) {
-                            String text = response.body().getStore().getStoreCategories().get(i).getCategory().getTitle();
-                            if (i < size - 1) {
-                                br.append(text + " , ");
-                            } else if (i == size - 1) {
-                                br.append(text + ".");
-                            }
-                        }
-                        storeDetailsFragmentBinding.storeCatId.setText(br.toString());
+                        storeDetailsFragmentBinding.storeCatId.setText(response.body().getStore().getDetails());
                         if (!response.body().getStore().getStoreSliders().isEmpty()) {
                             addsBannerAdapter.setSliders(response.body().getStore().getStoreSliders());
                             addsBannerAdapter.setOnItemClickListener(new ProductSlidersAdapter.OnItemClickListener() {
@@ -508,9 +501,9 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                                                     String token = task.getResult();
                                                     Log.w("TAG", token + "?");
                                                     if (GoldenSharedPreference.isLoggedIn(context)) {
-                                                        getSingleCoupons("Bearer" + GoldenSharedPreference.getToken(context), 0,"slider");
+                                                        getSingleCoupons("Bearer" + GoldenSharedPreference.getToken(context), 0, "slider");
                                                     } else {
-                                                        getSingleCoupons("", 0,"slider");
+                                                        getSingleCoupons("", 0, "slider");
                                                     }
 //                                                    getSingleSliderCoupons("Bearer" + GoldenSharedPreference.getToken(context), 0, token);
                                                 }
@@ -555,10 +548,10 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
     }
 
 
-    private void getSingleCoupons(String token, int position,String clickType) {
-        if (clickType.equals("slider")){
+    private void getSingleCoupons(String token, int position, String clickType) {
+        if (clickType.equals("slider")) {
             showSecondCopyCouponDialog();
-        }else {
+        } else {
             showCopyCouponDialog();
 
         }
@@ -650,9 +643,9 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
 
     }
 
-    private void getSingleProduct(String deviceToken, int country, String lang, String storeId, String catId, String subCatId, int productPosition) {
+    private void getSingleProduct(String id,String deviceToken, int country, String lang, String storeId, String catId, String subCatId, int productPosition) {
         storeDetailsFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId,"","").enqueue(new Callback<ApiResponse>() {
+        apiInterface.getStoreProducts(id,deviceToken, country, lang, storeId, catId, subCatId, "", "").enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
@@ -812,8 +805,20 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                                 @Override
                                 public void onItemClick(View viewItem, int position, int categoryId, int subCatId) {
                                     Log.i("CATEGORYIDDD", storeId + "?" + categoryId + "?" + subCatId);
-                                    getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), String.valueOf(categoryId), String.valueOf(subCatId));
-                                }
+                                   FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+                            // Get new FCM registration token
+                            String token = task.getResult();
+                            Log.w("TAG", token + "?");
+
+                                    getProducts("",token, GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), String.valueOf(categoryId), String.valueOf(subCatId));
+                                }});}
                             });
                         } else {
                             Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
@@ -832,9 +837,9 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
 
     }
 
-    private void getProducts(String deviceToken, int country, String lang, String storeId, String catId, String subCatId) {
+    private void getProducts(String id,String deviceToken, int country, String lang, String storeId, String catId, String subCatId) {
         storeDetailsFragmentBinding.progress.setVisibility(View.VISIBLE);
-        apiInterface.getStoreProducts(deviceToken, country, lang, storeId, catId, subCatId,"","").enqueue(new Callback<ApiResponse>() {
+        apiInterface.getStoreProducts(id,deviceToken, country, lang, storeId, catId, subCatId, "", "").enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
@@ -1125,9 +1130,9 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
             if (click == 1) {
                 //open copyCouponLinear
                 if (GoldenSharedPreference.isLoggedIn(context)) {
-                    getSingleCoupons("Bearer" + GoldenSharedPreference.getToken(context), position,"coupon");
+                    getSingleCoupons("Bearer" + GoldenSharedPreference.getToken(context), position, "coupon");
                 } else {
-                    getSingleCoupons("", position,"coupon");
+                    getSingleCoupons("", position, "coupon");
                 }
                 social();
             }
@@ -1179,7 +1184,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                                 }
                                 // Get new FCM registration token
                                 String deviceToken = task.getResult();
-                                getSingleProduct(deviceToken, GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "", finalPosition);
+                                getSingleProduct("",deviceToken, GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), String.valueOf(storeId), "", "", finalPosition);
                                 if (coupon == null || coupon.equals("null") || coupon.isEmpty()) {
                                     showNoCouponProductDetailsDialog();
                                 } else {
