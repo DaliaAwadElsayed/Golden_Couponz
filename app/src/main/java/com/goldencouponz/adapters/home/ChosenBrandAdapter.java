@@ -15,18 +15,19 @@ import com.e.goldencouponz.R;
 import java.util.ArrayList;
 
 public class ChosenBrandAdapter extends RecyclerView.Adapter<ChosenBrandAdapter.ViewHolder> {
-
+    private ArrayList<Integer> localIdsSet;
     private ArrayList<String> localDataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
-ImageView imageView;
+        ImageView imageView;
+
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
 
             textView = view.findViewById(R.id.textId);
-            imageView =  view.findViewById(R.id.deleteId);
+            imageView = view.findViewById(R.id.deleteId);
 
         }
 
@@ -34,8 +35,10 @@ ImageView imageView;
             return textView;
         }
     }
-    public ChosenBrandAdapter(ArrayList<String> dataSet) {
+
+    public ChosenBrandAdapter(ArrayList<String> dataSet, ArrayList<Integer> idSet) {
         localDataSet = dataSet;
+        localIdsSet = idSet;
     }
 
     // Create new views (invoked by the layout manager)
@@ -59,6 +62,7 @@ ImageView imageView;
             @Override
             public void onClick(View v) {
                 localDataSet.remove(position);
+                localIdsSet.remove(position);
                 notifyDataSetChanged();
 
             }
@@ -70,4 +74,5 @@ ImageView imageView;
     public int getItemCount() {
         return localDataSet.size();
     }
+
 }

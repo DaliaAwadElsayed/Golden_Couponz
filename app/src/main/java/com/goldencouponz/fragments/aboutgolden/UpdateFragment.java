@@ -10,32 +10,33 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.e.goldencouponz.databinding.AboutFragmentBinding;
+import com.e.goldencouponz.databinding.FragmentUpdateBinding;
 import com.goldencouponz.activities.MainActivity;
-import com.goldencouponz.viewModles.aboutgolden.AboutViewModel;
+import com.goldencouponz.viewModles.aboutgolden.UpdateViewModel;
 
-public class AboutFragment extends Fragment {
+public class UpdateFragment extends Fragment {
 
-    private AboutViewModel mViewModel;
-    AboutFragmentBinding aboutFragmentBinding;
+    private UpdateViewModel mViewModel;
+    FragmentUpdateBinding fragmentUpdateBinding;
 
-    public static AboutFragment newInstance() {
-        return new AboutFragment();
+    public static UpdateFragment newInstance() {
+        return new UpdateFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        aboutFragmentBinding = AboutFragmentBinding.inflate(inflater, container, false);
-        return aboutFragmentBinding.getRoot();
+        fragmentUpdateBinding = FragmentUpdateBinding.inflate(inflater, container, false);
+        return fragmentUpdateBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(AboutViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(UpdateViewModel.class);
         ((MainActivity) getActivity()).hideBottomMenu();
-        mViewModel.init(getContext(), aboutFragmentBinding,getArguments().getString("type"));
+        mViewModel.init(fragmentUpdateBinding,getContext());
+
     }
 
 }

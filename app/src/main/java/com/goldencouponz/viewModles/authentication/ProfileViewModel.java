@@ -117,7 +117,7 @@ public class ProfileViewModel extends ViewModel {
         // go through list of members and compare name with given name
 
         for (Country member : countries) {
-            if (member.getId().equals(id)) {
+            if (member.getId() == (id)) {
                 Log.i("MEMBER", member.getTitle() + "//" + member.getCurrency() + "?");
                 profileFragmentBinding.countryChangeId.setText(member.getTitle());
                 profileFragmentBinding.currencyNumId.setText(member.getCurrency());
@@ -301,6 +301,7 @@ public class ProfileViewModel extends ViewModel {
                         profileFragmentBinding.currencyNumId.getText().toString()
                 );
                 showLogOutDialog.dismiss();
+                GoldenNoLoginSharedPreference.saveUserEmail(context, profileFragmentBinding.emailId.getText().toString());
                 Navigation.findNavController(profileFragmentBinding.getRoot()).navigate(R.id.homeFragment);
                 profileFragmentBinding.progress.setVisibility(View.VISIBLE);
                 apiInterface.userLogOut("Bearer" + GoldenSharedPreference.getToken(context)).enqueue(new Callback<ApiResponse>() {
@@ -415,9 +416,9 @@ public class ProfileViewModel extends ViewModel {
             public void onResponse(Call<UserRegisteration> call, Response<UserRegisteration> response) {
                 if (response.code() == 200) {
                     if (response.body() != null) {
-                        if (response.body().getUser().getPhone()==null||response.body().getUser().getPhone().equals("null")){
+                        if (response.body().getUser().getPhone() == null || response.body().getUser().getPhone().equals("null")) {
                             profileFragmentBinding.phoneId.setVisibility(View.GONE);
-                        }else {
+                        } else {
                             profileFragmentBinding.phoneId.setVisibility(View.VISIBLE);
                         }
                         profileFragmentBinding.progress.setVisibility(View.GONE);

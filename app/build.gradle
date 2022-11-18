@@ -3,13 +3,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+
     compileSdk 32
 
     defaultConfig {
         applicationId "com.codesroots.goldencoupon"
         minSdk 21
         targetSdk 32
-        versionCode 10
+        versionCode 15
         versionName "1.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -19,6 +20,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     dataBinding {
@@ -80,5 +82,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.3.0'
 //facebook
     implementation 'com.facebook.android:facebook-android-sdk:12.1.0'
+//google play
+    implementation 'com.google.android.play:app-update:2.0.1'
 
 }

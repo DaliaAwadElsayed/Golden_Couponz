@@ -38,7 +38,6 @@
                 android:layout_width="match_parent"
                 android:layout_gravity="bottom"
                 android:id="@+id/relativBottomId"
-                android:saveEnabled="true"
                 android:layout_height="wrap_content"
                 app:action_layout="@layout/action_layout_hump"
                 app:action_view_attach_mode="hump"

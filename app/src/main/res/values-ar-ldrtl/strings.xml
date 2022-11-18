@@ -16,6 +16,7 @@
     <string name="enjoy_strongest_discounts_offers">استمتع بأقوي مجموعة من الخصومات والعروض</string>
     <string name="view_all">مشاهدة الكل</string>
     <string name="find_store_you_want">ابحث عن المتجر الذي تريده</string>
+    <string name="find_you_want">ابحث عن ما تريده</string>
     <string name="skip_label">تخطي</string>
     <string name="best_store_deals">أفضل عروض المتاجر</string>
     <string name="get_exclusive_coupon_and_offer">احصل علي كوبونات وعروض حصرية للمتاجر المفضلة اليك</string>
@@ -163,4 +164,6 @@
     <string name="store_label">المتجر</string>
     <string name="trade_mark">العلامة التجارية</string>
     <string name="perform_label">تطبيق</string>
+    <string name="update_downloaded">"لاستخدام هذا التطبيق ، قم بتنزيل أحدث إصدار "</string>
+    <string name="restart">"تحديث "</string>
 </resources>

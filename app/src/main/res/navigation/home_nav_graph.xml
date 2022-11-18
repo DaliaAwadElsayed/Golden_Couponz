@@ -65,6 +65,14 @@
         android:label="home_fragment"
         tools:layout="@layout/home_fragment">
         <action
+            android:id="@+id/searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
             android:id="@+id/notificationFragment"
             app:destination="@id/notificationFragment"
             app:enterAnim="@anim/slide_in_right"
@@ -229,6 +237,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/whatsAppFragment"
@@ -272,5 +287,9 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/updateFragment"
+        android:name="com.goldencouponz.fragments.aboutgolden.UpdateFragment"
+        android:label="UpdateFragment" />
 
 </navigation>

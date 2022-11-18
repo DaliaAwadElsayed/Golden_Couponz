@@ -33,7 +33,7 @@ public class FirstSkipFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(FirstSkipViewModel.class);
-         mViewModel.init(firstSkipFragmentBinding, getContext());
+         mViewModel.init(firstSkipFragmentBinding, getContext(),getActivity());
     }
 
 }

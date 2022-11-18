@@ -15,6 +15,7 @@ import com.goldencouponz.models.user.UserRegisteration;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.Utility;
+import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 
 import retrofit2.Call;
@@ -53,11 +54,12 @@ public class EditProfileViewModel extends ViewModel {
                 if (response.code() == 200) {
                     if (response.body() != null) {
                         editProfileFragmentBinding.progress.setVisibility(View.GONE);
-
                         editProfileFragmentBinding.phoneId.setText(Utility.fixNullString(response.body().getUser().getPhone()));
                         editProfileFragmentBinding.confirmEmailId.setText(Utility.fixNullString(response.body().getUser().getEmail()));
                         editProfileFragmentBinding.emailId.setText(Utility.fixNullString(response.body().getUser().getEmail()));
                         editProfileFragmentBinding.nameId.setText(Utility.fixNullString(response.body().getUser().getName()));
+                        GoldenNoLoginSharedPreference.saveUserEmail(context, response.body().getUser().getEmail());
+
                     } else {
                         editProfileFragmentBinding.progress.setVisibility(View.GONE);
                         editProfileFragmentBinding.phoneId.setText(Utility.fixNullString(GoldenSharedPreference.getPhone(context)));
@@ -121,7 +123,7 @@ public class EditProfileViewModel extends ViewModel {
     }
 
     private boolean inputValid() {
-        return nameValid()  && emailValid() && emailsIsValid();
+        return nameValid() && emailValid() && emailsIsValid();
     }
 
     private boolean nameValid() {

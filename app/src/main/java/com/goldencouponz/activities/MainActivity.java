@@ -2,6 +2,7 @@ package com.goldencouponz.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -52,6 +53,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.InstallState;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,10 +83,13 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     private BeginSignInRequest signInRequest;
     GoogleSignInOptions gso;
     GoogleSignInClient mGoogleSignInClient;
-    private static int RC_SIGN_IN = 100;
+    private static int RC_SIGN_IN = 1000;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
     private CallbackManager callbackManager;
     private LoginManager loginManager;
+    private static final int REQ_CODE_VERSION_UPDATE = 530;
+    private AppUpdateManager appUpdateManager;
+    private InstallStateUpdatedListener installStateUpdatedListener;
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -124,13 +137,153 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkNewAppVersionState();
+    }
+    @Override
+    protected void onDestroy() {
+        unregisterInstallStateUpdListener();
+        super.onDestroy();
+    }
 
+
+    private void checkForAppUpdate() {
+        // Creates instance of the manager.
+        appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
+
+        // Returns an intent object that you use to check for an update.
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        // Create a listener to track request state updates.
+        installStateUpdatedListener = new InstallStateUpdatedListener() {
+            @Override
+            public void onStateUpdate(InstallState installState) {
+                // Show module progress, log state, or install the update.
+                if (installState.installStatus() == InstallStatus.DOWNLOADED)
+                    // After the update is downloaded, show a notification
+                    // and request user confirmation to restart the app.
+                    popupSnackbarForCompleteUpdateAndUnregister();
+            }
+        };
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                // Request the update.
+                if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+
+                    // Before starting an update, register a listener for updates.
+                    appUpdateManager.registerListener(installStateUpdatedListener);
+                    // Start an update.
+                    startAppUpdateFlexible(appUpdateInfo);
+                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) ) {
+                    // Start an update.
+                    startAppUpdateImmediate(appUpdateInfo);
+                }
+            }
+        });
+    }
+
+    private void startAppUpdateImmediate(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    // The current activity making the update request.
+                    this,
+                    // Include a request code to later monitor this update request.
+                    MainActivity.REQ_CODE_VERSION_UPDATE);
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startAppUpdateFlexible(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.FLEXIBLE,
+                    // The current activity making the update request.
+                    this,
+                    // Include a request code to later monitor this update request.
+                    MainActivity.REQ_CODE_VERSION_UPDATE);
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+            unregisterInstallStateUpdListener();
+        }
+    }
+
+    /**
+     * Displays the snackbar notification and call to action.
+     * Needed only for Flexible app update
+     */
+    private void popupSnackbarForCompleteUpdateAndUnregister() {
+        Snackbar snackbar =
+                Snackbar.make(activityMainBinding.mainContainer, getString(R.string.update_downloaded), Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction(R.string.restart, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appUpdateManager.completeUpdate();
+            }
+        });
+        snackbar.setActionTextColor(getResources().getColor(R.color.basic_color));
+        snackbar.show();
+
+        unregisterInstallStateUpdListener();
+    }
+
+    /**
+     * Checks that the update is not stalled during 'onResume()'.
+     * However, you should execute this check at all app entry points.
+     */
+    private void checkNewAppVersionState() {
+        appUpdateManager
+                .getAppUpdateInfo()
+                .addOnSuccessListener(
+                        appUpdateInfo -> {
+                            //FLEXIBLE:
+                            // If the update is downloaded but not installed,
+                            // notify the user to complete the update.
+                            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                                popupSnackbarForCompleteUpdateAndUnregister();
+                            }
+
+                            //IMMEDIATE:
+                            if (appUpdateInfo.updateAvailability()
+                                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                                // If an in-app update is already running, resume the update.
+                                startAppUpdateImmediate(appUpdateInfo);
+                            }
+                        });
+
+    }
+
+    /**
+     * Needed only for FLEXIBLE update
+     */
+    private void unregisterInstallStateUpdListener() {
+        if (appUpdateManager != null && installStateUpdatedListener != null)
+            appUpdateManager.unregisterListener(installStateUpdatedListener);
+    }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        languageData();
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
+        checkForAppUpdate();
+        // Returns an intent object that you use to check for an update.
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                // Request the update.
+                navController.navigate(R.id.updateFragment);
+            }
+        });
 
+        languageData();
         String serverClientId = getString(R.string.server_client_id);
 //facebook
         printHashKey();
@@ -164,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         // go through list of members and compare name with given name
 
         for (Country member : countries) {
-            if (member.getId().equals(id)) {
+            if (member.getId() == (id)) {
                 Log.i("MEMBER", member.getTitle() + "//" + member.getCurrency() + "?");
                 GoldenNoLoginSharedPreference.saveUserCountry(this, 0, id, member.getTitle(), member.getCurrency());
                 return member; // return member when name found
@@ -271,7 +424,13 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
                                                         String fbUserID = object.getString("id");
                                                         disconnectFromFacebook();
                                                         Log.i("FACEBOOKDATA", name + "//" + email + "//" + fbUserID);
-                                                        loginWithGoogleApi(loginResult.getAccessToken().getToken(), "facebook");
+                                                        if (GoldenNoLoginSharedPreference.getUserEmail(MainActivity.this).equals(email)) {
+                                                            loginWithGoogleApi(loginResult.getAccessToken().getToken(), "facebook", "second");
+
+                                                        } else {
+                                                            loginWithGoogleApi(loginResult.getAccessToken().getToken(), "facebook", "first");
+
+                                                        }
                                                         // do action after Facebook login success
                                                         // or call your API
                                                     } catch (NullPointerException | JSONException e) {
@@ -302,7 +461,9 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
                                         + error.getMessage());
                             }
                         });
+
     }
+
 
     public void disconnectFromFacebook() {
         if (AccessToken.getCurrentAccessToken() == null) {
@@ -357,12 +518,17 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     }
 
 
-    private void loginWithGoogleApi(String accessToken, String driver) {
+    private void loginWithGoogleApi(String accessToken, String driver, String login) {
         apiInterface.socialLogin(accessToken, driver).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.code() == 200) {
-                    navController.navigate(R.id.homeFragment);
+                    if (login.equals("second")) {
+                        navController.navigate(R.id.homeFragment);
+                    } else {
+                        navController.navigate(R.id.favouriteStoresFragment);
+
+                    }
                     GoldenSharedPreference.saveUser(MainActivity.this, response.body(), response.body().getId());
 
                 }
@@ -390,19 +556,36 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
+        switch (requestCode) {
+
+            case REQ_CODE_VERSION_UPDATE:
+                if (resultCode != RESULT_OK) { //RESULT_OK / RESULT_CANCELED / RESULT_IN_APP_UPDATE_FAILED
+                    Log.d("Update flow failed!: " ,""+resultCode);
+                    // If the update is cancelled or fails,
+                    // you can request to start the update again.
+                    unregisterInstallStateUpdListener();
+                }
+
+                break;
+        }
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-            loginWithGoogleApi(account.getIdToken(), "apple");
+            if (GoldenNoLoginSharedPreference.getUserEmail(MainActivity.this).equals(acct.getEmail())) {
+                loginWithGoogleApi(account.getIdToken(), "apple", "second");
+            } else {
+                loginWithGoogleApi(account.getIdToken(), "apple", "first");
+            }
             // Signed in successfully, show authenticated UI.
+
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.d("massage", e.toString());
+            Log.d("massageGOOGLE", e.toString());
 
         }
     }

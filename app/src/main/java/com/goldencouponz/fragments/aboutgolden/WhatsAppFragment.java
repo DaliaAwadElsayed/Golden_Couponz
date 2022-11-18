@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.WhatsAppFragmentBinding;
+import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.aboutgolden.WhatsAppViewModel;
 
 public class WhatsAppFragment extends Fragment {
@@ -34,6 +35,8 @@ public class WhatsAppFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(WhatsAppViewModel.class);
         mViewModel.init(whatsAppFragmentBinding, getContext());
+        ((MainActivity) getActivity()).showBottomMenu();
+
     }
 
 }

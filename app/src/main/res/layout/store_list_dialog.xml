@@ -52,7 +52,8 @@
                     android:textStyle="bold" />
             </RelativeLayout>
 
-            <TextView
+            <EditText
+                android:id="@+id/searchTextId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_14sdp"
@@ -64,8 +65,8 @@
                 android:drawablePadding="@dimen/_4sdp"
                 android:gravity="fill"
                 android:padding="@dimen/_5sdp"
-                android:text="@string/find_store_you_want"
-                android:textColor="#7A7A7A"
+                android:hint="@string/find_store_you_want"
+                android:textColor="@color/black"
                 android:textFontWeight="400"
                 android:textSize="12sp" />
 
@@ -84,6 +85,7 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:orientation="vertical"
                 android:scrollbars="vertical"
+                android:layout_marginBottom="@dimen/_12sdp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 tools:listitem="@layout/check_store_filter_item" />
 

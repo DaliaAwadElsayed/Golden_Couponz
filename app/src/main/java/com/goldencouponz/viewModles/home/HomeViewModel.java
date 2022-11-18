@@ -183,12 +183,19 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         this.homeFragmentBinding = homeFragmentBinding;
         loginCheckDialog = new BottomSheetDialog(context);
         seeAllDialog = new BottomSheetDialog(context);
+        homeFragmentBinding.searchId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.searchFragment);
+            }
+        });
         if (GoldenSharedPreference.isLoggedIn(context)) {
             notification();
             homeFragmentBinding.notificationLayoutId.setVisibility(View.VISIBLE);
         } else {
             homeFragmentBinding.notificationLayoutId.setVisibility(View.GONE);
         }
+
         homeFragmentBinding.seeAllId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -473,7 +480,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                         }
                         // Get new FCM registration token
                         String device = task.getResult();
-                        Log.w("TAG", token + "?");
+                        Log.w("TAGGGG", device + "?");
                         apiInterface.getStore(token, lang, device, categoryId).enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -516,7 +523,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                         }
                         // Get new FCM registration token
                         String device = task.getResult();
-                        Log.w("TAG", token + "?");
+                        Log.w("TAGGRIDE", device + "?");
 
                         apiInterface.getStore(token, lang, device, categoryId).enqueue(new Callback<ApiResponse>() {
                             @Override

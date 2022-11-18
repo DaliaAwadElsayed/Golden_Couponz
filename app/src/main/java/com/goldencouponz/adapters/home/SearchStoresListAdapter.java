@@ -1,9 +1,9 @@
-package com.goldencouponz.adapters.stores;
+package com.goldencouponz.adapters.home;
+
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +11,20 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.e.goldencouponz.R;
-import com.e.goldencouponz.databinding.CouponItemBinding;
+import com.e.goldencouponz.databinding.StoreListItemBinding;
 import com.goldencouponz.interfaces.Api;
-import com.goldencouponz.models.store.StoreCoupons;
+import com.goldencouponz.models.home.Store;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
-import com.goldencouponz.viewModles.stores.StoreDetailsViewModel;
+import com.goldencouponz.viewModles.aboutgolden.SearchViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +33,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePageViewHolder> {
+public class SearchStoresListAdapter extends RecyclerView.Adapter<SearchStoresListAdapter.HomePageViewHolder> {
     private LayoutInflater inflater;
-    private List<StoreCoupons> store = new ArrayList<>();
+    private List<Store> store = new ArrayList<>();
     Context context;
-    StoreDetailsViewModel.Listener listener;
     private Api apiInterface = RetrofitClient.getInstance().getApi();
+    SearchViewModel.Listener listener;
+    SearchStoresListAdapter.OnItemClickListener listener1;
+    public interface OnItemClickListener {
+        void onItemClick(View viewItem, int position,int id, String store);
+    }
 
-    public CopounzAdapter(Context context, StoreDetailsViewModel.Listener listener) {
-        this.listener = listener;
+    public void setOnItemClickListener(SearchStoresListAdapter.OnItemClickListener listener1) {
+        this.listener1 = listener1;
+    }
+    public SearchStoresListAdapter(Context context, SearchViewModel.Listener listener) {
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -49,7 +58,7 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
         if (inflater == null) {
             inflater = LayoutInflater.from(parent.getContext());
         }
-        return new HomePageViewHolder(CouponItemBinding.inflate(inflater, parent, false), listener);
+        return new HomePageViewHolder(StoreListItemBinding.inflate(inflater, parent, false), listener);
     }
 
     @Override
@@ -62,46 +71,22 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
         return store == null ? 0 : store.size();
     }
 
-    public void setStores(List<StoreCoupons> store) {
+    public void setStores(List<Store> store) {
         this.store.addAll(store);
         notifyDataSetChanged();
     }
 
     class HomePageViewHolder extends RecyclerView.ViewHolder {
-        private CouponItemBinding storeGrideItemBinding;
-        StoreDetailsViewModel.Listener listener;
+        private StoreListItemBinding storeGrideItemBinding;
+        SearchViewModel.Listener listener;
 
-        HomePageViewHolder(@NonNull CouponItemBinding storeGrideItemBinding, StoreDetailsViewModel.Listener listener) {
+        HomePageViewHolder(@NonNull StoreListItemBinding storeGrideItemBinding, SearchViewModel.Listener listener) {
             super(storeGrideItemBinding.getRoot());
-            this.listener = listener;
             this.storeGrideItemBinding = storeGrideItemBinding;
+            this.listener = listener;
         }
 
-        private void bindRestaurant(StoreCoupons store) {
-            storeGrideItemBinding.discountId.setText(Utility.fixNullString(String.valueOf(store.getTitle())));
-            storeGrideItemBinding.discountDetailsId.setText(Utility.fixNullString(String.valueOf(store.getDetails())));
-            storeGrideItemBinding.hoursId.setText(Utility.fixNullString(String.valueOf(store.getLastUsed())));
-            if (store.getCouponType().equals("coupon")) {
-                storeGrideItemBinding.copyCouponId.setVisibility(View.VISIBLE);
-                storeGrideItemBinding.getOfferId.setVisibility(View.GONE);
-                storeGrideItemBinding.numberOfCopiesId.setVisibility(View.VISIBLE);
-                if (store.getCopies() != null) {
-                    storeGrideItemBinding.timeId.setText(Utility.fixNullString((store.getCopies()) + " " + context.getResources().getString(R.string.time)));
-                }
-                else {
-                    storeGrideItemBinding.timeId.setText("0" + " " + context.getResources().getString(R.string.time));
-                }
-            } else {
-                storeGrideItemBinding.numberOfCopiesId.setVisibility(View.GONE);
-                storeGrideItemBinding.copyCouponId.setVisibility(View.GONE);
-                storeGrideItemBinding.getOfferId.setVisibility(View.VISIBLE);
-            }
-            storeGrideItemBinding.copyCouponId.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.click(1, getAdapterPosition(),store.getId(), store.getCoupon());
-                }
-            });
+        private void bindRestaurant(Store store) {
             if (GoldenSharedPreference.isLoggedIn(context)) {
                 if (store.getIsFavorite() == 0) {
                     storeGrideItemBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_fav));
@@ -111,50 +96,44 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
                     storeGrideItemBinding.favId.setImageTintList(null);
                 }
             }
-            storeGrideItemBinding.shareId.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //shareVia(String coupon, String store, String url
-                    //todo change title to store name
-                    if (store.getCouponType().equals("coupon")) {
-                        listener.clickShare(store.getCoupon(), store.getTitle(), store.getCouponLink());
-                    } else {
-                        listener.clickShare("no", store.getTitle(), store.getCouponLink());
-                    }
-                }
-            });
             storeGrideItemBinding.favId.setOnClickListener(v -> {
                 if (GoldenSharedPreference.isLoggedIn(context)) {
+
                     if (store.getIsFavorite() == 0) {
-                        couponFav();
+                        storeFav();
                     } else {
                         removeFav();
                     }
                 } else {
-                    listener.click(5, getAdapterPosition(),store.getId(), store.getCoupon());
+                    listener.click(2);
                 }
             });
-            storeGrideItemBinding.getOfferId.setOnClickListener(new View.OnClickListener() {
+
+            storeGrideItemBinding.storeNameId.setText(Utility.fixNullString(String.valueOf(store.getTitle())));
+            storeGrideItemBinding.couponCountId.setText(Utility.fixNullString(String.valueOf(store.getStoreCouponsCount())));
+            Picasso.get().load(store.getFile()).into(storeGrideItemBinding.storeImgId);
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Uri uri = Uri.parse(store.getCouponLink()); // missing 'http://' will cause crashed
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    context.startActivity(intent);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("storeId", store.getId());
+                    Navigation.findNavController(v).navigate(R.id.storeDetailsFragment, bundle);
                 }
             });
+
         }
 
-        private void couponFav() {
+        private void storeFav() {
             String lang = GoldenNoLoginSharedPreference.getUserLanguage(context);
             String token = GoldenSharedPreference.getToken(context);
-            apiInterface.userMakeFavCoupons("Bearer" + token, lang, String.valueOf(store.get(getAdapterPosition()).getId())).enqueue(new Callback<ApiResponse>() {
+            apiInterface.userMakeFav("Bearer" + token, lang, String.valueOf(store.get(getAdapterPosition()).getId())).enqueue(new Callback<ApiResponse>() {
                 @Override
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     if (response.isSuccessful()) {
                         if (response.code() == 200 && response.body() != null) {
                             storeGrideItemBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_fav));
                             storeGrideItemBinding.favId.setImageTintList(null);
-                            listener.click(3, getAdapterPosition(),store.get(getAdapterPosition()).getId(), store.get(getAdapterPosition()).getCoupon());
+                            listener.click(1);
                         }
                     }
                 }
@@ -171,14 +150,14 @@ public class CopounzAdapter extends RecyclerView.Adapter<CopounzAdapter.HomePage
         private void removeFav() {
             String lang = GoldenNoLoginSharedPreference.getUserLanguage(context);
             String token = GoldenSharedPreference.getToken(context);
-            apiInterface.userRemoveFavCoupons("Bearer" + token, lang, String.valueOf(store.get(getAdapterPosition()).getId())).enqueue(new Callback<ApiResponse>() {
+            apiInterface.userRemoveFav("Bearer" + token, lang, String.valueOf(store.get(getAdapterPosition()).getId())).enqueue(new Callback<ApiResponse>() {
                 @Override
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     if (response.isSuccessful()) {
                         if (response.code() == 200 && response.body() != null) {
                             storeGrideItemBinding.favId.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_fav));
                             storeGrideItemBinding.favId.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.black)));
-                            listener.click(3, getAdapterPosition(), store.get(getAdapterPosition()).getId(),store.get(getAdapterPosition()).getCoupon());
+                            listener.click(1);
                         }
                     }
                 }

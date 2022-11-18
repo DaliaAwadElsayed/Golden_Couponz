@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.ChangePasswordFragmentBinding;
+import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.authentication.ChangePasswordViewModel;
 
 public class ChangePasswordFragment extends Fragment {
@@ -34,6 +35,8 @@ public class ChangePasswordFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ChangePasswordViewModel.class);
         mViewModel.init(changePasswordFragmentBinding, getContext());
+        ((MainActivity) getActivity()).hideBottomMenu();
+
     }
 
 }

@@ -7,14 +7,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:893608938454:android:8b0c22a27baa653895f277",
+        "mobilesdk_app_id": "1:893608938454:android:1860b7b6cd1317d295f277",
         "android_client_info": {
           "package_name": "com.codesroots.goldencoupon"
         }
       },
       "oauth_client": [
         {
-          "client_id": "893608938454-ugjeukum4ki8jntbg6ld286gl8m4sj8s.apps.googleusercontent.com",
+          "client_id": "893608938454-bh0ahmlv4bga3q9qfs25tlsrjftrca2u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.codesroots.goldencoupon",
@@ -22,51 +22,11 @@
           }
         },
         {
-          "client_id": "893608938454-55qcuh6iniqm2ll8r9ft0bk41aierv9e.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAJbmjXvmsrwD8G5IviNCbWcP3xNsfxL8M"
-        },
-        {
-          "current_key": "AIzaSyAHgwyBl1I3mEZjoElOQxVjbvn7sqfZ3Qo"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "893608938454-09j32o2ga3uvjoimmndh5scu0a8tlacd.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "893608938454-fc76dnlups47r03bgtbrjmft6583pu8c.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.CodeRoots.AdelAbdallah.GoldenCoupon",
-                "app_store_id": "1617640320"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:893608938454:android:3b1c5c781cb4fc9995f277",
-        "android_client_info": {
-          "package_name": "com.e.goldencouponz"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "893608938454-o5jelh16mf6tuhtn7b702f3vkqrvjnna.apps.googleusercontent.com",
+          "client_id": "893608938454-bvqar5lk5l1so8l63fim4fjro0pu9mae.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.e.goldencouponz",
-            "certificate_hash": "1de13e0d4fe72e1086a582a7d81e13b915f82a5b"
+            "package_name": "com.codesroots.goldencoupon",
+            "certificate_hash": "a2efc830ecf4f51ce4197a0ef8757aa6065b08a9"
           }
         },
         {
@@ -76,10 +36,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAJbmjXvmsrwD8G5IviNCbWcP3xNsfxL8M"
-        },
-        {
-          "current_key": "AIzaSyAHgwyBl1I3mEZjoElOQxVjbvn7sqfZ3Qo"
+          "current_key": "AIzaSyDGZaF5VmUtoKaQoIcG5g5NFZtaJDXXqZk"
         }
       ],
       "services": {

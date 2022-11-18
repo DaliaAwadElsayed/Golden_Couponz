@@ -12,6 +12,7 @@ import com.e.goldencouponz.databinding.DeleteAccountFragmentBinding;
 import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
+import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
 
 import retrofit2.Call;
@@ -48,6 +49,7 @@ public class DeleteAccountViewModel extends ViewModel {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getSuccess() && response.body() != null) {
+                        GoldenNoLoginSharedPreference.saveUserEmail(context, "");
                         GoldenSharedPreference.clearSharedPreference(context);
                         Navigation.findNavController(deleteAccountFragmentBinding.getRoot()).navigate(R.id.loginFragment);
                         Toast.makeText(context, R.string.account_deleted, Toast.LENGTH_SHORT).show();

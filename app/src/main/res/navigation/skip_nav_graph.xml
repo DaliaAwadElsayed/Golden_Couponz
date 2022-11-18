@@ -14,9 +14,4 @@
             android:id="@+id/notificationAlertFragment"
             app:destination="@id/notificationAlertFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/notificationAlertFragment"
-        android:name="com.goldencouponz.fragments.onboarding.NotificationAlertFragment"
-        android:label="NotificationAlertFragment"
-        tools:layout="@layout/notification_alert_fragment" />
-</navigation>
+  </navigation>

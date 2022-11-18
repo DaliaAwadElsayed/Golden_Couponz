@@ -316,6 +316,7 @@
                                     android:textSize="12sp"
                                     android:textStyle="bold"
                                     tools:text="Egypt" />
+
                                 <TextView
                                     android:id="@+id/countryChangeId"
                                     android:layout_width="wrap_content"

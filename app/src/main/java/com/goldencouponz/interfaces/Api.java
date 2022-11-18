@@ -7,6 +7,8 @@ import com.goldencouponz.models.user.UserRegisteration;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.WhatsApp;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -64,6 +66,13 @@ public interface Api {
     @GET("api/stores")
     Call<ApiResponse> getStore(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Query("category_id") int category_id);
 
+    //api/stores/search
+    @GET("api/stores")
+    Call<ApiResponse> getSearchStore(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Query("search") String search, @Query("locale") String locale);
+    //api/stores/search
+    @GET("api/stores")
+    Call<ApiResponse> getSearchStore(@Header("Authorization") String authHeader,@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Query("search") String search, @Query("locale") String locale);
+
     //api/stores
     @GET("api/stores/{id}")
     Call<ApiResponse> getSingleStore(@Header("Authorization") String authHeader, @Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Header("country") int countryId, @Path("id") String id);
@@ -99,7 +108,10 @@ public interface Api {
 
     //api/products?store_id=35
     @GET("api/products/{id}")
-    Call<ApiResponse> getStoreProducts(@Path("id") String id,@Header("fcm-token") String fcmToken, @Header("country") int country, @Header("Accept-Language") String AcceptLanguage, @Query("store_id") String store_id, @Query("category_id") String category_id, @Query("subcategory_id") String subcategory_id, @Query("price_asc") String price_asc, @Query("price_desc") String price_desc);
+    Call<ApiResponse> getStoreProducts(@Path("id") String id, @Header("fcm-token") String fcmToken, @Header("country") int country, @Header("Accept-Language") String AcceptLanguage, @Query("store_id") String store_id, @Query("category_id") String category_id, @Query("subcategory_id") String subcategory_id, @Query("price_asc") String price_asc, @Query("price_desc") String price_desc, @Query("page") int page);
+    //api/products?store_id=35
+    @GET("api/products/")
+    Call<ApiResponse> getSearchStoreProducts(@Query("search") String search,@Query("locale") String locale, @Header("fcm-token") String fcmToken, @Header("country") int country, @Header("Accept-Language") String AcceptLanguage);
 
     //api/user-fav-store-coupons
     @GET("api/user-fav-store-coupons")
@@ -137,6 +149,10 @@ public interface Api {
     //{{baseUrl}}/api/brands/
     @GET("/api/brands")
     Call<ApiResponse> getBrands(@Header("Accept-Language") String AcceptLanguage, @Header("fcm-token") String fcmToken, @Header("country") int country);
+
+    //api/products
+    @GET("api/products")
+    Call<ApiResponse> getFilterProducts(@Query("brand_ids[]") ArrayList<Integer> brand_ids, @Header("fcm-token") String fcmToken, @Header("country") int country, @Header("Accept-Language") String AcceptLanguage, @Query("store_id") String store_id, @Query("category_id") String category_id, @Query("subcategory_id") String subcategory_id, @Query("price_asc") String price_asc, @Query("price_desc") String price_desc, @Query("page") int page);
 
 }
 

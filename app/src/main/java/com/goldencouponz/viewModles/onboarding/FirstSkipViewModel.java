@@ -1,7 +1,10 @@
 package com.goldencouponz.viewModles.onboarding;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
@@ -12,6 +15,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.FirstSkipFragmentBinding;
+import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.adapters.onBoarding.OnBoardingAdapter;
 import com.rd.animation.type.AnimationType;
 
@@ -27,9 +31,11 @@ public class FirstSkipViewModel extends ViewModel implements ViewPager.OnPageCha
     int currentPage = 0;
     final long DELAY_MS = 2000;//delay in milliseconds before task is to be executed
     final long PERIOD_MS = 3000; // time in milliseconds between successive task executions.
+    Activity activity;
 
-    public void init(FirstSkipFragmentBinding firstSkipFragmentBinding, Context context) {
+    public void init(FirstSkipFragmentBinding firstSkipFragmentBinding, Context context,Activity activity)  {
         this.context = context;
+        this.activity=activity;
         this.firstSkipFragmentBinding = firstSkipFragmentBinding;
         firstSkipFragmentBinding.nextId.setText(R.string.next_label);
         firstSkipFragmentBinding.skipId.setText(R.string.skip_label);
@@ -71,7 +77,7 @@ public class FirstSkipViewModel extends ViewModel implements ViewPager.OnPageCha
                     firstSkipFragmentBinding.nextId.setText(R.string.lets_start);
                     firstSkipFragmentBinding.slider.setCurrentItem(2);
                 } else if (selection == 2) {
-                    Navigation.findNavController(v).navigate(R.id.notificationAlertFragment);
+                    moveToNewActivity();
                 }
 
             }
@@ -86,6 +92,15 @@ public class FirstSkipViewModel extends ViewModel implements ViewPager.OnPageCha
         OnBoardingAdapter adapter = new OnBoardingAdapter(context, imageArray, firstStringArray, secondStringArray, thirdStringArray);
         firstSkipFragmentBinding.slider.setAdapter(adapter);
 
+    }
+
+    private void moveToNewActivity() {
+        Bundle extras = activity.getIntent().getExtras();
+        Intent i = new Intent(activity, MainActivity.class);
+        i.putExtra("language", extras.getString("language"));
+        i.putExtra("country", extras.getString("country"));
+        activity.startActivity(i);
+        ((Activity) activity).overridePendingTransition(0, 0);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)

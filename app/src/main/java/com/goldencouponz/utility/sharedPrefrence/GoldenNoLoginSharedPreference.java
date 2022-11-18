@@ -13,7 +13,8 @@ public class GoldenNoLoginSharedPreference {
     private static final String COUNTRY_CURRENCY = "chosen_currency";
     private static final String COUNTRY_ID = "chosen_country_id";
     private static final String POSITION = "position";
-    private static final String DEVICETOKEN = "devicetoken";
+    private static final String SEARCH_KEY = "search";
+    private static final String EMAIL = "email";
 
     private static Application application;
     SharedPreferences sharedPref = application.getApplicationContext().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
@@ -21,6 +22,18 @@ public class GoldenNoLoginSharedPreference {
 
     public GoldenNoLoginSharedPreference() {
 
+    }
+
+    public static void saveUserEmail(Context context, String email) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(EMAIL, email)
+                .apply();
+    }
+
+    public static String getUserEmail(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(EMAIL, "");
     }
 
     public static void saveUserLang(Context context, String lang) {

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.e.goldencouponz.databinding.EditProfileFragmentBinding;
+import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.authentication.EditProfileViewModel;
 
 public class EditProfileFragment extends Fragment {
@@ -34,6 +35,8 @@ public class EditProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
         mViewModel.init(editProfileFragmentBinding, getContext());
+        ((MainActivity) getActivity()).hideBottomMenu();
+
     }
 
 }

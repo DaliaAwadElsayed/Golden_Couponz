@@ -16,6 +16,7 @@ import com.e.goldencouponz.databinding.NotificationFragmentBinding;
 import com.e.goldencouponz.databinding.ProductDetailsDialogBinding;
 import com.e.goldencouponz.databinding.SecondCopyCouponDialogBinding;
 import com.e.goldencouponz.databinding.SecondProductDetailsDialogBinding;
+import com.goldencouponz.activities.MainActivity;
 import com.goldencouponz.viewModles.aboutgolden.NotificationViewModel;
 
 public class NotificationFragment extends Fragment {
@@ -47,6 +48,7 @@ public class NotificationFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
+        ((MainActivity) getActivity()).hideBottomMenu();
         mViewModel.init(notificationFragmentBinding, copyCouponDialogBinding, secondCopyCouponDialogBinding, productDetailsDialogBinding
                 , secondProductDetailsDialogBinding,
                 noCouponProductDetailsDialogBinding, getContext());

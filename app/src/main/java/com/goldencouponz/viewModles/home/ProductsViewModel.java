@@ -12,6 +12,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.Navigation;
 
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.ArrangeDialogBinding;
@@ -79,6 +83,13 @@ public class ProductsViewModel extends ViewModel {
     int position;
     private ClipboardManager myClipboard;
     private ClipData myClip;
+    private int currentPage = 1;
+    int lastPage;
+    ProductAdapter storeProduct;
+    StoresFilterAdapter storesListAdapter;
+    ArrayList<Integer> brand_ids;
+    String storeSelectedId;
+    int currentPageFiltter = 1;
 
     private void openUrl(String url) {
         Uri uri = Uri.parse(url); // missing 'http://' will cause crashed
@@ -220,10 +231,32 @@ public class ProductsViewModel extends ViewModel {
         brandListDialog = new BottomSheetDialog(context);
         filtterDialog = new BottomSheetDialog(context);
         arrangeDialog = new BottomSheetDialog(context);
+        storeProduct = new ProductAdapter(context, listener);
+        storesListAdapter = new StoresFilterAdapter(context);
+        productsFragmentBinding.searchId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.searchFragment);
+            }
+        });
         productsFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
         productsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
         productsFragmentBinding.allId.setBackgroundTintList(null);
-        getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), "", "", "", "", "");
+        getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), "", "", "", "", "", currentPage);
+        productsFragmentBinding.idNesteddSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == view.getChildAt(0).getMeasuredHeight() - view.getMeasuredHeight()) {
+                    currentPage++;
+                    Log.i("currentPageScrolling", String.valueOf(currentPage));
+                    Log.i("LastPageScrolling", String.valueOf(lastPage));
+                    if (currentPage <= lastPage) {
+                        Log.i("currentPageIf", String.valueOf(currentPage));
+                        getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), "", "", "", "", "", currentPage);
+                    }
+                }
+            }
+        });
         categories(GoldenNoLoginSharedPreference.getUserLanguage(context));
         productsFragmentBinding.allId.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,7 +264,9 @@ public class ProductsViewModel extends ViewModel {
                 productsFragmentBinding.subCategoryRecyclerView.setVisibility(View.GONE);
                 productsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category));
                 productsFragmentBinding.allId.setBackgroundTintList(null);
-                getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), "", "", "", "", "");
+                storeProduct = new ProductAdapter(context, listener);
+                currentPage = 1;
+                getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), "", "", "", "", "", currentPage);
                 categories(GoldenNoLoginSharedPreference.getUserLanguage(context));
 
             }
@@ -261,16 +296,20 @@ public class ProductsViewModel extends ViewModel {
         arrangeDialogBinding.lowToHighId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                storeProduct = new ProductAdapter(context, listener);
+                currentPage = 1;
                 getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
-                        "", "", "", "1", "");
+                        "", "", "", "1", "", currentPage);
                 arrangeDialog.dismiss();
             }
         });
         arrangeDialogBinding.highToLowId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                storeProduct = new ProductAdapter(context, listener);
+                currentPage = 1;
                 getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
-                        "", "", "", "", "1");
+                        "", "", "", "", "1", currentPage);
                 arrangeDialog.dismiss();
             }
         });
@@ -305,8 +344,10 @@ public class ProductsViewModel extends ViewModel {
                                             categoriesAdapter.setOnItemClickListener(new ProductsSubCategoriesAdapter.OnItemClickListener() {
                                                 @Override
                                                 public void onItemClick(View viewItem, int position, int categoryId, int subCatId) {
+                                                    storeProduct = new ProductAdapter(context, listener);
+                                                    currentPage = 1;
                                                     getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
-                                                            "", String.valueOf(categoryId), String.valueOf(subCatId), "", "");
+                                                            "", String.valueOf(categoryId), String.valueOf(subCatId), "", "", currentPage);
                                                 }
                                             });
                                         } else {
@@ -327,7 +368,7 @@ public class ProductsViewModel extends ViewModel {
                 });
     }
 
-    private void getProducts(String id, int country, String lang, String storeId, String catId, String subCatId, String asc, String desc) {
+    private void getProducts(String id, int country, String lang, String storeId, String catId, String subCatId, String asc, String desc, int page) {
         Log.i("POSITIONOUT", position + "?");
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -340,20 +381,18 @@ public class ProductsViewModel extends ViewModel {
                         // Get new FCM registration token
                         String token = task.getResult();
                         Log.w("TAG", token + "?");
-
                         productsFragmentBinding.progress.setVisibility(View.VISIBLE);
-                        apiInterface.getStoreProducts(id, token, country, lang, storeId, catId, subCatId, asc, desc).enqueue(new Callback<ApiResponse>() {
+                        apiInterface.getStoreProducts(id, token, country, lang, storeId, catId, subCatId, asc, desc, page).enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                                 if (response.isSuccessful()) {
                                     if (response.code() == 200 && response.body() != null) {
                                         productsFragmentBinding.progress.setVisibility(View.GONE);
                                         if (!response.body().getProducts().getData().isEmpty()) {
-                                            ProductAdapter storeProduct = new ProductAdapter(context, listener);
                                             storeProduct.setStores(response.body().getProducts().getData());
                                             productsFragmentBinding.idRVUsers.setAdapter(storeProduct);
                                             productsFragmentBinding.idRVUsers.setVisibility(View.VISIBLE);
-
+                                            lastPage = response.body().getProducts().getLastPage();
                                         } else {
                                             productsFragmentBinding.idRVUsers.setVisibility(View.GONE);
                                             productsFragmentBinding.progress.setVisibility(View.GONE);
@@ -391,7 +430,7 @@ public class ProductsViewModel extends ViewModel {
                         Log.w("TAG", token + "?");
 
                         productsFragmentBinding.progress.setVisibility(View.VISIBLE);
-                        apiInterface.getStoreProducts(id, token, country, lang, "", "", "", "", "").enqueue(new Callback<ApiResponse>() {
+                        apiInterface.getStoreProducts(id, token, country, lang, "", "", "", "", "", 0).enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                                 if (response.isSuccessful()) {
@@ -585,8 +624,10 @@ public class ProductsViewModel extends ViewModel {
                                                     productsFragmentBinding.allId.setBackground(context.getResources().getDrawable(R.drawable.bk_category_uncheck));
 //                                    homeFragmentBinding.allId.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.category_bk)));
                                                     subCategory(categoryId, GoldenNoLoginSharedPreference.getUserLanguage(context));
+                                                    storeProduct = new ProductAdapter(context, listener);
+                                                    currentPage = 1;
                                                     getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
-                                                            "", String.valueOf(categoryId), "", "", "");
+                                                            "", String.valueOf(categoryId), "", "", "", currentPage);
 
                                                 }
                                             });
@@ -629,7 +670,7 @@ public class ProductsViewModel extends ViewModel {
                                 if (response.isSuccessful()) {
                                     if (response.code() == 200 && response.body() != null) {
                                         if (!response.body().getStores().isEmpty()) {
-                                            StoresFilterAdapter storesListAdapter = new StoresFilterAdapter(context);
+                                            storesListAdapter = new StoresFilterAdapter(context);
                                             storesListAdapter.setStores(response.body().getStores());
                                             storeListDialogBinding.tradeRecyclerView.setAdapter(storesListAdapter);
                                             storesListAdapter.setOnItemClickListener(new StoresFilterAdapter.OnItemClickListener() {
@@ -639,6 +680,7 @@ public class ProductsViewModel extends ViewModel {
                                                     storeListDialog.dismiss();
                                                     filtterDialogBinding.textId.setText(store);
                                                     filtterDialogBinding.storeChosenId.setText(id + "");
+                                                    storeSelectedId = String.valueOf(id);
                                                 }
                                             });
                                         } else {
@@ -682,9 +724,9 @@ public class ProductsViewModel extends ViewModel {
                                                 public void onItemClick(View viewItem, int position, ArrayList<Integer> selectedBrandIdItem, ArrayList<String> selectedBrandNamesItem) {
                                                     Log.i("LISTS", selectedBrandNamesItem.toString());
                                                     //ADD TO LIST OF CHOSEN BRAND
-                                                    ChosenBrandAdapter storesListAdapter = new ChosenBrandAdapter(selectedBrandNamesItem);
+                                                    ChosenBrandAdapter storesListAdapter = new ChosenBrandAdapter(selectedBrandNamesItem, selectedBrandIdItem);
                                                     filtterDialogBinding.tradeRecyclerView.setAdapter(storesListAdapter);
-
+                                                    brand_ids = selectedBrandIdItem;
                                                 }
                                             });
                                         } else {
@@ -708,10 +750,37 @@ public class ProductsViewModel extends ViewModel {
         filtterDialog.setContentView(view5);
         filtterDialog.setCancelable(true);
         filtterDialog.show();
+
+        filtterDialogBinding.performId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("BRANDS", brand_ids + "??" + storeSelectedId);
+                storeProduct = new ProductAdapter(context, listener);
+                currentPageFiltter = 1;
+                getProductsWithFilters(brand_ids, GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), (storeSelectedId), "", "", "", "", currentPageFiltter);
+                productsFragmentBinding.idNesteddSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                        if (scrollY == view.getChildAt(0).getMeasuredHeight() - view.getMeasuredHeight()) {
+                            currentPageFiltter++;
+                            Log.i("currentPageScrolling", String.valueOf(currentPageFiltter));
+                            Log.i("LastPageScrolling", String.valueOf(lastPage));
+                            if (currentPageFiltter <= lastPage) {
+                                Log.i("currentPageIf", String.valueOf(currentPageFiltter));
+                                getProductsWithFilters(brand_ids, GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context), (storeSelectedId), "", "", "", "", currentPageFiltter);
+                            }
+                        }
+                    }
+                });
+                filtterDialog.dismiss();
+            }
+        });
         filtterDialogBinding.resetId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO delete tradeListId and storeId
+                brand_ids.clear();
+                storeSelectedId = "";
                 filtterDialogBinding.storeLinearId.setVisibility(View.INVISIBLE);
                 filtterDialogBinding.tradeRecyclerView.setVisibility(View.INVISIBLE);
             }
@@ -719,6 +788,7 @@ public class ProductsViewModel extends ViewModel {
         filtterDialogBinding.deleteId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                storeSelectedId = "";
                 filtterDialogBinding.storeLinearId.setVisibility(View.INVISIBLE);
             }
         });
@@ -740,9 +810,75 @@ public class ProductsViewModel extends ViewModel {
                 storeListDialog.dismiss();
             }
         });
+//search
+        storeListDialogBinding.searchTextId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.i("LANGUAGEEE", GoldenNoLoginSharedPreference.getUserLanguage(context) + "//" + storeListDialogBinding.searchTextId.getText().toString());
+                String locale = GoldenNoLoginSharedPreference.getUserLanguage(context);
+                storesListAdapter = new StoresFilterAdapter(context);
+                getSearchStore(locale, storeListDialogBinding.searchTextId.getText().toString(), locale);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
+
+    private void getSearchStore(String lang, String word, String locale) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String device = task.getResult();
+                        apiInterface.getSearchStore(lang, device, word, locale).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.code() == 200 && response.body() != null) {
+                                        if (!response.body().getStores().isEmpty()) {
+                                            storesListAdapter = new StoresFilterAdapter(context);
+                                            storesListAdapter.setStores(response.body().getStores());
+                                            storeListDialogBinding.tradeRecyclerView.setAdapter(storesListAdapter);
+                                            storesListAdapter.setOnItemClickListener(new StoresFilterAdapter.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(View viewItem, int position, int id, String store) {
+                                                    filtterDialogBinding.storeLinearId.setVisibility(View.VISIBLE);
+                                                    storeListDialog.dismiss();
+                                                    filtterDialogBinding.textId.setText(store);
+                                                    filtterDialogBinding.storeChosenId.setText(id + "");
+                                                    storeSelectedId = String.valueOf(id);
+                                                }
+                                            });
+                                        } else {
+                                            Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+    }
+
 
     private void showBrandListDialog() {
         final View view5 = brandListDialogBinding.getRoot();
@@ -827,7 +963,6 @@ public class ProductsViewModel extends ViewModel {
             productDetailsDialogBinding.discountId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         social2();
-
     }
 
     private void showSecondProductDetailsDialog() {
@@ -855,4 +990,52 @@ public class ProductsViewModel extends ViewModel {
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.share_via)));
     }
+
+    private void getProductsWithFilters(ArrayList<Integer> brand_ids, int country, String lang, String storeId, String catId, String subCatId, String asc, String desc, int page) {
+        Log.i("POSITIONOUT", position + "?");
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        Log.w("TAG", token + "?");
+                        productsFragmentBinding.progress.setVisibility(View.VISIBLE);
+                        apiInterface.getFilterProducts(brand_ids, token, country, lang, storeId, catId, subCatId, asc, desc, page).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.code() == 200 && response.body() != null) {
+                                        productsFragmentBinding.progress.setVisibility(View.GONE);
+                                        if (!response.body().getProducts().getData().isEmpty()) {
+                                            storeProduct.setStores(response.body().getProducts().getData());
+                                            productsFragmentBinding.idRVUsers.setAdapter(storeProduct);
+                                            productsFragmentBinding.idRVUsers.setVisibility(View.VISIBLE);
+                                            lastPage = response.body().getProducts().getLastPage();
+                                        } else {
+                                            productsFragmentBinding.idRVUsers.setVisibility(View.GONE);
+                                            productsFragmentBinding.progress.setVisibility(View.GONE);
+                                        }
+                                    } else {
+                                        Toast.makeText(context, R.string.somethingwentwrongmessage, Toast.LENGTH_SHORT).show();
+                                        productsFragmentBinding.progress.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.i("onFailure", t.toString());
+                                productsFragmentBinding.progress.setVisibility(View.GONE);
+                                Toast.makeText(context, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+    }
+
 }
