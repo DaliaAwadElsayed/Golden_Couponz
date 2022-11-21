@@ -188,7 +188,7 @@ public class RegisterationViewModel extends ViewModel {
 
     private boolean nameValid() {
         String name = registerationFragmentBinding.nameId.getText().toString();
-        if (!name.isEmpty()) {
+        if (!name.isEmpty()&&name.length()>=2) {
             return true;
         } else {
             registerationFragmentBinding.nameId.setError(context.getResources().getString(R.string.enterurname));

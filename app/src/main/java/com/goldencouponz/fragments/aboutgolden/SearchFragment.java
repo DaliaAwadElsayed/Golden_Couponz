@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.aboutgolden;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,11 @@ public class SearchFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
-        ((MainActivity) getActivity()).hideBottomMenu();
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).hideBottomMenu();
+        }else {
+            ((MainActivity) getActivity()).hideBottomMenu2();
+        }
         mViewModel.init(searchFragmentBinding,loginCheckDialogBinding,  productDetailsDialogBinding,
                  secondProductDetailsDialogBinding,
                  noCouponProductDetailsDialogBinding,

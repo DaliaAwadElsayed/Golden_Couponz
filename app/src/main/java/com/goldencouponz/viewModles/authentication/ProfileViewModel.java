@@ -288,6 +288,8 @@ public class ProfileViewModel extends ViewModel {
         logOutDialogBinding.logOutSureId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((MainActivity) activity).googleLogOut();
+
                 GoldenSharedPreference.clearSharedPreference(context);
                 if (profileFragmentBinding.langChangeId.getText().equals("اللغة العربية")) {
                     GoldenNoLoginSharedPreference.saveUserLang(context, "ar");

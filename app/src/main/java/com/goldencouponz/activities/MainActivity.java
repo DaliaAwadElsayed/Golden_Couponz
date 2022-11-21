@@ -15,13 +15,17 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.e.goldencouponz.R;
 import com.e.goldencouponz.databinding.ActivityMainBinding;
@@ -52,6 +56,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
@@ -103,17 +108,22 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         super.onConfigurationChanged(newConfig);
         // Checks the orientation of the screen
         languageData();
+        if (!isInternetAvailable()) {
+            Toast.makeText(this, R.string.no_internet_message, Toast.LENGTH_SHORT).show();
+        }
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (GoldenNoLoginSharedPreference.getUserLanguage(MainActivity.this).equals("en")) {
                 LocaleHelper.setLocale(this, "en");
                 GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "en");
                 activityMainBinding.relativBottomId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                activityMainBinding.bottomAppBar.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                 Local.Companion.updateResources(MainActivity.this);
 
             } else {
                 LocaleHelper.setLocale(this, "ar");
                 GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "ar");
                 activityMainBinding.relativBottomId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                activityMainBinding.bottomAppBar.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
                 Local.Companion.updateResources(MainActivity.this);
 
             }
@@ -122,11 +132,13 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
             if (GoldenNoLoginSharedPreference.getUserLanguage(MainActivity.this).equals("en")) {
                 LocaleHelper.setLocale(this, "en");
                 GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "en");
+                activityMainBinding.bottomAppBar.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                 activityMainBinding.relativBottomId.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                 Local.Companion.updateResources(MainActivity.this);
             } else {
                 LocaleHelper.setLocale(this, "ar");
                 GoldenNoLoginSharedPreference.saveUserLang(MainActivity.this, "ar");
+                activityMainBinding.bottomAppBar.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
                 activityMainBinding.relativBottomId.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
                 Local.Companion.updateResources(MainActivity.this);
             }
@@ -137,11 +149,13 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         checkNewAppVersionState();
     }
+
     @Override
     protected void onDestroy() {
         unregisterInstallStateUpdListener();
@@ -178,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
                     appUpdateManager.registerListener(installStateUpdatedListener);
                     // Start an update.
                     startAppUpdateFlexible(appUpdateInfo);
-                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) ) {
+                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                     // Start an update.
                     startAppUpdateImmediate(appUpdateInfo);
                 }
@@ -267,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
         if (appUpdateManager != null && installStateUpdatedListener != null)
             appUpdateManager.unregisterListener(installStateUpdatedListener);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
 
         languageData();
         String serverClientId = getString(R.string.server_client_id);
-//facebook
+        //facebook
         printHashKey();
         FacebookSdk.sdkInitialize(MainActivity.this);
         callbackManager = CallbackManager.Factory.create();
@@ -300,13 +315,12 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
 
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         navController = Navigation.findNavController(this, R.id.home_nav_fragment);
-        bottomClickListener();
-        activityMainBinding.relativBottomId.getActionView().findViewById(R.id.button_add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.whatsAppFragment);
-            }
-        });
+
+        if (Build.VERSION.RELEASE.equals("12")) {
+            bottomClickListener();
+        } else {
+            bottom2ClickListener();
+        }
 
         GoldenSharedPreference.setActivity(getApplication());
         GoldenNoLoginSharedPreference.setActivity(getApplication());
@@ -464,7 +478,6 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
 
     }
 
-
     public void disconnectFromFacebook() {
         if (AccessToken.getCurrentAccessToken() == null) {
             return; // already logged out
@@ -560,7 +573,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
 
             case REQ_CODE_VERSION_UPDATE:
                 if (resultCode != RESULT_OK) { //RESULT_OK / RESULT_CANCELED / RESULT_IN_APP_UPDATE_FAILED
-                    Log.d("Update flow failed!: " ,""+resultCode);
+                    Log.d("Update flow failed!: ", "" + resultCode);
                     // If the update is cancelled or fails,
                     // you can request to start the update again.
                     unregisterInstallStateUpdListener();
@@ -596,6 +609,20 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     }
 
     private void bottomClickListener() {
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) activityMainBinding.fragmentId.getLayoutParams();
+        params.setMargins(0, 0, 0, 0);
+        activityMainBinding.fragmentId.setLayoutParams(params);
+        activityMainBinding.fragmentId.setLayoutParams(params);
+        activityMainBinding.fragmentId.setLayoutParams(params);
+        activityMainBinding.fab.setVisibility(View.GONE);
+        activityMainBinding.bottomAppBar.setVisibility(View.GONE);
+        activityMainBinding.relativBottomId.setVisibility(View.VISIBLE);
+        activityMainBinding.relativBottomId.getActionView().findViewById(R.id.button_add).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.whatsAppFragment);
+            }
+        });
         activityMainBinding.relativBottomId.setOnNavigationItemSelectedListener(
                 new BottomNavigationBar.OnNavigationItemSelectedListener() {
                     @Override
@@ -616,6 +643,62 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
                 });
     }
 
+    private void bottom2ClickListener() {
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) activityMainBinding.fragmentId.getLayoutParams();
+        params.setMargins(0, 0, 0, 200);
+        activityMainBinding.fragmentId.setLayoutParams(params);
+        activityMainBinding.fragmentId.setLayoutParams(params);
+        activityMainBinding.fab.setVisibility(View.VISIBLE);
+        activityMainBinding.bottomAppBar.setVisibility(View.VISIBLE);
+        activityMainBinding.relativBottomId.setVisibility(View.GONE);
+        NavigationUI.setupWithNavController(activityMainBinding.bottomNavigation, navController);
+        activityMainBinding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.whatsAppFragment);
+            }
+        });
+        activityMainBinding.bottomNavigation.getMenu().findItem(R.id.homeFragment).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                navController.navigate(R.id.homeFragment);
+                return true;
+            }
+        });
+        activityMainBinding.bottomNavigation.getMenu().findItem(R.id.productsFragment).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                navController.navigate(R.id.productsFragment);
+                return true;
+            }
+        });
+        activityMainBinding.bottomNavigation.getMenu().findItem(R.id.favouriteFragment).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                navController.navigate(R.id.favouriteFragment);
+                return true;
+            }
+        });
+        activityMainBinding.bottomNavigation.getMenu().findItem(R.id.profileFragment).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                navController.navigate(R.id.profileFragment);
+                return true;
+            }
+        });
+    }
+
+    public void googleLogOut() {
+        LoginManager.getInstance().logOut();
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                });
+    }
+
     @Override
     public void hideBottomMenu() {
         activityMainBinding.relativBottomId.setVisibility(View.GONE);
@@ -624,6 +707,19 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     @Override
     public void showBottomMenu() {
         activityMainBinding.relativBottomId.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void hideBottomMenu2() {
+        activityMainBinding.fab.setVisibility(View.GONE);
+        activityMainBinding.bottomAppBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showBottomMenu2() {
+        activityMainBinding.bottomAppBar.setVisibility(View.VISIBLE);
+        activityMainBinding.fab.setVisibility(View.VISIBLE);
 
     }
 

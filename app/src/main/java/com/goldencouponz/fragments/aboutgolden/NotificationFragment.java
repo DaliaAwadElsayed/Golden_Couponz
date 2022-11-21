@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.aboutgolden;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,8 +49,12 @@ public class NotificationFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
-        ((MainActivity) getActivity()).hideBottomMenu();
-        mViewModel.init(notificationFragmentBinding, copyCouponDialogBinding, secondCopyCouponDialogBinding, productDetailsDialogBinding
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).hideBottomMenu();
+        }else {
+            ((MainActivity) getActivity()).hideBottomMenu2();
+
+        }        mViewModel.init(notificationFragmentBinding, copyCouponDialogBinding, secondCopyCouponDialogBinding, productDetailsDialogBinding
                 , secondProductDetailsDialogBinding,
                 noCouponProductDetailsDialogBinding, getContext());
     }

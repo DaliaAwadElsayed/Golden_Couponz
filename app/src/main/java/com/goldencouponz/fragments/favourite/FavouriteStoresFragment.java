@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.favourite;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +36,11 @@ public class FavouriteStoresFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(FavouriteStoresViewModel.class);
         mViewModel.init(favouriteStoresFragmentBinding,getContext());
-        ((MainActivity) getActivity()).hideBottomMenu();
-
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).hideBottomMenu();
+        }else {
+            ((MainActivity) getActivity()).hideBottomMenu2();
+        }
     }
 
 }

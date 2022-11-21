@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.authentication;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,10 @@ CountryDialogBinding countryDialogBinding;
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(RegisterationViewModel.class);
         mViewModel.init(registerationFragmentBinding,countryDialogBinding, getContext());
-        ((MainActivity) getActivity()).hideBottomMenu();
-    }
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).hideBottomMenu();
+        }else {
+            ((MainActivity) getActivity()).hideBottomMenu2();
+        }       }
 
 }

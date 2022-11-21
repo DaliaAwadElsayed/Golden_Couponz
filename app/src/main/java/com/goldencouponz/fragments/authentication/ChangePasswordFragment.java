@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.authentication;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +36,11 @@ public class ChangePasswordFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ChangePasswordViewModel.class);
         mViewModel.init(changePasswordFragmentBinding, getContext());
-        ((MainActivity) getActivity()).hideBottomMenu();
-
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).showBottomMenu();
+        }else {
+            ((MainActivity) getActivity()).showBottomMenu2();
+        }
     }
 
 }

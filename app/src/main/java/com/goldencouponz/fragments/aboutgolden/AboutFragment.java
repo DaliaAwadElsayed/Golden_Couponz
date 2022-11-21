@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.aboutgolden;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,12 @@ public class AboutFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(AboutViewModel.class);
-        ((MainActivity) getActivity()).hideBottomMenu();
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).hideBottomMenu();
+        }else {
+            ((MainActivity) getActivity()).hideBottomMenu2();
+
+        }
         mViewModel.init(getContext(), aboutFragmentBinding,getArguments().getString("type"));
     }
 

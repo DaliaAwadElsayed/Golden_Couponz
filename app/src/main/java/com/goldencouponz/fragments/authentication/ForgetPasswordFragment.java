@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.authentication;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +36,11 @@ public class ForgetPasswordFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ForgetPasswordViewModel.class);
         mViewModel.init(forgetPasswordFragmentBinding, getContext(),getArguments().getString("login"));
-        ((MainActivity) getActivity()).hideBottomMenu();
-
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).hideBottomMenu();
+        }else {
+            ((MainActivity) getActivity()).hideBottomMenu2();
+        }
     }
 
 }

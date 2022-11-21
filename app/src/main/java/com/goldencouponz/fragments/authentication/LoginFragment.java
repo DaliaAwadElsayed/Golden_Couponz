@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.authentication;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +35,11 @@ public class LoginFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        ((MainActivity) getActivity()).hideBottomMenu();
-        mViewModel.init(loginFragmentBinding, getContext(), getActivity());
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).hideBottomMenu();
+        }else {
+            ((MainActivity) getActivity()).hideBottomMenu2();
+        }           mViewModel.init(loginFragmentBinding, getContext(), getActivity());
         loginFragmentBinding.googleId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

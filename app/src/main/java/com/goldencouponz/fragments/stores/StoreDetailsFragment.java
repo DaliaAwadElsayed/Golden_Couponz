@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.stores;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,11 @@ public class StoreDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(StoreDetailsViewModel.class);
-        ((MainActivity) getActivity()).hideBottomMenu();
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).hideBottomMenu();
+        } else {
+            ((MainActivity) getActivity()).hideBottomMenu2();
+        }
         mViewModel.init(storeDetailsFragmentBinding, copyCouponDialogBinding, secondCopyCouponDialogBinding, productDetailsDialogBinding
                 , secondProductDetailsDialogBinding,
                 noCouponProductDetailsDialogBinding,

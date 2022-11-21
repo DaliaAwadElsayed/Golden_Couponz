@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.home;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,8 +41,11 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        ((MainActivity) getActivity()).showBottomMenu();
-        mViewModel.init(homeFragmentBinding, seeAllDialogBinding, loginCheckDialogBinding, getContext());
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).showBottomMenu();
+        }else {
+            ((MainActivity) getActivity()).showBottomMenu2();
+        }           mViewModel.init(homeFragmentBinding, seeAllDialogBinding, loginCheckDialogBinding, getContext());
     }
 
 }

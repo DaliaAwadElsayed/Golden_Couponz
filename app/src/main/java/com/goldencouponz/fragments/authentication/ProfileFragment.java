@@ -1,5 +1,6 @@
 package com.goldencouponz.fragments.authentication;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public class ProfileFragment extends Fragment {
     EditProfileDialogBinding editProfileDialogBinding;
     LangDialogBinding langDialogBinding;
     ProfileCountriesDialogBinding profileCountriesDialogBinding;
+
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
     }
@@ -46,8 +48,12 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        ((MainActivity) getActivity()).showBottomMenu();
-        mViewModel.init(profileFragmentBinding,logOutDialogBinding, editProfileDialogBinding,langDialogBinding,
+        if (Build.VERSION.RELEASE.equals("12")) {
+            ((MainActivity) getActivity()).showBottomMenu();
+        } else {
+            ((MainActivity) getActivity()).showBottomMenu2();
+        }
+        mViewModel.init(profileFragmentBinding, logOutDialogBinding, editProfileDialogBinding, langDialogBinding,
                 profileCountriesDialogBinding, getContext());
 
     }
