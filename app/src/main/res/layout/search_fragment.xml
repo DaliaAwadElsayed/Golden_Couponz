@@ -18,14 +18,14 @@
             app:titleTextColor="@color/black">
 
             <LinearLayout
-                android:gravity="center"
-                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_8sdp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -71,27 +71,71 @@
                 android:textSize="15sp"
                 app:tabSelectedTextColor="@color/black"
                 app:tabTextAppearance="@style/TabViewBold" />
-
             <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/productLinearId"
+                android:id="@+id/pastSearcheslinearId"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-               >
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextViewBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/previous_research"
+                        android:textColor="@color/black"
+                        android:textFontWeight="600"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/deleteAllStoreId"
+                        style="@style/TextViewBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="@string/delete_all"
+                        android:textColor="@color/basic_color"
+                        android:textFontWeight="600"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/deleteAllProductId"
+                        style="@style/TextViewBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="@string/delete_all"
+                        android:textColor="@color/basic_color"
+                        android:textFontWeight="600"
+                        android:textSize="12sp" />
+                </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/productPastSearchId"
+                    android:id="@+id/storePastSearchId"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/_8sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
                     android:orientation="vertical"
                     android:scrollbars="vertical"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2"
-                    tools:listitem="@layout/product_item" />
+                    app:spanCount="4"
+                    tools:listitem="@layout/filter_store_item" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/productLinearId"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
@@ -103,40 +147,29 @@
                         android:orientation="vertical">
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/couponzRecyclerId"
+                            android:id="@+id/productPastSearchId"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:nestedScrollingEnabled="false"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_12sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_12sdp"
+                            android:orientation="vertical"
+                            android:scrollbars="vertical"
                             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                            tools:listitem="@layout/coupon_item" />
-
+                            app:spanCount="2"
+                            tools:listitem="@layout/product_item" />
                         <!--we are adding progress bar
                             for the purpose of loading-->
                     </LinearLayout>
 
                 </androidx.core.widget.NestedScrollView>
             </LinearLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/storePastSearchId"
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginEnd="@dimen/_12sdp"
-                android:orientation="vertical"
-                android:scrollbars="vertical"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="4"
-                tools:listitem="@layout/filter_store_item" />
-
-            <LinearLayout
+  <LinearLayout
                 android:id="@+id/storesLinearId"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
 
                 <androidx.core.widget.NestedScrollView

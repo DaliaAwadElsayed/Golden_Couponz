@@ -38,6 +38,7 @@ import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.room.DatabaseClient;
+import com.goldencouponz.room.Golden;
 import com.goldencouponz.room.SavedData;
 import com.goldencouponz.room.TasksAdapter;
 import com.goldencouponz.utility.Utility;
@@ -96,6 +97,20 @@ public class SearchViewModel extends ViewModel {
         showProductDetailsDialog = new BottomSheetDialog(context);
         showNoCouponDialog = new BottomSheetDialog(context);
         getOldSearches();
+        searchFragmentBinding.deleteAllProductId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseClient golden = DatabaseClient.getInstance(context);
+                deleteAllProduct(golden.getAppDatabase().taskDao());
+            }
+        });
+        searchFragmentBinding.deleteAllStoreId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseClient golden = DatabaseClient.getInstance(context);
+                deleteAllStore(golden.getAppDatabase().taskDao());
+            }
+        });
         searchFragmentBinding.backId.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.homeFragment));
         tabLayout();
         firstTime();
@@ -142,6 +157,8 @@ public class SearchViewModel extends ViewModel {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
+                    searchFragmentBinding.deleteAllStoreId.setVisibility(View.VISIBLE);
+                    searchFragmentBinding.deleteAllProductId.setVisibility(View.GONE);
                     getOldSearches();
                     searchFragmentBinding.storesLinearId.setVisibility(View.VISIBLE);
                     searchFragmentBinding.productLinearId.setVisibility(View.GONE);
@@ -156,6 +173,8 @@ public class SearchViewModel extends ViewModel {
                             if (TextUtils.isEmpty(searchFragmentBinding.searchTextId.getText())) {
                                 //history search
                                 Log.i("HEREEEE", "?");
+                                getOldSearches();
+                                searchFragmentBinding.pastSearcheslinearId.setVisibility(View.VISIBLE);
                                 searchFragmentBinding.storesRecyclerId.setVisibility(View.GONE);
                             } else {
                                 Log.i("LANGUAGEEE", GoldenNoLoginSharedPreference.getUserLanguage(context) + "//" + searchFragmentBinding.searchTextId.getText().toString());
@@ -173,6 +192,9 @@ public class SearchViewModel extends ViewModel {
                     });
 
                 } else if (tab.getPosition() == 1) {
+                    getOldProductSearches();
+                    searchFragmentBinding.deleteAllStoreId.setVisibility(View.GONE);
+                    searchFragmentBinding.deleteAllProductId.setVisibility(View.VISIBLE);
                     searchFragmentBinding.storesLinearId.setVisibility(View.GONE);
                     searchFragmentBinding.productLinearId.setVisibility(View.VISIBLE);
                     searchFragmentBinding.searchTextId.addTextChangedListener(new TextWatcher() {
@@ -186,6 +208,8 @@ public class SearchViewModel extends ViewModel {
                             if (TextUtils.isEmpty(searchFragmentBinding.searchTextId.getText())) {
                                 //history search
                                 Log.i("HEREEEE", "?");
+                                getOldProductSearches();
+                                searchFragmentBinding.pastSearcheslinearId.setVisibility(View.VISIBLE);
                                 searchFragmentBinding.productPastSearchId.setVisibility(View.GONE);
                             } else {
                                 Log.i("LANGUAGEEE", GoldenNoLoginSharedPreference.getUserLanguage(context) + "//" + searchFragmentBinding.searchTextId.getText().toString());
@@ -240,6 +264,7 @@ public class SearchViewModel extends ViewModel {
                                 if (response.isSuccessful()) {
                                     if (response.code() == 200 && response.body() != null) {
                                         if (!response.body().getStores().isEmpty()) {
+                                            searchFragmentBinding.pastSearcheslinearId.setVisibility(View.GONE);
                                             storesListAdapter = new SearchStoresListAdapter(context, listener);
                                             storesListAdapter.setStores(response.body().getStores());
                                             searchFragmentBinding.storesRecyclerId.setAdapter(storesListAdapter);
@@ -349,6 +374,7 @@ public class SearchViewModel extends ViewModel {
                                     if (response.code() == 200 && response.body() != null) {
                                         searchFragmentBinding.progress.setVisibility(View.GONE);
                                         if (!response.body().getProducts().getData().isEmpty()) {
+                                            searchFragmentBinding.pastSearcheslinearId.setVisibility(View.GONE);
                                             storeProduct = new SearchProductAdapter(context, listener);
                                             storeProduct.setStores(response.body().getProducts().getData());
                                             searchFragmentBinding.productPastSearchId.setAdapter(storeProduct);
@@ -375,6 +401,7 @@ public class SearchViewModel extends ViewModel {
     }
 
     private void getOldSearches() {
+        searchFragmentBinding.pastSearcheslinearId.setVisibility(View.VISIBLE);
         class GetTasks extends AsyncTask<Void, Void, List<SavedData>> {
 
             @Override
@@ -384,7 +411,8 @@ public class SearchViewModel extends ViewModel {
                         .getAppDatabase()
                         .taskDao()
                         .getPastSearches("store");
-//                Set<String> s = new LinkedHashSet<String>(taskList);
+                DatabaseClient golden = DatabaseClient.getInstance(context);
+                deleteAllDublicates(golden.getAppDatabase().taskDao());
                 return taskList;
 
             }
@@ -392,13 +420,130 @@ public class SearchViewModel extends ViewModel {
             @Override
             protected void onPostExecute(List<SavedData> tasks) {
                 super.onPostExecute(tasks);
-                TasksAdapter adapter = new TasksAdapter(context, tasks);
+                TasksAdapter adapter = new TasksAdapter(context, tasks,listener);
                 searchFragmentBinding.storePastSearchId.setAdapter(adapter);
             }
         }
 
         GetTasks gt = new GetTasks();
         gt.execute();
+    }
+
+    private void getOldProductSearches() {
+        Log.i("PRODUCTDATABASE", "here");
+        searchFragmentBinding.pastSearcheslinearId.setVisibility(View.VISIBLE);
+        class GetTasks extends AsyncTask<Void, Void, List<SavedData>> {
+
+            @Override
+            protected List<SavedData> doInBackground(Void... voids) {
+                List<SavedData> taskList = DatabaseClient
+                        .getInstance(context)
+                        .getAppDatabase()
+                        .taskDao()
+                        .getPastSearches("product");
+                DatabaseClient golden = DatabaseClient.getInstance(context);
+                deleteAllDublicates(golden.getAppDatabase().taskDao());
+                return taskList;
+
+            }
+
+            @Override
+            protected void onPostExecute(List<SavedData> tasks) {
+                super.onPostExecute(tasks);
+                TasksAdapter adapter = new TasksAdapter(context, tasks,listener);
+                searchFragmentBinding.storePastSearchId.setAdapter(adapter);
+            }
+        }
+
+        GetTasks gt = new GetTasks();
+        gt.execute();
+    }
+
+    private static class deleteAllWordsStoreAsyncTask extends AsyncTask<Void, Void, Void> {
+        private Golden mAsyncTaskDao;
+
+        deleteAllWordsStoreAsyncTask(Golden dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAll("store");
+            return null;
+        }
+    }
+
+    private static class deleteAllWordsProductAsyncTask extends AsyncTask<Void, Void, Void> {
+        private Golden mAsyncTaskDao;
+
+        deleteAllWordsProductAsyncTask(Golden dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAll("product");
+            return null;
+        }
+    }
+
+    //saveItemsInDataBase
+    private void saveTask(String name, int productId) {
+        class SaveTask extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                //creating a task
+                SavedData task = new SavedData();
+                task.setWord(name);
+                task.setStoreId(productId);
+                task.setType("product");
+                //adding to database
+                DatabaseClient.getInstance(context).getAppDatabase()
+                        .taskDao()
+                        .insert(task);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                Log.i("DATABASE", "SAVED");
+            }
+        }
+
+        SaveTask st = new SaveTask();
+        st.execute();
+
+    }
+
+    public void deleteAllDublicates(Golden mWordDao) {
+        new deleteAllDublicatesWordsAsyncTask(mWordDao).execute();
+    }
+
+    public void deleteAllStore(Golden mWordDao) {
+        new deleteAllWordsStoreAsyncTask(mWordDao).execute();
+        searchFragmentBinding.pastSearcheslinearId.setVisibility(View.GONE);
+    }
+
+    public void deleteAllProduct(Golden mWordDao) {
+        new deleteAllWordsProductAsyncTask(mWordDao).execute();
+        searchFragmentBinding.pastSearcheslinearId.setVisibility(View.GONE);
+    }
+
+    private static class deleteAllDublicatesWordsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private Golden mAsyncTaskDao;
+
+        deleteAllDublicatesWordsAsyncTask(Golden dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteDuplicates();
+            Log.i("DELETED", "?");
+            return null;
+        }
     }
 
     private void getSingleProducts(int country, String lang, String id) {
@@ -420,6 +565,8 @@ public class SearchViewModel extends ViewModel {
                                 if (response.isSuccessful()) {
                                     if (response.code() == 200 && response.body() != null) {
                                         //product dialog
+                                        saveTask(response.body().getSingleProduct().getTitle(), Integer.parseInt(id));
+                                        searchFragmentBinding.pastSearcheslinearId.setVisibility(View.GONE);
                                         productDetailsDialogBinding.newPriceId.setText(Utility.fixNullString(response.body().getSingleProduct().getProductCountry().getDiscountPrice()) + "");
                                         productDetailsDialogBinding.currentPriceId.setPaintFlags(productDetailsDialogBinding.currentPriceId.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                                         productDetailsDialogBinding.discountId.setText(Utility.fixNullString(String.valueOf(response.body().getSingleProduct().getProductCountry().getDiscount())) + "");

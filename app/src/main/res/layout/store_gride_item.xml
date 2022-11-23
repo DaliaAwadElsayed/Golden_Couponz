@@ -60,7 +60,7 @@
             android:gravity="center"
             android:textSize="@dimen/small_text_size"
             android:textStyle="bold"
-            tools:text="EGYPttttT"
+            tools:text="EGYPttttTtttt"
             android:singleLine="true" />
     </LinearLayout>
 

@@ -135,6 +135,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                                 public void onItemClick(View viewItem, int position, int storeId) {
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("storeId", storeId);
+                                    bundle.putString("type","no");
                                     Navigation.findNavController(homeFragmentBinding.getRoot()).navigate(R.id.storeDetailsFragment, bundle);
                                     seeAllDialog.dismiss();
                                 }

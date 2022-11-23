@@ -39,6 +39,7 @@
             android:textSize="15sp" />
 
         <ScrollView
+            android:layout_marginBottom="@dimen/_50sdp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/chooseYourFavStore_tv">

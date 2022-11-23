@@ -33,6 +33,7 @@
             android:textSize="1sp"
             />
         <TextView
+            android:ellipsize="end"
             android:id="@+id/textId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +41,8 @@
             android:textColor="@color/black"
             android:textSize="10sp"
             android:textStyle="bold"
-            tools:text="@string/all_label" />
+            android:singleLine="true"
+            tools:text="sdfghgdsfg" />
 
     </LinearLayout>
 </layout>
