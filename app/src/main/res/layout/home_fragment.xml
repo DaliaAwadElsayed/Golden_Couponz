@@ -128,17 +128,17 @@
                             android:layout_alignParentStart="true"
                             android:scaleType="fitCenter"
                             android:src="@drawable/change_logo" />
+
                         <RelativeLayout
                             android:id="@+id/notificationLayoutId"
-                            android:gravity="center"
-                            android:background="@drawable/ic_background"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_centerInParent="true"
                             android:layout_marginStart="@dimen/_12sdp"
                             android:layout_marginEnd="@dimen/_12sdp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            >
+                            android:background="@drawable/ic_background"
+                            android:gravity="center">
 
                             <ImageView
                                 android:id="@+id/notificationId"
@@ -148,7 +148,6 @@
                                 android:src="@drawable/ic_baseline_notifications_none_24" />
 
                             <TextView
-                                android:visibility="gone"
                                 android:id="@+id/notification_badge"
                                 style="@style/TextViewBold"
                                 android:layout_width="13dp"
@@ -159,7 +158,8 @@
                                 android:padding="2dp"
                                 android:textAlignment="center"
                                 android:textColor="@android:color/white"
-                                android:textSize="7sp" />
+                                android:textSize="7sp"
+                                android:visibility="gone" />
 
                         </RelativeLayout>
 
@@ -262,17 +262,30 @@
                     </LinearLayout>
 
                     <HorizontalScrollView
+                        android:id="@+id/horizonatalId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_12sdp"
-                        android:layout_marginEnd="@dimen/_12sdp"
-                        >
+                        android:layout_marginEnd="@dimen/_12sdp">
+
                         <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_4sdp"
-                            android:orientation="horizontal"
                             android:padding="@dimen/_4sdp">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/category_recycler_view"
+                                android:layout_width="800dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_43sdp"
+                               android:layout_marginStart="@dimen/_43sdp"
+                                android:layout_alignStart="@+id/allId"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="horizontal"
+                                android:scrollbars="horizontal"
+                                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                                tools:listitem="@layout/categories_item" />
 
                             <LinearLayout
                                 android:id="@+id/allId"
@@ -301,22 +314,9 @@
                                     android:textSize="12sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/category_recycler_view"
-                                android:layout_width="wrap_content"
-                             app:stackFromEnd="false"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_43sdp"
-                                android:layout_marginEnd="@dimen/_43sdp"
-                                android:nestedScrollingEnabled="false"
-                                android:orientation="horizontal"
-                                android:scrollbars="horizontal"
-                                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                                tools:listitem="@layout/categories_item" />
-
                         </RelativeLayout>
                     </HorizontalScrollView>
+
 
                     <View
                         android:layout_width="match_parent"

@@ -95,7 +95,7 @@
                         android:background="@drawable/slider_card_bg"
                         android:backgroundTint="@color/white"
                         android:scrollIndicators="top"
-                        android:visibility="gone" />
+                     />
 
                 </RelativeLayout>
 

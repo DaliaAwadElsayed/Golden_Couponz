@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -36,6 +37,9 @@ import com.goldencouponz.adapters.stores.SearchProductAdapter;
 import com.goldencouponz.interfaces.Api;
 import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
+import com.goldencouponz.room.DatabaseClient;
+import com.goldencouponz.room.SavedData;
+import com.goldencouponz.room.TasksAdapter;
 import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
@@ -45,6 +49,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -89,7 +95,7 @@ public class SearchViewModel extends ViewModel {
         secondShowProductDetailsDialog = new BottomSheetDialog(context);
         showProductDetailsDialog = new BottomSheetDialog(context);
         showNoCouponDialog = new BottomSheetDialog(context);
-
+        getOldSearches();
         searchFragmentBinding.backId.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.homeFragment));
         tabLayout();
         firstTime();
@@ -136,6 +142,7 @@ public class SearchViewModel extends ViewModel {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
+                    getOldSearches();
                     searchFragmentBinding.storesLinearId.setVisibility(View.VISIBLE);
                     searchFragmentBinding.productLinearId.setVisibility(View.GONE);
                     searchFragmentBinding.searchTextId.addTextChangedListener(new TextWatcher() {
@@ -367,6 +374,33 @@ public class SearchViewModel extends ViewModel {
                 });
     }
 
+    private void getOldSearches() {
+        class GetTasks extends AsyncTask<Void, Void, List<SavedData>> {
+
+            @Override
+            protected List<SavedData> doInBackground(Void... voids) {
+                List<SavedData> taskList = DatabaseClient
+                        .getInstance(context)
+                        .getAppDatabase()
+                        .taskDao()
+                        .getPastSearches("store");
+//                Set<String> s = new LinkedHashSet<String>(taskList);
+                return taskList;
+
+            }
+
+            @Override
+            protected void onPostExecute(List<SavedData> tasks) {
+                super.onPostExecute(tasks);
+                TasksAdapter adapter = new TasksAdapter(context, tasks);
+                searchFragmentBinding.storePastSearchId.setAdapter(adapter);
+            }
+        }
+
+        GetTasks gt = new GetTasks();
+        gt.execute();
+    }
+
     private void getSingleProducts(int country, String lang, String id) {
         showProductDetailsDialog();
         FirebaseMessaging.getInstance().getToken()
@@ -548,6 +582,7 @@ public class SearchViewModel extends ViewModel {
         secondProductDetailsDialogBinding.yesActiveId.setOnClickListener(v7 -> rateDialog());
 
     }
+
     private void supportUs() {
         //https://play.google.com/store/apps/details?id=com.codesroots.goldencoupon
         Uri uri = Uri.parse("market://details?id=" + "com.codesroots.goldencoupon");
@@ -558,6 +593,7 @@ public class SearchViewModel extends ViewModel {
             Toast.makeText(context, " unable to find market app", Toast.LENGTH_LONG).show();
         }
     }
+
     private void rateDialog() {
         final Dialog dialog = new Dialog(context);
         dialog.setCancelable(false);
@@ -575,6 +611,7 @@ public class SearchViewModel extends ViewModel {
         yes.setOnClickListener(v -> supportUs());
         no.setOnClickListener(v -> dialog.dismiss());
     }
+
     private void sendNoActive(String code, String store, String phone) {
         try {
             Intent sendIntent = new Intent("android.intent.action.MAIN");

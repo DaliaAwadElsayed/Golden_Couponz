@@ -55,7 +55,8 @@ public class ProductsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProductsViewModel.class);
-        if (Build.VERSION.RELEASE.equals("12")) {
+        int release = Integer.parseInt(Build.VERSION.RELEASE);
+        if (release >= 11) {
             ((MainActivity) getActivity()).showBottomMenu();
         }else {
             ((MainActivity) getActivity()).showBottomMenu2();

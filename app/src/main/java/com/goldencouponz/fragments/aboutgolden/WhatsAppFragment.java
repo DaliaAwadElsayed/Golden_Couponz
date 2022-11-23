@@ -36,9 +36,10 @@ public class WhatsAppFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(WhatsAppViewModel.class);
         mViewModel.init(whatsAppFragmentBinding, getContext());
-        if (Build.VERSION.RELEASE.equals("12")) {
+        int release = Integer.parseInt(Build.VERSION.RELEASE);
+        if (release >= 11) {
             ((MainActivity) getActivity()).showBottomMenu();
-        }else {
+        } else {
             ((MainActivity) getActivity()).showBottomMenu2();
         }
     }

@@ -181,6 +181,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
         this.seeAllDialogBinding = seeAllDialogBinding;
         this.loginCheckDialogBinding = loginCheckDialogBinding;
         this.homeFragmentBinding = homeFragmentBinding;
+        homeFragmentBinding.categoryRecyclerView.scrollToPosition(0);
         loginCheckDialog = new BottomSheetDialog(context);
         seeAllDialog = new BottomSheetDialog(context);
         homeFragmentBinding.searchId.setOnClickListener(new View.OnClickListener() {

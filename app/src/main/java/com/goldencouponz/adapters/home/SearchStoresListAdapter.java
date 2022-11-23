@@ -117,6 +117,7 @@ public class SearchStoresListAdapter extends RecyclerView.Adapter<SearchStoresLi
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("storeId", store.getId());
+                    bundle.putString("type","search");
                     Navigation.findNavController(v).navigate(R.id.storeDetailsFragment, bundle);
                 }
             });

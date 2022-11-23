@@ -315,8 +315,9 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
 
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         navController = Navigation.findNavController(this, R.id.home_nav_fragment);
-
-        if (Build.VERSION.RELEASE.equals("12")) {
+        int release = Integer.parseInt(Build.VERSION.RELEASE);
+        Log.i("RELEASEEE", release + "?");
+        if (release >= 11) {
             bottomClickListener();
         } else {
             bottom2ClickListener();

@@ -36,9 +36,10 @@ public class ChangePasswordFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ChangePasswordViewModel.class);
         mViewModel.init(changePasswordFragmentBinding, getContext());
-        if (Build.VERSION.RELEASE.equals("12")) {
+        int release = Integer.parseInt(Build.VERSION.RELEASE);
+        if (release >= 11) {
             ((MainActivity) getActivity()).showBottomMenu();
-        }else {
+        } else {
             ((MainActivity) getActivity()).showBottomMenu2();
         }
     }

@@ -67,6 +67,7 @@ public class SlidersAdapter extends PagerAdapter {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("storeId", sliders.get(position).getStoreId());
+                bundle.putString("type","no");
                 Navigation.findNavController(v).navigate(R.id.storeDetailsFragment, bundle);
             }
         });

@@ -36,7 +36,8 @@ public class ForgetPasswordFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ForgetPasswordViewModel.class);
         mViewModel.init(forgetPasswordFragmentBinding, getContext(),getArguments().getString("login"));
-        if (Build.VERSION.RELEASE.equals("12")) {
+        int release = Integer.parseInt(Build.VERSION.RELEASE);
+        if (release >= 11) {
             ((MainActivity) getActivity()).hideBottomMenu();
         }else {
             ((MainActivity) getActivity()).hideBottomMenu2();

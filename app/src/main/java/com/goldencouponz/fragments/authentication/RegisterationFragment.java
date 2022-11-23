@@ -38,7 +38,8 @@ CountryDialogBinding countryDialogBinding;
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(RegisterationViewModel.class);
         mViewModel.init(registerationFragmentBinding,countryDialogBinding, getContext());
-        if (Build.VERSION.RELEASE.equals("12")) {
+        int release = Integer.parseInt(Build.VERSION.RELEASE);
+        if (release >= 11) {
             ((MainActivity) getActivity()).hideBottomMenu();
         }else {
             ((MainActivity) getActivity()).hideBottomMenu2();

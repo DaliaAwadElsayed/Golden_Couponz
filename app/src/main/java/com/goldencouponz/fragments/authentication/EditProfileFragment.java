@@ -36,9 +36,10 @@ public class EditProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
         mViewModel.init(editProfileFragmentBinding, getContext());
-        if (Build.VERSION.RELEASE.equals("12")) {
+        int release = Integer.parseInt(Build.VERSION.RELEASE);
+        if (release >= 11) {
             ((MainActivity) getActivity()).hideBottomMenu();
-        }else {
+        } else {
             ((MainActivity) getActivity()).hideBottomMenu2();
         }
     }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
@@ -31,7 +32,10 @@ import com.goldencouponz.utility.LocaleHelper;
 import com.goldencouponz.utility.Utility;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.List;
 
@@ -368,7 +372,34 @@ public class ProfileViewModel extends ViewModel {
         });
 
     }
-
+    private void firebaseTopic(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Subscribed";
+                        if (!task.isSuccessful()) {
+                            msg = "Subscribe failed";
+                        }
+                        Log.d("TAGINSPLASH", msg);
+//                        Toast.makeText(SplashActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+    private void firebaseUnSubscribeTopic(String topic) {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Subscribed";
+                        if (!task.isSuccessful()) {
+                            msg = "Subscribe failed";
+                        }
+                        Log.d("TAGINSPLASH", msg);
+//                        Toast.makeText(SplashActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
     private void supportUs() {
         //https://play.google.com/store/apps/details?id=com.codesroots.goldencoupon
@@ -392,12 +423,16 @@ public class ProfileViewModel extends ViewModel {
             langDialogBinding.checkArabicId.setVisibility(View.VISIBLE);
         }
         langDialogBinding.englishRelativeId.setOnClickListener(view -> {
+            firebaseTopic("golden_en");
+            firebaseUnSubscribeTopic("golden_ar");
             GoldenNoLoginSharedPreference.saveUserLang(context, "en");
             LocaleHelper.setLocale(context, "en");
             Local.Companion.updateResources(context);
             resetApplication();
         });
         langDialogBinding.arabicRelativeId.setOnClickListener(view -> {
+            firebaseTopic("golden_ar");
+            firebaseUnSubscribeTopic("golden_en");
             GoldenNoLoginSharedPreference.saveUserLang(context, "ar");
             LocaleHelper.setLocale(context, "ar");
             Local.Companion.updateResources(context);

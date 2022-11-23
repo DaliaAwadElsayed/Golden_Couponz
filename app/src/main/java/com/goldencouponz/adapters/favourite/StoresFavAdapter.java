@@ -93,6 +93,7 @@ public class StoresFavAdapter extends RecyclerView.Adapter<StoresFavAdapter.Home
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("storeId", store.getId());
+                    bundle.putString("type","no");
                     Navigation.findNavController(v).navigate(R.id.storeDetailsFragment, bundle);
                 }
             });

@@ -29,6 +29,7 @@ public class NotificationFragment extends Fragment {
     ProductDetailsDialogBinding productDetailsDialogBinding;
     SecondProductDetailsDialogBinding secondProductDetailsDialogBinding;
     NoCouponProductDetailsDialogBinding noCouponProductDetailsDialogBinding;
+
     public static NotificationFragment newInstance() {
         return new NotificationFragment();
     }
@@ -49,12 +50,14 @@ public class NotificationFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
-        if (Build.VERSION.RELEASE.equals("12")) {
+        int release = Integer.parseInt(Build.VERSION.RELEASE);
+        if (release >= 11) {
             ((MainActivity) getActivity()).hideBottomMenu();
-        }else {
+        } else {
             ((MainActivity) getActivity()).hideBottomMenu2();
 
-        }        mViewModel.init(notificationFragmentBinding, copyCouponDialogBinding, secondCopyCouponDialogBinding, productDetailsDialogBinding
+        }
+        mViewModel.init(notificationFragmentBinding, copyCouponDialogBinding, secondCopyCouponDialogBinding, productDetailsDialogBinding
                 , secondProductDetailsDialogBinding,
                 noCouponProductDetailsDialogBinding, getContext());
     }

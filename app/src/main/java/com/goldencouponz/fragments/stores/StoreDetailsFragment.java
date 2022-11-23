@@ -54,7 +54,8 @@ public class StoreDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(StoreDetailsViewModel.class);
-        if (Build.VERSION.RELEASE.equals("12")) {
+        int release = Integer.parseInt(Build.VERSION.RELEASE);
+        if (release >= 11) {
             ((MainActivity) getActivity()).hideBottomMenu();
         } else {
             ((MainActivity) getActivity()).hideBottomMenu2();
@@ -62,7 +63,7 @@ public class StoreDetailsFragment extends Fragment {
         mViewModel.init(storeDetailsFragmentBinding, copyCouponDialogBinding, secondCopyCouponDialogBinding, productDetailsDialogBinding
                 , secondProductDetailsDialogBinding,
                 noCouponProductDetailsDialogBinding,
-                loginCheckDialogBinding, getContext(), getArguments().getInt("storeId"));
+                loginCheckDialogBinding, getContext(), getArguments().getInt("storeId"),getArguments().getString("type"));
     }
 
 }

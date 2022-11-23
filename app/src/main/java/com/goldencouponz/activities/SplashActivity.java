@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -26,6 +27,9 @@ import com.goldencouponz.models.wrapper.ApiResponse;
 import com.goldencouponz.models.wrapper.RetrofitClient;
 import com.goldencouponz.utility.sharedPrefrence.GoldenNoLoginSharedPreference;
 import com.goldencouponz.utility.sharedPrefrence.GoldenSharedPreference;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,6 +58,11 @@ public class SplashActivity extends AppCompatActivity {
         }
         splashScreen();
         splashFragmentBinding.continueId.setOnClickListener(view -> {
+            if (GoldenNoLoginSharedPreference.getUserLanguage(SplashActivity.this).equals("ar")) {
+                firebaseTopic("golden_ar");
+            } else if (GoldenNoLoginSharedPreference.getUserLanguage(SplashActivity.this).equals("en")) {
+                firebaseTopic("golden_en");
+            }
             Intent i = new Intent(SplashActivity.this, SkipActivity.class);
             i.putExtra("language", language);
             startActivity(i);
@@ -100,7 +109,20 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
-
+    private void firebaseTopic(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Subscribed";
+                        if (!task.isSuccessful()) {
+                            msg = "Subscribe failed";
+                        }
+                        Log.d("TAGINSPLASH", msg);
+//                        Toast.makeText(SplashActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
     private void splashScreen() {
         final Handler handler = new Handler();

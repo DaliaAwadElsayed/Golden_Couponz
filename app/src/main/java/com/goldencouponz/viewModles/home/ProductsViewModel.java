@@ -233,6 +233,7 @@ public class ProductsViewModel extends ViewModel {
         arrangeDialog = new BottomSheetDialog(context);
         storeProduct = new ProductAdapter(context, listener);
         storesListAdapter = new StoresFilterAdapter(context);
+        productsFragmentBinding.categoryRecyclerView.scrollToPosition(0);
         productsFragmentBinding.searchId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -301,6 +302,22 @@ public class ProductsViewModel extends ViewModel {
                 getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
                         "", "", "", "1", "", currentPage);
                 arrangeDialog.dismiss();
+                productsFragmentBinding.idNesteddSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                        if (scrollY == view.getChildAt(0).getMeasuredHeight() - view.getMeasuredHeight()) {
+                            currentPage++;
+                            Log.i("currentPageScrolling", String.valueOf(currentPage));
+                            Log.i("LastPageScrolling", String.valueOf(lastPage));
+                            if (currentPage <= lastPage) {
+                                Log.i("currentPageIf", String.valueOf(currentPage));
+                                getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
+                                        "", "", "", "1", "", currentPage);
+                            }
+                        }
+                    }
+                });
+
             }
         });
         arrangeDialogBinding.highToLowId.setOnClickListener(new View.OnClickListener() {
@@ -311,6 +328,21 @@ public class ProductsViewModel extends ViewModel {
                 getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
                         "", "", "", "", "1", currentPage);
                 arrangeDialog.dismiss();
+                productsFragmentBinding.idNesteddSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                        if (scrollY == view.getChildAt(0).getMeasuredHeight() - view.getMeasuredHeight()) {
+                            currentPage++;
+                            Log.i("currentPageScrolling", String.valueOf(currentPage));
+                            Log.i("LastPageScrolling", String.valueOf(lastPage));
+                            if (currentPage <= lastPage) {
+                                Log.i("currentPageIf", String.valueOf(currentPage));
+                                getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
+                                        "", "", "", "", "1", currentPage);
+                            }
+                        }
+                    }
+                });
             }
         });
     }

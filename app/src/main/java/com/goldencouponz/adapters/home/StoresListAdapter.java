@@ -110,6 +110,7 @@ public class StoresListAdapter extends RecyclerView.Adapter<StoresListAdapter.Ho
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("storeId", store.getId());
+                    bundle.putString("type","no");
                     Navigation.findNavController(v).navigate(R.id.storeDetailsFragment, bundle);
                 }
             });
