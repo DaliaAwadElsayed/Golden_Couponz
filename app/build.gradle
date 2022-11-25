@@ -10,7 +10,7 @@ android {
         applicationId "com.codesroots.goldencoupon"
         minSdk 21
         targetSdk 32
-        versionCode 18
+        versionCode 19
         versionName "1.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -55,10 +55,10 @@ dependencies {
     //google material
     implementation 'com.android.support:design:30.0.0'
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.squareup.okhttp3:okhttp:3.14.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation "com.squareup.okhttp3:logging-interceptor:4.2.1"
     //circleImageview
     implementation 'de.hdodenhof:circleimageview:3.0.0'

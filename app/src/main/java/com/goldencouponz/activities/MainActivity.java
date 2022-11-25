@@ -294,7 +294,11 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                     && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                 // Request the update.
+                Log.i("UPDATESSS", "yes?");
                 navController.navigate(R.id.updateFragment);
+            } else {
+                Log.i("UPDATESSS", "no?");
+
             }
         });
 
@@ -315,8 +319,10 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
 
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         navController = Navigation.findNavController(this, R.id.home_nav_fragment);
-        int release = Integer.parseInt(Build.VERSION.RELEASE);
-        Log.i("RELEASEEE", release + "?");
+        String part = (Build.VERSION.RELEASE);
+        String[] parts = part.split("\\.");
+        Log.i("RELEASEEE", (parts[0]) + "?");
+        int release = Integer.parseInt(parts[0]); // 004
         if (release >= 11) {
             bottomClickListener();
         } else {

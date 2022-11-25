@@ -1,10 +1,12 @@
 package com.goldencouponz.models.wrapper;
 
 
+import static com.facebook.FacebookSdk.getCacheDir;
+
 import com.goldencouponz.interfaces.Api;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -12,13 +14,12 @@ public class RetrofitClient {
     public static final String BASE_URL = " http://app.couponake.com/";
     private static RetrofitClient mInstance;
     private Retrofit retrofit;
+    int cacheSize = 30 * 1024 * 1024; // Size in mb
+    Cache cache = new Cache(getCacheDir(), cacheSize);
 
     private RetrofitClient() {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        // loggingInterceptor.level(HttpLoggingInterceptor.Level.BASIC);
-        loggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
+                .cache(cache)
                 .build();
 
         retrofit = new Retrofit.Builder()

@@ -2,6 +2,7 @@ package com.goldencouponz.fragments.favourite;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,10 +36,15 @@ public class FavouriteStoresFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(FavouriteStoresViewModel.class);
-        mViewModel.init(favouriteStoresFragmentBinding,getContext());
-        int release = Integer.parseInt(Build.VERSION.RELEASE);
-        if (release >= 11) { ((MainActivity) getActivity()).hideBottomMenu();
-        }else {
+        mViewModel.init(favouriteStoresFragmentBinding, getContext());
+        String part = (Build.VERSION.RELEASE);
+        String[] parts = part.split("\\.");
+        int release = Integer.parseInt(parts[0]); // 004
+        Log.i("RELEASEEE", release + "?");
+        if (release >= 11) {
+
+            ((MainActivity) getActivity()).hideBottomMenu();
+        } else {
             ((MainActivity) getActivity()).hideBottomMenu2();
         }
     }

@@ -764,7 +764,7 @@ public class StoreDetailsViewModel extends ViewModel implements ViewPager.OnPage
                             @Override
                             public void onClick(View v) {
                                 sendNoActive(secondProductDetailsDialogBinding.couponValueId.getText().toString(),
-                                        response.body().getSingleProduct().getStore().getTitle(), response.body().getProducts().getWhatsapp()
+                                        response.body().getSingleProduct().getStore().getTitle(), response.body().getSingleProduct().getWhatsapp()
                                 );
                             }
                         });

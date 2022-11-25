@@ -2,6 +2,7 @@ package com.goldencouponz.fragments.aboutgolden;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,10 @@ public class SearchFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
-        int release = Integer.parseInt(Build.VERSION.RELEASE);
+        String part = (Build.VERSION.RELEASE);
+        String[] parts = part.split("\\.");
+        int release = Integer.parseInt(parts[0]); // 004
+        Log.i("RELEASEEE", release + "?");
         if (release >= 11) {
             ((MainActivity) getActivity()).hideBottomMenu();
         } else {
