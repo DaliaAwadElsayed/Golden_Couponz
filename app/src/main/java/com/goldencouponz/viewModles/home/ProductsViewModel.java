@@ -380,6 +380,22 @@ public class ProductsViewModel extends ViewModel {
                                                     currentPage = 1;
                                                     getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
                                                             "", String.valueOf(categoryId), String.valueOf(subCatId), "", "", currentPage);
+                                                    productsFragmentBinding.idNesteddSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                                                        @Override
+                                                        public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                                                            if (scrollY == view.getChildAt(0).getMeasuredHeight() - view.getMeasuredHeight()) {
+                                                                currentPage++;
+                                                                Log.i("currentPageScrolling", String.valueOf(currentPage));
+                                                                Log.i("LastPageScrolling", String.valueOf(lastPage));
+                                                                if (currentPage <= lastPage) {
+                                                                    Log.i("currentPageIf", String.valueOf(currentPage));
+                                                                    getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
+                                                                            "", String.valueOf(categoryId), String.valueOf(subCatId), "", "", currentPage);
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+
                                                 }
                                             });
                                         } else {
@@ -648,6 +664,7 @@ public class ProductsViewModel extends ViewModel {
                                         if (!response.body().getCategories().isEmpty()) {
                                             productsFragmentBinding.progress.setVisibility(View.GONE);
                                             categoriesAdapter = new ProductCatAdapter(context);
+
                                             productsFragmentBinding.categoryRecyclerView.setAdapter(categoriesAdapter);
                                             categoriesAdapter.setCategories(response.body().getCategories());
                                             categoriesAdapter.setOnItemClickListener(new ProductCatAdapter.OnItemClickListener() {
@@ -660,6 +677,23 @@ public class ProductsViewModel extends ViewModel {
                                                     currentPage = 1;
                                                     getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
                                                             "", String.valueOf(categoryId), "", "", "", currentPage);
+
+                                                    Log.i("CATEGORYIDDD", currentPage+"?"+String.valueOf(categoryId));
+                                                      productsFragmentBinding.idNesteddSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                                                        @Override
+                                                        public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                                                            if (scrollY == view.getChildAt(0).getMeasuredHeight() - view.getMeasuredHeight()) {
+                                                                currentPage++;
+                                                                Log.i("currentPageScrollinggg", String.valueOf(currentPage));
+                                                                Log.i("LastPageScrollingggg", String.valueOf(lastPage));
+                                                                if (currentPage <= lastPage) {
+                                                                    Log.i("currentPageggIf", String.valueOf(currentPage));
+                                                                    getProducts("", GoldenNoLoginSharedPreference.getUserCountryId(context), GoldenNoLoginSharedPreference.getUserLanguage(context),
+                                                                            "", String.valueOf(categoryId), "", "", "", currentPage);
+                                                                }
+                                                            }
+                                                        }
+                                                    });
 
                                                 }
                                             });
