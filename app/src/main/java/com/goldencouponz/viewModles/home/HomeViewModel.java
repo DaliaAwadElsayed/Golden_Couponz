@@ -216,7 +216,7 @@ public class HomeViewModel extends ViewModel implements ViewPager.OnPageChangeLi
                         }
                         // Get new FCM registration token
                          deviceToken = task.getResult();
-                        Log.w("TAG", deviceToken + "?");
+                        Log.w("TAGGGGGG", deviceToken + "?");
                     }
                 });
         homeFragmentBinding.searchId.setOnClickListener(new View.OnClickListener() {

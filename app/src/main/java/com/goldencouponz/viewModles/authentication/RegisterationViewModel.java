@@ -151,7 +151,7 @@ public class RegisterationViewModel extends ViewModel {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.code() == 200) {
                     registerationFragmentBinding.progress.setVisibility(View.GONE);
-                    GoldenSharedPreference.saveUser(context, response.body(), response.body().getId());
+                    GoldenSharedPreference.saveUser(context, response.body());
                     //TODO change to fav stores
                     Navigation.findNavController(registerationFragmentBinding.getRoot()).navigate(R.id.favouriteStoresFragment);
                 } else {

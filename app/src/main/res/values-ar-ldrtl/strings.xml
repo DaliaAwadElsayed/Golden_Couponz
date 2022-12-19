@@ -153,6 +153,7 @@
     <string name="server_client_id">893608938454-09j32o2ga3uvjoimmndh5scu0a8tlacd.apps.googleusercontent.com</string>
     <string name="facebook_app_id">793586418366637</string>
     <string name="fb_login_protocol_scheme">fb793586418366637</string>
+    <string name="facebook_client_token">2564a181d066a2e16ed46a254df79068</string>
     <string name="most_common">الأكثر شيوعا</string>
     <string name="most_disconted">الأكثر خصما</string>
     <string name="sort_by">ترتيب حسب</string>
@@ -166,4 +167,5 @@
     <string name="perform_label">تطبيق</string>
     <string name="update_downloaded">"لاستخدام هذا التطبيق ، قم بتنزيل أحدث إصدار "</string>
     <string name="restart">"تحديث "</string>
+    <string name="mail_not_found">"عفوا هذا الحساب لا يحتوي علي بريد اٍلكتروني! "</string>
 </resources>

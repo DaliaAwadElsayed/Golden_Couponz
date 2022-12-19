@@ -35,10 +35,9 @@ public class GoldenSharedPreference {
      * @param context  the context to access the shared preference
      * @param userData the user data from the login response
      */
-    public static void saveUser(Context context, ApiResponse userData, int id) {
+    public static void saveUser(Context context, ApiResponse userData) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putInt(UID, id)
                 .putString(KEY_NAME, userData.getName())
                 .putString(KEY_EMAIL, userData.getEmail())
                 .putString(PHONE, userData.getPhone())

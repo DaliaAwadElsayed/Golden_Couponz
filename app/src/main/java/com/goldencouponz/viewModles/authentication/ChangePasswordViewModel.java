@@ -119,7 +119,7 @@ public class ChangePasswordViewModel extends ViewModel {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.code() == 200) {
-                    GoldenSharedPreference.saveUser(context, response.body(), response.body().getId());
+                    GoldenSharedPreference.saveUser(context, response.body());
                     Toast.makeText(context, R.string.changepassworddone, Toast.LENGTH_LONG).show();
 
                 }

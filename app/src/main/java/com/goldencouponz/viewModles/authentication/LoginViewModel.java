@@ -62,7 +62,7 @@ public class LoginViewModel extends ViewModel {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.code() == 200) {
                     loginFragmentBinding.progress.setVisibility(View.GONE);
-                    GoldenSharedPreference.saveUser(context, response.body(), response.body().getId());
+                    GoldenSharedPreference.saveUser(context, response.body());
                     Navigation.findNavController(loginFragmentBinding.getRoot()).navigate(R.id.homeFragment);
                 } else {
                     loginFragmentBinding.progress.setVisibility(View.GONE);

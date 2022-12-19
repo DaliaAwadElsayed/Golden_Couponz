@@ -421,6 +421,8 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     }
 
     public void facebookLogin() {
+        FacebookSdk.sdkInitialize(MainActivity.this);
+        callbackManager = CallbackManager.Factory.create();
         loginManager
                 = LoginManager.getInstance();
         callbackManager
@@ -441,17 +443,25 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
                                                 if (object != null) {
                                                     try {
                                                         String name = object.getString("name");
-                                                        String email = object.getString("email");
                                                         String fbUserID = object.getString("id");
                                                         disconnectFromFacebook();
-                                                        Log.i("FACEBOOKDATA", name + "//" + email + "//" + fbUserID);
-                                                        if (GoldenNoLoginSharedPreference.getUserEmail(MainActivity.this).equals(email)) {
-                                                            loginWithGoogleApi(loginResult.getAccessToken().getToken(), "facebook", "second");
+                                                        if (object.has("email")) {
+                                                            Log.i("TOKEEEEEENEMAIL", loginResult.getAccessToken().getToken() + "?");
+                                                            String email = object.getString("email");
+                                                            if (GoldenNoLoginSharedPreference.getUserEmail(MainActivity.this).equals(email)) {
+                                                                loginWithGoogleApi(loginResult.getAccessToken().getToken(), "facebook", "second","yes");
 
+                                                            } else {
+                                                                loginWithGoogleApi(loginResult.getAccessToken().getToken(), "facebook", "first","yes");
+
+                                                            }
                                                         } else {
-                                                            loginWithGoogleApi(loginResult.getAccessToken().getToken(), "facebook", "first");
-
+                                                            if (!loginResult.getAccessToken().isDataAccessExpired())
+                                                                Log.i("TOKEEEEEEN", loginResult.getAccessToken().getToken() + "?");
+                                                            loginWithGoogleApi(loginResult.getAccessToken().getToken(), "facebook", "first","no");
                                                         }
+                                                        Log.i("FACEBOOKDATA", name + "//" + "//" + fbUserID);
+
                                                         // do action after Facebook login success
                                                         // or call your API
                                                     } catch (NullPointerException | JSONException e) {
@@ -480,6 +490,8 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
                                 // here write code when get error
                                 Log.v("LoginScreen", "----onError: "
                                         + error.getMessage());
+                                AccessToken.setCurrentAccessToken(null);
+                                LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("email"));
                             }
                         });
 
@@ -538,19 +550,24 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
     }
 
 
-    private void loginWithGoogleApi(String accessToken, String driver, String login) {
+    private void loginWithGoogleApi(String accessToken, String driver, String login,String emailFound) {
+        Log.i("ACCESSTOKENFACEBOOK", accessToken + "?");
         apiInterface.socialLogin(accessToken, driver).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.code() == 200) {
-                    if (login.equals("second")) {
-                        navController.navigate(R.id.homeFragment);
+
+                      if (emailFound.equals("no")) {
+                        Toast.makeText(MainActivity.this, R.string.mail_not_found, Toast.LENGTH_LONG).show();
+                        navController.navigate(R.id.loginFragment);
                     } else {
-                        navController.navigate(R.id.favouriteStoresFragment);
-
+                        if (login.equals("second")) {
+                            navController.navigate(R.id.homeFragment);
+                        } else {
+                            navController.navigate(R.id.favouriteStoresFragment);
+                        }
+                        GoldenSharedPreference.saveUser(MainActivity.this, response.body());
                     }
-                    GoldenSharedPreference.saveUser(MainActivity.this, response.body(), response.body().getId());
-
                 }
             }
 
@@ -595,9 +612,9 @@ public class MainActivity extends AppCompatActivity implements ToolbarInterface 
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
             if (GoldenNoLoginSharedPreference.getUserEmail(MainActivity.this).equals(acct.getEmail())) {
-                loginWithGoogleApi(account.getIdToken(), "apple", "second");
+                loginWithGoogleApi(account.getIdToken(), "apple", "second","yes");
             } else {
-                loginWithGoogleApi(account.getIdToken(), "apple", "first");
+                loginWithGoogleApi(account.getIdToken(), "apple", "first","yes");
             }
             // Signed in successfully, show authenticated UI.
 
